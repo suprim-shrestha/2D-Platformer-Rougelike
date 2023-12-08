@@ -23,8 +23,9 @@ class CharacterInstance extends Instance {
     this.vx = 0;
     this.vy = 0;
     this.isGrounded = false;
-    this.facingLeft = 0;
+    this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
+    this.speed = SPEED;
   }
 
   update() {
