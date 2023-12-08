@@ -24,3 +24,12 @@ function detectCollision(rect1, rect2) {
     rect1.y + rect1.height >= rect2.y
   );
 }
+
+function detectPointCollision(rect, x, y) {
+  return (
+    x > rect.x &&
+    x < rect.x + rect.width &&
+    y > rect.y &&
+    y < rect.y + rect.height
+  );
+}
