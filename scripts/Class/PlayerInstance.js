@@ -39,8 +39,8 @@ const commando = {
   },
 };
 
-let abilityInstance;
-let abilityWidth;
+let primaryInstance;
+let secondaryInstance;
 
 class PlayerInstance extends CharacterInstance {
   constructor(x, y, width = 32, height = 32, sprite, survivor = commando) {
@@ -53,8 +53,11 @@ class PlayerInstance extends CharacterInstance {
     if (!this.movementDisabled) {
       this.control();
     }
-    if (abilityInstance) {
-      abilityInstance.draw();
+    if (primaryInstance) {
+      primaryInstance.draw();
+    }
+    if (secondaryInstance) {
+      secondaryInstance.draw();
     }
     super.update();
   }
@@ -89,13 +92,14 @@ class PlayerInstance extends CharacterInstance {
     if (skill.offCooldown) {
       skill.offCooldown = false;
       if (skill === commando.primary || skill === commando.secondary) {
-        abilityWidth = canvas.width;
+        let abilityWidth = canvas.width;
         let abilityX =
           this.x +
           (this.facingDirection === FACING_LEFT ? -abilityWidth : this.width);
         let abilityY = this.y + (this.height * 1) / 3;
-        abilityInstance = new Instance(abilityX, abilityY, abilityWidth, 2);
         if (skill === commando.primary) {
+          primaryInstance = new Instance(abilityX, abilityY, abilityWidth, 2);
+          primaryInstance.color = skill.color;
           if (this.facingDirection === FACING_RIGHT) {
             for (let posX = this.x; posX < canvas.width; posX += 5) {
               enemyArr.forEach((enemy) => {
@@ -103,9 +107,9 @@ class PlayerInstance extends CharacterInstance {
                   abilityWidth = enemy.x - this.x - enemy.width / 2;
                   if (
                     this.x < enemy.x &&
-                    abilityWidth < abilityInstance.width
+                    abilityWidth < primaryInstance.width
                   ) {
-                    abilityInstance.width = abilityWidth;
+                    primaryInstance.width = abilityWidth;
                   }
                 }
               });
@@ -117,27 +121,29 @@ class PlayerInstance extends CharacterInstance {
                   abilityWidth = this.x - enemy.x - enemy.width / 2;
                   if (
                     this.x > enemy.x &&
-                    abilityWidth < abilityInstance.width
+                    abilityWidth < primaryInstance.width
                   ) {
-                    abilityInstance.width = abilityWidth;
-                    abilityInstance.x = this.x - abilityWidth;
+                    primaryInstance.width = abilityWidth;
+                    primaryInstance.x = this.x - abilityWidth;
                   }
                 }
               });
             }
           }
-        }
-
-        abilityInstance.color = skill.color;
-        if (skill === commando.secondary) {
+          setTimeout(() => {
+            primaryInstance = null;
+          }, skill.skillDuration);
+        } else {
+          secondaryInstance = new Instance(abilityX, abilityY, abilityWidth, 2);
+          secondaryInstance.color = skill.color;
           this.movementDisabled = true;
           setTimeout(() => {
             this.movementDisabled = false;
           }, skill.skillDuration);
+          setTimeout(() => {
+            secondaryInstance = null;
+          }, skill.skillDuration);
         }
-        setTimeout(() => {
-          abilityInstance = null;
-        }, skill.skillDuration);
       } else if (skill === commando.utility) {
         this.movementDisabled = true;
         const skillInterval = setInterval(() => {
