@@ -24,6 +24,7 @@ let enemyArr = [];
 const player = new PlayerInstance({
   x: canvas.width / 4,
   y: canvas.height - 400,
+  width: 10,
   collisionBlocks,
 });
 let enemy = new CharacterInstance({
@@ -45,6 +46,11 @@ enemy = new CharacterInstance({
 });
 enemyArr.push(enemy);
 
+const camera = {
+  x: 0,
+  y: -512,
+};
+
 // Set maximum framerate for higher refresh rate screens
 let lastRenderTime = 0;
 let frameDuration = 1000 / FRAME_RATE;
@@ -55,8 +61,8 @@ function animate(currentTime) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.save();
-    ctx.scale(2, 2);
-    ctx.translate(0, -512);
+    ctx.scale(SCALE, SCALE);
+    ctx.translate(camera.x, camera.y);
     background.draw();
     collisionBlocks.forEach((collisionBlock) => {
       collisionBlock.draw();

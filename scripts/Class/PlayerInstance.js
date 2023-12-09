@@ -34,7 +34,7 @@ const commando = {
   utility: {
     cooldown: 4000,
     offCooldown: true,
-    rollSpeed: 12,
+    rollSpeed: 4,
     rollDuration: 250,
   },
 };
@@ -55,9 +55,19 @@ class PlayerInstance extends CharacterInstance {
     super({ x, y, width, height, collisionBlocks, sprite });
     this.survivor = survivor;
     this.color = "#ddd";
+
+    this.cameraBox = {
+      x: this.x,
+      y: this.y,
+      width: canvas.width / SCALE,
+      height: 350,
+    };
   }
 
   update() {
+    if (!this.movementDisabled) {
+      this.control();
+    }
     if (primaryInstance) {
       primaryInstance.draw();
     }
@@ -65,19 +75,71 @@ class PlayerInstance extends CharacterInstance {
       secondaryInstance.draw();
     }
     super.update();
-    if (!this.movementDisabled) {
-      this.control();
+    this.updateCameraBox();
+  }
+
+  updateCameraBox() {
+    this.cameraBox = {
+      x: this.x - this.cameraBox.width / 2,
+      y: this.y - this.cameraBox.height / 2,
+      width: canvas.width / 2,
+      height: 350,
+    };
+  }
+
+  panCameraToLeft() {
+    if (this.cameraBox.x + this.cameraBox.width >= background.image.width)
+      return;
+
+    if (
+      this.cameraBox.x + this.cameraBox.width >=
+      canvas.width / SCALE + Math.abs(camera.x)
+    ) {
+      camera.x -= this.vx;
+    }
+  }
+
+  panCameraToRight() {
+    if (this.cameraBox.x <= 0) return;
+
+    if (this.cameraBox.x <= Math.abs(camera.x)) {
+      camera.x -= this.vx;
+    }
+  }
+
+  panCameraToDown() {
+    if (this.cameraBox.y + this.vy <= 0) return;
+
+    if (this.cameraBox.y <= Math.abs(camera.y)) {
+      camera.y -= this.vy;
+    }
+  }
+
+  panCameraToUp() {
+    if (
+      this.cameraBox.y + this.cameraBox.height + this.vy >=
+      background.image.height
+    )
+      return;
+
+    if (
+      this.cameraBox.y + this.cameraBox.height >=
+      Math.abs(camera.y) + canvas.height / SCALE
+    ) {
+      camera.y -= this.vy;
     }
   }
 
   control() {
     if (keys.left) {
       this.vx = -this.speed;
+      this.panCameraToRight();
       if (!keys.primary) {
         this.facingDirection = FACING_LEFT;
       }
     } else if (keys.right) {
       this.vx = this.speed;
+      this.panCameraToLeft();
       if (!keys.primary) {
         this.facingDirection = FACING_RIGHT;
       }
@@ -85,8 +147,14 @@ class PlayerInstance extends CharacterInstance {
       this.vx = 0;
     }
     if (keys.jump && this.isGrounded) {
+      // if (keys.jump) {
       this.vy = -JUMP_HEIGHT;
       this.isGrounded = false;
+    }
+    if (this.vy < 0) {
+      this.panCameraToDown();
+    } else if (this.vy > 0) {
+      this.panCameraToUp();
     }
     if (keys.primary) {
       this.useSkill(commando.primary);
@@ -165,8 +233,13 @@ class PlayerInstance extends CharacterInstance {
       } else if (skill === commando.utility) {
         this.movementDisabled = true;
         const skillInterval = setInterval(() => {
-          this.vx = this.facingDirection * skill.rollSpeed;
+          this.vx = this.facingDirection * this.speed * skill.rollSpeed;
           this.x += this.vx;
+          if (this.vx > 0) {
+            this.panCameraToLeft();
+          } else {
+            this.panCameraToRight();
+          }
         }, 1000 / FRAME_RATE);
         setTimeout(() => {
           clearInterval(skillInterval);
