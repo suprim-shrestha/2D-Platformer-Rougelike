@@ -1,7 +1,7 @@
 const canvas = document.querySelector(".canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth * 0.9;
-canvas.height = window.innerHeight * 0.9;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 const background = new Sprite(0, 0, "./assets/Stage1.png");
 
