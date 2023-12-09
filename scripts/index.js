@@ -59,9 +59,9 @@ function animate(currentTime) {
     ctx.scale(SCALE, SCALE);
     ctx.translate(camera.x, camera.y);
     background.draw();
-    collisionBlocks.forEach((collisionBlock) => {
-      collisionBlock.draw();
-    });
+    // collisionBlocks.forEach((collisionBlock) => {
+    //   collisionBlock.draw();
+    // });
     enemyArr.forEach((enemy) => {
       enemy.update();
     });
