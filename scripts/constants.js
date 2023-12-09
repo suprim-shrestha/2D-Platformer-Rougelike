@@ -1,4 +1,4 @@
-const JUMP_HEIGHT = 8;
+const JUMP_HEIGHT = 5;
 
 const GRAVITY = 0.4;
 
