@@ -232,6 +232,7 @@ class PlayerInstance extends CharacterInstance {
         }
       } else if (skill === commando.utility) {
         this.movementDisabled = true;
+        this.vy = 0;
         const skillInterval = setInterval(() => {
           this.vx = this.facingDirection * this.speed * skill.rollSpeed;
           this.x += this.vx;
