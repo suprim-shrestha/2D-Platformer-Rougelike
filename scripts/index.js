@@ -3,14 +3,46 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth * 0.9;
 canvas.height = window.innerHeight * 0.9;
 
+const background = new Sprite(0, 0, "./assets/Stage1.png");
+
+const collisionArray = [];
+for (let i = 0; i < collision.length; i += 165) {
+  collisionArray.push(collision.slice(i, i + 165));
+}
+
+const collisionBlocks = [];
+collisionArray.forEach((row, rowIndex) => {
+  row.forEach((symbol, colIndex) => {
+    if (symbol === 22016) {
+      collisionBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16));
+    }
+  });
+});
+
 let enemyArr = [];
 
-const player = new PlayerInstance(canvas.width / 2, canvas.height - 100);
-let enemy = new CharacterInstance((canvas.width * 3) / 4, canvas.height - 100);
+const player = new PlayerInstance({
+  x: canvas.width / 4,
+  y: canvas.height - 400,
+  collisionBlocks,
+});
+let enemy = new CharacterInstance({
+  x: (canvas.width * 3) / 8,
+  y: canvas.height - 400,
+  collisionBlocks,
+});
 enemyArr.push(enemy);
-enemy = new CharacterInstance((canvas.width * 3) / 4 + 50, canvas.height - 100);
+enemy = new CharacterInstance({
+  x: (canvas.width * 3) / 8 + 50,
+  y: canvas.height - 400,
+  collisionBlocks,
+});
 enemyArr.push(enemy);
-enemy = new CharacterInstance(canvas.width / 4, canvas.height - 100);
+enemy = new CharacterInstance({
+  x: canvas.width / 8,
+  y: canvas.height - 400,
+  collisionBlocks,
+});
 enemyArr.push(enemy);
 
 // Set maximum framerate for higher refresh rate screens
@@ -22,10 +54,18 @@ function animate(currentTime) {
     lastRenderTime = currentTime - (timeSinceLastRender % frameDuration);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.save();
+    ctx.scale(2, 2);
+    ctx.translate(0, -512);
+    background.draw();
+    collisionBlocks.forEach((collisionBlock) => {
+      collisionBlock.draw();
+    });
     enemyArr.forEach((enemy) => {
       enemy.update();
     });
     player.update();
+    ctx.restore();
   }
   requestAnimationFrame(animate);
 }
