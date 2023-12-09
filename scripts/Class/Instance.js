@@ -16,7 +16,7 @@
  */
 
 class Instance {
-  constructor(x, y, width = 32, height = 32, sprite) {
+  constructor({ x, y, width, height, sprite }) {
     this.x = x;
     this.y = y;
     this.sprite = sprite;
