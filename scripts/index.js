@@ -5,11 +5,6 @@ canvas.height = window.innerHeight;
 
 const background = new Sprite(0, 0, "./assets/Stage1.png");
 
-const collisionArray = [];
-for (let i = 0; i < collision.length; i += 165) {
-  collisionArray.push(collision.slice(i, i + 165));
-}
-
 const collisionBlocks = [];
 collisionArray.forEach((row, rowIndex) => {
   row.forEach((symbol, colIndex) => {
