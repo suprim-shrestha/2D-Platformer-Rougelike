@@ -146,8 +146,8 @@ class PlayerInstance extends CharacterInstance {
     } else {
       this.vx = 0;
     }
-    if (keys.jump && this.isGrounded) {
-      // if (keys.jump) {
+    // if (keys.jump && this.isGrounded) {
+    if (keys.jump) {
       this.vy = -JUMP_HEIGHT;
       this.isGrounded = false;
     }
@@ -180,16 +180,34 @@ class PlayerInstance extends CharacterInstance {
         let abilityY = this.y + (this.height * 1) / 3;
         if (skill === commando.primary) {
           // Create primary skill instance
-          primaryInstance = new Instance(abilityX, abilityY, abilityWidth, 2);
+          primaryInstance = new Instance({
+            x: abilityX,
+            y: abilityY,
+            width: abilityWidth,
+            height: 2,
+          });
           primaryInstance.color = skill.color;
           // Set ability width
           if (this.facingDirection === FACING_RIGHT) {
             // Loop from player position to canvas border and check collision at each point
             for (let posX = this.x; posX < canvas.width; posX += 5) {
+              for (const collisionBlock of this.collisionBlocks) {
+                if (detectPointCollision(collisionBlock, posX, abilityY)) {
+                  abilityWidth =
+                    collisionBlock.x - this.x - collisionBlock.width / SCALE;
+                  if (
+                    this.x < collisionBlock.x &&
+                    abilityWidth < primaryInstance.width
+                  ) {
+                    primaryInstance.width = abilityWidth;
+                    break;
+                  }
+                }
+              }
               enemyArr.forEach((enemy) => {
                 // Detect collision between enemy and path of ability
                 if (detectPointCollision(enemy, posX, abilityY)) {
-                  abilityWidth = enemy.x - this.x - enemy.width / 2;
+                  abilityWidth = enemy.x - this.x - enemy.width / 4;
                   // Update abilityWidth when enemy is on same direction as fired skill and enemy is closer than the last one
                   if (
                     this.x < enemy.x &&
@@ -202,6 +220,20 @@ class PlayerInstance extends CharacterInstance {
             }
           } else {
             for (let posX = this.x; posX > 0; posX -= 5) {
+              for (const collisionBlock of this.collisionBlocks) {
+                if (detectPointCollision(collisionBlock, posX, abilityY)) {
+                  abilityWidth =
+                    this.x - collisionBlock.x - collisionBlock.width;
+                  if (
+                    this.x > collisionBlock.x &&
+                    abilityWidth < primaryInstance.width
+                  ) {
+                    primaryInstance.width = abilityWidth;
+                    primaryInstance.x = this.x - abilityWidth;
+                    break;
+                  }
+                }
+              }
               enemyArr.forEach((enemy) => {
                 if (detectPointCollision(enemy, posX, abilityY)) {
                   abilityWidth = this.x - enemy.x - enemy.width / 2;
@@ -220,9 +252,49 @@ class PlayerInstance extends CharacterInstance {
             primaryInstance = null;
           }, skill.skillDuration);
         } else {
-          secondaryInstance = new Instance(abilityX, abilityY, abilityWidth, 2);
+          secondaryInstance = new Instance({
+            x: abilityX,
+            y: abilityY,
+            width: abilityWidth,
+            height: 2,
+          });
           secondaryInstance.color = skill.color;
           this.movementDisabled = true;
+          if (this.facingDirection === FACING_RIGHT) {
+            // Loop from player position to canvas border and check collision at each point
+            for (let posX = this.x; posX < canvas.width; posX += 5) {
+              for (const collisionBlock of this.collisionBlocks) {
+                if (detectPointCollision(collisionBlock, posX, abilityY)) {
+                  abilityWidth =
+                    collisionBlock.x - this.x - collisionBlock.width / SCALE;
+                  if (
+                    this.x < collisionBlock.x &&
+                    abilityWidth < secondaryInstance.width
+                  ) {
+                    secondaryInstance.width = abilityWidth;
+                    break;
+                  }
+                }
+              }
+            }
+          } else {
+            for (let posX = this.x; posX > 0; posX -= 5) {
+              for (const collisionBlock of this.collisionBlocks) {
+                if (detectPointCollision(collisionBlock, posX, abilityY)) {
+                  abilityWidth =
+                    this.x - collisionBlock.x - collisionBlock.width;
+                  if (
+                    this.x > collisionBlock.x &&
+                    abilityWidth < secondaryInstance.width
+                  ) {
+                    secondaryInstance.width = abilityWidth;
+                    secondaryInstance.x = this.x - abilityWidth;
+                    break;
+                  }
+                }
+              }
+            }
+          }
           setTimeout(() => {
             this.movementDisabled = false;
           }, skill.skillDuration);
