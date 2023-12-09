@@ -18,7 +18,7 @@
  */
 
 class CharacterInstance extends Instance {
-  constructor({ x, y, width = 16, height = 16, collisionBlocks, sprite }) {
+  constructor({ x, y, width = 15, height = 15, collisionBlocks, sprite }) {
     super({ x, y, width, height, sprite });
     this.vx = 0;
     this.vy = 0;
