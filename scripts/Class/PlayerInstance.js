@@ -64,8 +64,9 @@ class PlayerInstance extends CharacterInstance {
     this.sprite.width =
       (this.sprite.image.width / this.sprite.frameRate) * PLAYER_SPRITE_SCALE;
     this.sprite.height = this.sprite.image.height * PLAYER_SPRITE_SCALE;
-    this.sprite.x = this.x;
+    const widthDiff = Math.round(this.sprite.width - this.width);
     const heightDiff = Math.round(this.sprite.height - this.height);
+    this.sprite.x = this.x - widthDiff;
     this.sprite.y = this.y - heightDiff;
   }
 
@@ -195,6 +196,11 @@ class PlayerInstance extends CharacterInstance {
       } else {
         this.vx = 0;
         this.switchSprite("idle");
+      }
+      if (this.vy < 0) {
+        this.switchSprite("jump");
+      } else if (this.vy > 0.25) {
+        this.switchSprite("fall");
       }
       if (keys.primary) {
         this.switchSprite("primary");

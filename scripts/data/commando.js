@@ -33,6 +33,16 @@ const commando = {
       frameRate: 8,
       frameBuffer: 3,
     },
+    jump: {
+      imgSrc: "./assets/commando/jump.png",
+      frameRate: 1,
+      frameBuffer: 3,
+    },
+    fall: {
+      imgSrc: "./assets/commando/fall.png",
+      frameRate: 1,
+      frameBuffer: 3,
+    },
     primary: {
       imgSrc: "./assets/commando/primary.png",
       frameRate: 3,
