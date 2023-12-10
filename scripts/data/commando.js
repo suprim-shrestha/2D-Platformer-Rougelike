@@ -43,6 +43,16 @@ const commando = {
       frameRate: 1,
       frameBuffer: 3,
     },
+    climbUp: {
+      imgSrc: "./assets/commando/climbUp.png",
+      frameRate: 6,
+      frameBuffer: 7,
+    },
+    climbDown: {
+      imgSrc: "./assets/commando/climbDown.png",
+      frameRate: 6,
+      frameBuffer: 7,
+    },
     primary: {
       imgSrc: "./assets/commando/primary.png",
       frameRate: 3,

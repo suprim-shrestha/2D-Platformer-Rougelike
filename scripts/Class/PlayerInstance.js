@@ -71,10 +71,10 @@ class PlayerInstance extends CharacterInstance {
   }
 
   update() {
-    super.update();
     if (!this.movementDisabled) {
       this.control();
     }
+    super.update();
     if (primaryInstance) {
       primaryInstance.draw();
     }
@@ -82,7 +82,12 @@ class PlayerInstance extends CharacterInstance {
       secondaryInstance.draw();
     }
     this.updateCameraBox();
-    this.sprite.updateFrames();
+    if (
+      (this.climbingRope && (this.vy > 0 || this.vy < 0)) ||
+      !this.climbingRope
+    ) {
+      this.sprite.updateFrames();
+    }
     this.updateSpriteProperties();
     this.sprite.draw(this.facingDirection);
   }
@@ -146,15 +151,20 @@ class PlayerInstance extends CharacterInstance {
         this.jumpCount = 0;
         this.vx = 0;
         if (keys.up) {
+          this.switchSprite("climbUp");
           this.vy = -ROPE_CLIMBING_SPEED;
           this.y += this.vy;
         } else {
+          this.switchSprite("climbDown");
           this.vy = ROPE_CLIMBING_SPEED;
           this.y += this.vy;
         }
       } else {
         this.climbingRope = false;
+        this.switchSprite("idle");
       }
+    } else if (this.climbingRope) {
+      this.vy = 0;
     }
     if (keys.jump && this.canJump && this.jumpCount < this.maxJumps) {
       this.canJump = false;
