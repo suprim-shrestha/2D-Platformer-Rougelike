@@ -61,15 +61,13 @@ function animate(currentTime) {
 animate();
 
 function moveCameraWithinBoundaries() {
-  if (Math.abs(camera.x) + canvas.width / SCALE >= stage.map.image.width) {
-    camera.x +=
-      Math.abs(camera.x) + canvas.width / SCALE - stage.map.image.width;
+  if (Math.abs(camera.x) + canvas.width / SCALE >= MAP_WIDTH) {
+    camera.x += Math.abs(camera.x) + canvas.width / SCALE - MAP_WIDTH;
   } else if (camera.x > 0) {
     camera.x = 0;
   }
-  if (Math.abs(camera.y) + canvas.height / SCALE >= stage.map.image.height) {
-    camera.y +=
-      Math.abs(camera.y) + canvas.height / SCALE - stage.map.image.height;
+  if (Math.abs(camera.y) + canvas.height / SCALE >= MAP_HEIGHT) {
+    camera.y += Math.abs(camera.y) + canvas.height / SCALE - MAP_HEIGHT;
   } else if (camera.y > 0) {
     camera.y = 0;
   }
