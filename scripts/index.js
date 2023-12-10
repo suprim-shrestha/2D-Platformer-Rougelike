@@ -3,31 +3,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const background = new Sprite(0, 0, "./assets/Stage1.png");
-
-const collisionBlocks = [];
-collisionArray.forEach((row, rowIndex) => {
-  row.forEach((symbol, colIndex) => {
-    if (symbol === COLLISION_BLOCK) {
-      collisionBlocks.push(
-        new CollisionBlock(colIndex * 16, rowIndex * 16, symbol)
-      );
-    }
-  });
-});
-
-const ropeBlocks = [];
-ropeCollisions.forEach((row, rowIndex) => {
-  row.forEach((symbol, colIndex) => {
-    if (
-      symbol === ROPE_BLOCK ||
-      symbol === ROPE_BLOCK_TOP ||
-      symbol === ROPE_BLOCK_END
-    ) {
-      ropeBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16, symbol));
-    }
-  });
-});
+const stage = new Stage();
 
 let enemyArr = [];
 
@@ -35,24 +11,20 @@ const player = new PlayerInstance({
   x: canvas.width / 4,
   y: canvas.height - 400,
   width: 10,
-  collisionBlocks,
 });
 let enemy = new CharacterInstance({
   x: (canvas.width * 3) / 8,
   y: canvas.height - 400,
-  collisionBlocks,
 });
 enemyArr.push(enemy);
 enemy = new CharacterInstance({
   x: (canvas.width * 3) / 8 + 50,
   y: canvas.height - 400,
-  collisionBlocks,
 });
 enemyArr.push(enemy);
 enemy = new CharacterInstance({
   x: canvas.width / 8,
   y: canvas.height - 400,
-  collisionBlocks,
 });
 enemyArr.push(enemy);
 
@@ -73,13 +45,7 @@ function animate(currentTime) {
     ctx.save();
     ctx.scale(SCALE, SCALE);
     ctx.translate(camera.x, camera.y);
-    background.draw();
-    // collisionBlocks.forEach((collisionBlock) => {
-    //   collisionBlock.draw();
-    // });
-    // ropeBlocks.forEach((ropeBlock) => {
-    //   ropeBlock.draw();
-    // });
+    stage.draw();
     enemyArr.forEach((enemy) => {
       enemy.update();
     });

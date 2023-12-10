@@ -43,16 +43,8 @@ let primaryInstance;
 let secondaryInstance;
 
 class PlayerInstance extends CharacterInstance {
-  constructor({
-    x,
-    y,
-    width,
-    height,
-    collisionBlocks,
-    sprite,
-    survivor = commando,
-  }) {
-    super({ x, y, width, height, collisionBlocks, sprite });
+  constructor({ x, y, width, height, sprite, survivor = commando }) {
+    super({ x, y, width, height, sprite });
     this.survivor = survivor;
     this.color = "#ddd";
 
@@ -92,7 +84,7 @@ class PlayerInstance extends CharacterInstance {
   }
 
   panCameraToLeft() {
-    if (this.cameraBox.x + this.cameraBox.width >= background.image.width)
+    if (this.cameraBox.x + this.cameraBox.width >= stage.map.image.width)
       return;
 
     if (
@@ -122,7 +114,7 @@ class PlayerInstance extends CharacterInstance {
   panCameraToUp() {
     if (
       this.cameraBox.y + this.cameraBox.height + this.vy >=
-      background.image.height
+      stage.map.image.height
     )
       return;
 
@@ -156,7 +148,7 @@ class PlayerInstance extends CharacterInstance {
       this.isGrounded = false;
       if (this.climbingRope) {
         this.climbingRope = false;
-        for (const collisionBlock of this.collisionBlocks) {
+        for (const collisionBlock of stage.collisionBlocks) {
           if (detectCollision(this, collisionBlock)) {
             this.climbingRope = true;
             break;
@@ -203,7 +195,7 @@ class PlayerInstance extends CharacterInstance {
       skill.offCooldown = false;
       if (skill === commando.primary || skill === commando.secondary) {
         // Set position and width for skill instance
-        let abilityWidth = background.image.width;
+        let abilityWidth = stage.map.image.width;
         let abilityX =
           this.x +
           (this.facingDirection === FACING_LEFT ? -abilityWidth : this.width);
@@ -220,7 +212,7 @@ class PlayerInstance extends CharacterInstance {
           // Set ability width
           if (this.facingDirection === FACING_RIGHT) {
             // Loop from player position to canvas border and check collision at each point
-            for (let posX = this.x; posX < background.image.width; posX += 5) {
+            for (let posX = this.x; posX < stage.map.image.width; posX += 5) {
               this.checkAbilityCollisionRight(primaryInstance, posX);
               enemyArr.forEach((enemy) => {
                 // Detect collision between enemy and path of ability
@@ -267,7 +259,7 @@ class PlayerInstance extends CharacterInstance {
           this.movementDisabled = true;
           if (this.facingDirection === FACING_RIGHT) {
             // Loop from player position to canvas border and check collision at each point
-            for (let posX = this.x; posX < background.image.width; posX += 5) {
+            for (let posX = this.x; posX < stage.map.image.width; posX += 5) {
               this.checkAbilityCollisionRight(secondaryInstance, posX);
             }
           } else {
@@ -308,8 +300,8 @@ class PlayerInstance extends CharacterInstance {
   }
 
   checkAbilityCollisionLeft(abilityInstance, posX) {
-    let abilityWidth = background.image.width;
-    for (const collisionBlock of this.collisionBlocks) {
+    let abilityWidth = stage.map.image.width;
+    for (const collisionBlock of stage.collisionBlocks) {
       if (detectPointCollision(collisionBlock, posX, abilityInstance.y)) {
         abilityWidth = this.x - collisionBlock.x - collisionBlock.width;
         if (this.x > collisionBlock.x && abilityWidth < abilityInstance.width) {
@@ -322,8 +314,8 @@ class PlayerInstance extends CharacterInstance {
   }
 
   checkAbilityCollisionRight(abilityInstance, posX) {
-    let abilityWidth = background.image.width;
-    for (const collisionBlock of this.collisionBlocks) {
+    let abilityWidth = stage.map.image.width;
+    for (const collisionBlock of stage.collisionBlocks) {
       if (detectPointCollision(collisionBlock, posX, abilityInstance.y)) {
         abilityWidth = collisionBlock.x - this.x - collisionBlock.width / SCALE;
         if (this.x < collisionBlock.x && abilityWidth < abilityInstance.width) {
