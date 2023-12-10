@@ -9,7 +9,9 @@ const collisionBlocks = [];
 collisionArray.forEach((row, rowIndex) => {
   row.forEach((symbol, colIndex) => {
     if (symbol === COLLISION_BLOCK) {
-      collisionBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16));
+      collisionBlocks.push(
+        new CollisionBlock(colIndex * 16, rowIndex * 16, symbol)
+      );
     }
   });
 });
@@ -17,8 +19,12 @@ collisionArray.forEach((row, rowIndex) => {
 const ropeBlocks = [];
 ropeCollisions.forEach((row, rowIndex) => {
   row.forEach((symbol, colIndex) => {
-    if (symbol === ROPE_BLOCK) {
-      ropeBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16));
+    if (
+      symbol === ROPE_BLOCK ||
+      symbol === ROPE_BLOCK_TOP ||
+      symbol === ROPE_BLOCK_END
+    ) {
+      ropeBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16, symbol));
     }
   });
 });
@@ -71,9 +77,9 @@ function animate(currentTime) {
     // collisionBlocks.forEach((collisionBlock) => {
     //   collisionBlock.draw();
     // });
-    ropeBlocks.forEach((ropeBlock) => {
-      ropeBlock.draw();
-    });
+    // ropeBlocks.forEach((ropeBlock) => {
+    //   ropeBlock.draw();
+    // });
     enemyArr.forEach((enemy) => {
       enemy.update();
     });

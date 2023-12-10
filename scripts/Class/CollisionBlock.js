@@ -1,9 +1,10 @@
 class CollisionBlock {
-  constructor(x, y) {
+  constructor(x, y, type) {
     this.x = x;
     this.y = y;
     this.width = 16;
     this.height = 16;
+    this.type = type;
   }
 
   draw() {
