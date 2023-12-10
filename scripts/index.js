@@ -3,15 +3,14 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const stage = new Stage();
-
-let enemyArr = [];
-
 const player = new PlayerInstance({
   x: canvas.width / 4,
   y: canvas.height - 400,
   width: 10,
 });
+
+let enemyArr = [];
+
 let enemy = new CharacterInstance({
   x: (canvas.width * 3) / 8,
   y: canvas.height - 400,
@@ -28,10 +27,14 @@ enemy = new CharacterInstance({
 });
 enemyArr.push(enemy);
 
+const stage = new Stage();
+
 const camera = {
-  x: 0,
-  y: -512,
+  x: -player.cameraBox.x,
+  y: -player.cameraBox.y,
 };
+
+moveCameraWithinBoundaries();
 
 // Set maximum framerate for higher refresh rate screens
 let lastRenderTime = 0;
@@ -56,3 +59,12 @@ function animate(currentTime) {
 }
 
 animate();
+
+function moveCameraWithinBoundaries() {
+  if (Math.abs(camera.x) + canvas.width / SCALE >= stage.map.image.width) {
+    camera.x +=
+      Math.abs(camera.x) + canvas.width / SCALE - stage.map.image.width;
+  } else if (camera.x > 0) {
+    camera.x = 0;
+  }
+}

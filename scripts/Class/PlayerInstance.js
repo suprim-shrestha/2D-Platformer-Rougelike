@@ -49,10 +49,10 @@ class PlayerInstance extends CharacterInstance {
     this.color = "#ddd";
 
     this.cameraBox = {
-      x: this.x,
-      y: this.y,
+      x: this.x - ((canvas.width / SCALE) * 1) / 2,
+      y: this.y - ((canvas.height / SCALE) * 1) / 2,
       width: canvas.width / SCALE,
-      height: 350,
+      height: canvas.height / SCALE,
     };
 
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
@@ -78,8 +78,8 @@ class PlayerInstance extends CharacterInstance {
     this.cameraBox = {
       x: this.x - this.cameraBox.width / 2,
       y: this.y - this.cameraBox.height / 2,
-      width: canvas.width / 2,
-      height: 350,
+      width: canvas.width / SCALE,
+      height: canvas.height / SCALE,
     };
   }
 
@@ -279,12 +279,12 @@ class PlayerInstance extends CharacterInstance {
         this.vy = 0;
         const skillInterval = setInterval(() => {
           this.vx = this.facingDirection * this.speed * skill.rollSpeed;
-          this.x += this.vx;
           if (this.vx > 0) {
             this.panCameraToLeft();
           } else {
             this.panCameraToRight();
           }
+          this.x += this.vx;
         }, 1000 / FRAME_RATE);
         setTimeout(() => {
           clearInterval(skillInterval);
