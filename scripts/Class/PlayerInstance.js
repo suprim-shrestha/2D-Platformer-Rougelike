@@ -309,12 +309,12 @@ class PlayerInstance extends CharacterInstance {
           clearInterval(skillInterval);
           this.vx = 0;
           this.movementDisabled = false;
+          this.switchSprite("idle");
         }, skill.rollDuration);
       }
       setTimeout(() => {
         skill.offCooldown = true;
         this.speed = SPEED;
-        this.switchSprite("idle");
       }, skill.cooldown);
     }
   }

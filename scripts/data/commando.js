@@ -15,7 +15,7 @@ const commando = {
     cooldown: 4000,
     offCooldown: true,
     rollSpeed: 4,
-    rollDuration: 400,
+    rollDuration: 340,
   },
   sprites: {
     idle: {
