@@ -333,6 +333,7 @@ class PlayerInstance extends CharacterInstance {
         }, 1000 / FRAME_RATE);
         setTimeout(() => {
           clearInterval(skillInterval);
+          this.checkHorizontalCollisions();
           this.vx = 0;
           this.movementDisabled = false;
           this.switchSprite("idle");
