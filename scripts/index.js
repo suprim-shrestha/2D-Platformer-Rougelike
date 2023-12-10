@@ -67,4 +67,10 @@ function moveCameraWithinBoundaries() {
   } else if (camera.x > 0) {
     camera.x = 0;
   }
+  if (Math.abs(camera.y) + canvas.height / SCALE >= stage.map.image.height) {
+    camera.y +=
+      Math.abs(camera.y) + canvas.height / SCALE - stage.map.image.height;
+  } else if (camera.y > 0) {
+    camera.y = 0;
+  }
 }
