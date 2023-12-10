@@ -11,6 +11,8 @@ const FACING_RIGHT = 1;
 
 const SCALE = 2;
 
+const PLAYER_SPRITE_SCALE = 11 / 26;
+
 const COLLISION_BLOCK = 22016;
 const SPAWNABLE_BLOCK = 22017;
 const ROPE_BLOCK = 22018;

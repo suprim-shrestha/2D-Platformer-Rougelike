@@ -16,10 +16,9 @@
  */
 
 class Instance {
-  constructor({ x, y, width, height, sprite }) {
+  constructor({ x, y, width, height }) {
     this.x = x;
     this.y = y;
-    this.sprite = sprite;
     this.width = width;
     this.height = height;
     this.color = "#49c";

@@ -18,8 +18,8 @@
  */
 
 class CharacterInstance extends Instance {
-  constructor({ x, y, width = 15, height = 15, sprite }) {
-    super({ x, y, width, height, sprite });
+  constructor({ x, y, width = 15, height = 15 }) {
+    super({ x, y, width, height });
     this.vx = 0;
     this.vy = 0;
     this.isGrounded = false;
@@ -33,7 +33,7 @@ class CharacterInstance extends Instance {
     if (!this.movementDisabled) {
       this.x += this.vx;
     }
-    this.draw();
+    // this.draw();
     if (!this.climbingRope) {
       this.checkHorizontalCollisions();
       this.applyGravity();

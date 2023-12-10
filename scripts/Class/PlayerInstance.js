@@ -18,35 +18,16 @@
  *
  */
 
-const commando = {
-  primary: {
-    cooldown: 200,
-    offCooldown: true,
-    color: "#f00",
-    skillDuration: 20,
-  },
-  secondary: {
-    cooldown: 3000,
-    offCooldown: true,
-    color: "#0f0",
-    skillDuration: 200,
-  },
-  utility: {
-    cooldown: 4000,
-    offCooldown: true,
-    rollSpeed: 4,
-    rollDuration: 250,
-  },
-};
-
 let primaryInstance;
 let secondaryInstance;
 
 class PlayerInstance extends CharacterInstance {
-  constructor({ x, y, width, height, sprite, survivor = commando }) {
-    super({ x, y, width, height, sprite });
+  constructor({ x, y, width, height, survivor = commando }) {
+    super({ x, y, width, height });
     this.survivor = survivor;
     this.color = "#ddd";
+
+    this.canJump = true;
 
     this.cameraBox = {
       x: this.x - ((canvas.width / SCALE) * 1) / 2,
@@ -54,13 +35,41 @@ class PlayerInstance extends CharacterInstance {
       width: canvas.width / SCALE,
       height: canvas.height / SCALE,
     };
+    this.sprites = this.survivor.sprites;
+
+    this.sprite = new Sprite(this.x, this.y, this.sprites.idle.imgSrc);
+
+    for (let key in this.sprites) {
+      const image = new Image();
+      image.src = this.sprites[key].imgSrc;
+      this.sprites[key].image = image;
+    }
 
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
       this.checkAbilityCollisionRight.bind(this);
   }
 
+  switchSprite(key) {
+    if (this.sprite.image === this.sprites[key].image || !this.sprite.loaded)
+      return;
+
+    this.currentFrame = 0;
+    this.sprite.image = this.sprites[key].image;
+    this.sprite.frameBuffer = this.sprites[key].frameBuffer;
+    this.sprite.frameRate = this.sprites[key].frameRate;
+  }
+
+  updateSpriteProperties() {
+    this.sprite.x = this.x;
+    this.sprite.y = this.y;
+    this.sprite.width =
+      (this.sprite.image.width / this.sprite.frameRate) * PLAYER_SPRITE_SCALE;
+    this.sprite.height = this.sprite.image.height * PLAYER_SPRITE_SCALE;
+  }
+
   update() {
+    super.update();
     if (!this.movementDisabled) {
       this.control();
     }
@@ -70,8 +79,10 @@ class PlayerInstance extends CharacterInstance {
     if (secondaryInstance) {
       secondaryInstance.draw();
     }
-    super.update();
     this.updateCameraBox();
+    this.sprite.updateFrames();
+    this.updateSpriteProperties();
+    this.sprite.draw(this.facingDirection);
   }
 
   updateCameraBox() {
@@ -143,10 +154,15 @@ class PlayerInstance extends CharacterInstance {
       }
     }
     // if (keys.jump && this.isGrounded) {
-    if (keys.jump) {
-      this.vy = -JUMP_HEIGHT;
-      this.isGrounded = false;
-      if (this.climbingRope) {
+    if (keys.jump && this.canJump) {
+      this.canJump = false;
+      console.log("jumping");
+      console.log(this.isGrounded);
+      if (this.isGrounded) {
+        console.log("jump");
+        this.vy = -JUMP_HEIGHT;
+        this.isGrounded = false;
+      } else if (this.climbingRope) {
         this.climbingRope = false;
         for (const collisionBlock of stage.collisionBlocks) {
           if (detectCollision(this, collisionBlock)) {
@@ -155,6 +171,8 @@ class PlayerInstance extends CharacterInstance {
           }
         }
       }
+    } else if (!keys.jump) {
+      this.canJump = true;
     }
     if (this.vy < 0) {
       this.panCameraToDown();
@@ -163,12 +181,14 @@ class PlayerInstance extends CharacterInstance {
     }
     if (!this.climbingRope) {
       if (keys.left) {
+        this.switchSprite("run");
         this.vx = -this.speed;
         this.panCameraToRight();
         if (!keys.primary) {
           this.facingDirection = FACING_LEFT;
         }
       } else if (keys.right) {
+        this.switchSprite("run");
         this.vx = this.speed;
         this.panCameraToLeft();
         if (!keys.primary) {
@@ -176,6 +196,7 @@ class PlayerInstance extends CharacterInstance {
         }
       } else {
         this.vx = 0;
+        this.switchSprite("idle");
       }
       if (keys.primary) {
         this.useSkill(commando.primary);
@@ -275,6 +296,7 @@ class PlayerInstance extends CharacterInstance {
           }, skill.skillDuration);
         }
       } else if (skill === commando.utility) {
+        this.switchSprite("roll");
         this.movementDisabled = true;
         this.vy = 0;
         const skillInterval = setInterval(() => {
@@ -295,6 +317,7 @@ class PlayerInstance extends CharacterInstance {
       setTimeout(() => {
         skill.offCooldown = true;
         this.speed = SPEED;
+        this.switchSprite("idle");
       }, skill.cooldown);
     }
   }
