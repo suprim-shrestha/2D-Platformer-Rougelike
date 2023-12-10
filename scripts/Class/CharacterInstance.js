@@ -24,6 +24,7 @@ class CharacterInstance extends Instance {
     this.vy = 0;
     this.collisionBlocks = collisionBlocks;
     this.isGrounded = false;
+    this.climbingRope = false;
     this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
     this.speed = SPEED;
@@ -34,9 +35,11 @@ class CharacterInstance extends Instance {
       this.x += this.vx;
     }
     this.draw();
-    this.checkHorizontalCollisions();
-    this.applyGravity();
-    this.checkVerticalCollisions();
+    if (!this.climbingRope) {
+      this.checkHorizontalCollisions();
+      this.applyGravity();
+      this.checkVerticalCollisions();
+    }
   }
 
   applyGravity() {
@@ -79,6 +82,16 @@ class CharacterInstance extends Instance {
         }
       } else {
         this.isGrounded = false;
+      }
+    }
+  }
+
+  checkRopeCollision() {
+    for (const ropeBlock of ropeBlocks) {
+      if (detectCollision(this, ropeBlock)) {
+        this.climbingRope = true;
+        this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
+        return true;
       }
     }
   }

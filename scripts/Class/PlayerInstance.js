@@ -135,25 +135,40 @@ class PlayerInstance extends CharacterInstance {
   }
 
   control() {
-    if (keys.left) {
-      this.vx = -this.speed;
-      this.panCameraToRight();
-      if (!keys.primary) {
-        this.facingDirection = FACING_LEFT;
+    if (!this.climbingRope) {
+      if (keys.left) {
+        this.vx = -this.speed;
+        this.panCameraToRight();
+        if (!keys.primary) {
+          this.facingDirection = FACING_LEFT;
+        }
+      } else if (keys.right) {
+        this.vx = this.speed;
+        this.panCameraToLeft();
+        if (!keys.primary) {
+          this.facingDirection = FACING_RIGHT;
+        }
+      } else {
+        this.vx = 0;
       }
-    } else if (keys.right) {
-      this.vx = this.speed;
-      this.panCameraToLeft();
-      if (!keys.primary) {
-        this.facingDirection = FACING_RIGHT;
+    }
+    if (keys.up || keys.down) {
+      if (this.checkRopeCollision()) {
+        this.vx = 0;
+        if (keys.up) {
+          this.vy = -ROPE_CLIMBING_SPEED;
+          this.y += this.vy;
+        } else {
+          this.vy = ROPE_CLIMBING_SPEED;
+          this.y += this.vy;
+        }
       }
-    } else {
-      this.vx = 0;
     }
     // if (keys.jump && this.isGrounded) {
     if (keys.jump) {
       this.vy = -JUMP_HEIGHT;
       this.isGrounded = false;
+      this.climbingRope = false;
     }
     if (this.vy < 0) {
       this.panCameraToDown();

@@ -13,3 +13,5 @@ const SCALE = 2;
 
 const COLLISION_BLOCK = 22016;
 const ROPE_BLOCK = 22017;
+
+const ROPE_CLIMBING_SPEED = 2;

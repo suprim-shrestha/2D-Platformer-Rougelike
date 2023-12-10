@@ -1,6 +1,8 @@
 const keys = {
   left: false,
   right: false,
+  up: false,
+  down: false,
   jump: false,
   primary: false,
   secondary: false,
@@ -15,6 +17,12 @@ window.onkeydown = (e) => {
       break;
     case "ArrowRight":
       keys.right = true;
+      break;
+    case "ArrowUp":
+      keys.up = true;
+      break;
+    case "ArrowDown":
+      keys.down = true;
       break;
     case "Space":
       keys.jump = true;
@@ -38,6 +46,12 @@ window.onkeyup = (e) => {
       break;
     case "ArrowRight":
       keys.right = false;
+      break;
+    case "ArrowUp":
+      keys.up = false;
+      break;
+    case "ArrowDown":
+      keys.down = false;
       break;
     case "Space":
       keys.jump = false;
