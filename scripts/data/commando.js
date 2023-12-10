@@ -3,7 +3,7 @@ const commando = {
     cooldown: 200,
     offCooldown: true,
     color: "#f00",
-    skillDuration: 20,
+    skillDuration: 30,
   },
   secondary: {
     cooldown: 3000,
@@ -36,7 +36,7 @@ const commando = {
     primary: {
       imgSrc: "./assets/commando/primary.png",
       frameRate: 3,
-      frameBuffer: 3,
+      frameBuffer: 6,
     },
   },
 };

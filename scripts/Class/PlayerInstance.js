@@ -61,11 +61,12 @@ class PlayerInstance extends CharacterInstance {
   }
 
   updateSpriteProperties() {
-    this.sprite.x = this.x;
-    this.sprite.y = this.y;
     this.sprite.width =
       (this.sprite.image.width / this.sprite.frameRate) * PLAYER_SPRITE_SCALE;
     this.sprite.height = this.sprite.image.height * PLAYER_SPRITE_SCALE;
+    this.sprite.x = this.x;
+    const heightDiff = Math.round(this.sprite.height - this.height);
+    this.sprite.y = this.y - heightDiff;
   }
 
   update() {
@@ -196,6 +197,7 @@ class PlayerInstance extends CharacterInstance {
         this.switchSprite("idle");
       }
       if (keys.primary) {
+        this.switchSprite("primary");
         this.useSkill(commando.primary);
         this.speed = SPEED / 3;
       }
