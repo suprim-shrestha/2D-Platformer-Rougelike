@@ -58,15 +58,23 @@ class PlayerInstance extends CharacterInstance {
     this.sprite.image = this.sprites[key].image;
     this.sprite.frameBuffer = this.sprites[key].frameBuffer;
     this.sprite.frameRate = this.sprites[key].frameRate;
+    this.sprite.name = key;
   }
 
   updateSpriteProperties() {
     this.sprite.width =
       (this.sprite.image.width / this.sprite.frameRate) * PLAYER_SPRITE_SCALE;
     this.sprite.height = this.sprite.image.height * PLAYER_SPRITE_SCALE;
-    const widthDiff = Math.round(this.sprite.width - this.width);
+    if (
+      this.sprite.name === "primary" &&
+      this.facingDirection === FACING_LEFT
+    ) {
+      const widthDiff = Math.round(this.sprite.width - this.width);
+      this.sprite.x = this.x - widthDiff;
+    } else {
+      this.sprite.x = this.x;
+    }
     const heightDiff = Math.round(this.sprite.height - this.height);
-    this.sprite.x = this.x - widthDiff;
     this.sprite.y = this.y - heightDiff;
   }
 

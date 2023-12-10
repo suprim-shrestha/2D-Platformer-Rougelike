@@ -2,6 +2,7 @@ class Sprite {
   constructor(x, y, imgSrc, frameRate = 1, frameBuffer = 3) {
     this.x = x;
     this.y = y;
+    this.name = "";
     this.loaded = false;
     this.image = new Image();
     this.image.src = imgSrc;
