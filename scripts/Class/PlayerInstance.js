@@ -135,6 +135,40 @@ class PlayerInstance extends CharacterInstance {
   }
 
   control() {
+    if (keys.up || keys.down) {
+      const movingDirection = keys.up ? "up" : "down";
+      if (this.checkRopeCollision(movingDirection)) {
+        this.vx = 0;
+        if (keys.up) {
+          this.vy = -ROPE_CLIMBING_SPEED;
+          this.y += this.vy;
+        } else {
+          this.vy = ROPE_CLIMBING_SPEED;
+          this.y += this.vy;
+        }
+      } else {
+        this.climbingRope = false;
+      }
+    }
+    // if (keys.jump && this.isGrounded) {
+    if (keys.jump) {
+      this.vy = -JUMP_HEIGHT;
+      this.isGrounded = false;
+      if (this.climbingRope) {
+        this.climbingRope = false;
+        for (const collisionBlock of this.collisionBlocks) {
+          if (detectCollision(this, collisionBlock)) {
+            this.climbingRope = true;
+            break;
+          }
+        }
+      }
+    }
+    if (this.vy < 0) {
+      this.panCameraToDown();
+    } else if (this.vy > 0) {
+      this.panCameraToUp();
+    }
     if (!this.climbingRope) {
       if (keys.left) {
         this.vx = -this.speed;
@@ -151,39 +185,16 @@ class PlayerInstance extends CharacterInstance {
       } else {
         this.vx = 0;
       }
-    }
-    if (keys.up || keys.down) {
-      if (this.checkRopeCollision()) {
-        this.vx = 0;
-        if (keys.up) {
-          this.vy = -ROPE_CLIMBING_SPEED;
-          this.y += this.vy;
-        } else {
-          this.vy = ROPE_CLIMBING_SPEED;
-          this.y += this.vy;
-        }
+      if (keys.primary) {
+        this.useSkill(commando.primary);
+        this.speed = SPEED / 3;
       }
-    }
-    // if (keys.jump && this.isGrounded) {
-    if (keys.jump) {
-      this.vy = -JUMP_HEIGHT;
-      this.isGrounded = false;
-      this.climbingRope = false;
-    }
-    if (this.vy < 0) {
-      this.panCameraToDown();
-    } else if (this.vy > 0) {
-      this.panCameraToUp();
-    }
-    if (keys.primary) {
-      this.useSkill(commando.primary);
-      this.speed = SPEED / 3;
-    }
-    if (keys.secondary) {
-      this.useSkill(commando.secondary);
-    }
-    if (keys.utility) {
-      this.useSkill(commando.utility);
+      if (keys.secondary) {
+        this.useSkill(commando.secondary);
+      }
+      if (keys.utility) {
+        this.useSkill(commando.utility);
+      }
     }
   }
 

@@ -86,12 +86,46 @@ class CharacterInstance extends Instance {
     }
   }
 
-  checkRopeCollision() {
+  checkRopeCollision(movingDirection) {
     for (const ropeBlock of ropeBlocks) {
       if (detectCollision(this, ropeBlock)) {
-        this.climbingRope = true;
-        this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
-        return true;
+        if (
+          this.climbingRope &&
+          ropeBlock.type === ROPE_BLOCK_TOP &&
+          this.y <= ropeBlock.y + (ropeBlock.height - this.height)
+        ) {
+          this.climbingRope = false;
+          this.y = ropeBlock.y;
+          return false;
+        } else if (
+          !this.climbingRope &&
+          ropeBlock.type === ROPE_BLOCK_TOP &&
+          movingDirection === "down"
+        ) {
+          this.climbingRope = true;
+          this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
+          this.y = ropeBlock.y + ROPE_CLIMBING_SPEED;
+          return true;
+        } else if (ropeBlock.type === ROPE_BLOCK_END) {
+          if (
+            this.y + this.height >= ropeBlock.y + ropeBlock.height &&
+            movingDirection === "down"
+          ) {
+            this.climbingRope = false;
+            this.vy = 0;
+            this.isGrounded = true;
+            this.y = ropeBlock.y + (ropeBlock.height - this.height);
+            return false;
+          } else if (movingDirection === "up") {
+            this.climbingRope = true;
+            this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
+            return true;
+          }
+        } else if (ropeBlock.type === ROPE_BLOCK) {
+          this.climbingRope = true;
+          this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
+          return true;
+        }
       }
     }
   }
