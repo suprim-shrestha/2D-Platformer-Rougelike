@@ -141,6 +141,7 @@ class PlayerInstance extends CharacterInstance {
     if (keys.up || keys.down) {
       const movingDirection = keys.up ? "up" : "down";
       if (this.checkRopeCollision(movingDirection)) {
+        this.jumpCount = 0;
         this.vx = 0;
         if (keys.up) {
           this.vy = -ROPE_CLIMBING_SPEED;
