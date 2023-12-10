@@ -18,11 +18,10 @@
  */
 
 class CharacterInstance extends Instance {
-  constructor({ x, y, width = 15, height = 15, collisionBlocks, sprite }) {
+  constructor({ x, y, width = 15, height = 15, sprite }) {
     super({ x, y, width, height, sprite });
     this.vx = 0;
     this.vy = 0;
-    this.collisionBlocks = collisionBlocks;
     this.isGrounded = false;
     this.climbingRope = false;
     this.facingDirection = FACING_RIGHT;
@@ -50,7 +49,7 @@ class CharacterInstance extends Instance {
   }
 
   checkHorizontalCollisions() {
-    for (const collisionBlock of collisionBlocks) {
+    for (const collisionBlock of stage.collisionBlocks) {
       if (detectCollision(this, collisionBlock)) {
         if (this.vx > 0) {
           this.vx = 0;
@@ -67,7 +66,7 @@ class CharacterInstance extends Instance {
   }
 
   checkVerticalCollisions() {
-    for (const collisionBlock of collisionBlocks) {
+    for (const collisionBlock of stage.collisionBlocks) {
       if (detectCollision(this, collisionBlock)) {
         if (this.vy > 0) {
           this.vy = 0;
@@ -87,7 +86,7 @@ class CharacterInstance extends Instance {
   }
 
   checkRopeCollision(movingDirection) {
-    for (const ropeBlock of ropeBlocks) {
+    for (const ropeBlock of stage.ropeBlocks) {
       if (detectCollision(this, ropeBlock)) {
         if (
           this.climbingRope &&
