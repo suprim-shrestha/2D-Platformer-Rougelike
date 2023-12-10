@@ -8,8 +8,17 @@ const background = new Sprite(0, 0, "./assets/Stage1.png");
 const collisionBlocks = [];
 collisionArray.forEach((row, rowIndex) => {
   row.forEach((symbol, colIndex) => {
-    if (symbol === 22016) {
+    if (symbol === COLLISION_BLOCK) {
       collisionBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16));
+    }
+  });
+});
+
+const ropeBlocks = [];
+ropeCollisions.forEach((row, rowIndex) => {
+  row.forEach((symbol, colIndex) => {
+    if (symbol === ROPE_BLOCK) {
+      ropeBlocks.push(new CollisionBlock(colIndex * 16, rowIndex * 16));
     }
   });
 });
@@ -62,6 +71,9 @@ function animate(currentTime) {
     // collisionBlocks.forEach((collisionBlock) => {
     //   collisionBlock.draw();
     // });
+    ropeBlocks.forEach((ropeBlock) => {
+      ropeBlock.draw();
+    });
     enemyArr.forEach((enemy) => {
       enemy.update();
     });
