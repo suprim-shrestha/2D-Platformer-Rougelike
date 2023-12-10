@@ -27,6 +27,8 @@ class CharacterInstance extends Instance {
     this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
     this.speed = SPEED;
+    this.maxJumps = 1;
+    this.jumpCount = 0;
   }
 
   update() {
@@ -71,6 +73,7 @@ class CharacterInstance extends Instance {
         if (this.vy > 0) {
           this.vy = 0;
           this.isGrounded = true;
+          this.jumpCount = 0;
           this.y = collisionBlock.y - this.height - 0.01;
           break;
         }

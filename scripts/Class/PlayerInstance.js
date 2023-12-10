@@ -153,16 +153,12 @@ class PlayerInstance extends CharacterInstance {
         this.climbingRope = false;
       }
     }
-    // if (keys.jump && this.isGrounded) {
-    if (keys.jump && this.canJump) {
+    if (keys.jump && this.canJump && this.jumpCount < this.maxJumps) {
       this.canJump = false;
-      console.log("jumping");
-      console.log(this.isGrounded);
-      if (this.isGrounded) {
-        console.log("jump");
-        this.vy = -JUMP_HEIGHT;
-        this.isGrounded = false;
-      } else if (this.climbingRope) {
+      this.jumpCount++;
+      this.vy = -JUMP_HEIGHT;
+      this.isGrounded = false;
+      if (this.climbingRope) {
         this.climbingRope = false;
         for (const collisionBlock of stage.collisionBlocks) {
           if (detectCollision(this, collisionBlock)) {
