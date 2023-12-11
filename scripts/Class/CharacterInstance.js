@@ -29,6 +29,7 @@ class CharacterInstance extends Instance {
     this.speed = SPEED;
     this.maxJumps = 1;
     this.jumpCount = 0;
+    this.level = 1;
   }
 
   update() {

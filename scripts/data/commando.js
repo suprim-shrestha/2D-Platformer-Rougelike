@@ -1,15 +1,29 @@
 const commando = {
+  baseStats: {
+    maxhp: 110,
+    healthRegen: 1,
+    damage: 12,
+    speed: SPEED,
+    armor: 0,
+  },
+  statIncrease: {
+    maxhp: 33,
+    healthRegen: 0.2,
+    damage: 2.4,
+  },
   primary: {
     cooldown: 200,
     offCooldown: true,
     color: "#f00",
     skillDuration: 30,
+    damageMultiplier: 1,
   },
   secondary: {
     cooldown: 3000,
     offCooldown: true,
     color: "#0f0",
     skillDuration: 200,
+    damageMultiplier: 3,
   },
   utility: {
     cooldown: 4000,

@@ -1,23 +1,3 @@
-/**
- * Subclass of CharacterInstance to manipulate PLayer
- *
- * items[{}]
- * exp
- * maxexp
- * level
- *
- *
- * control()
- * giveItem()
- * removeItem()
- * countItem()
- * useSkill()
- * setSkill()
- * setSkillCooldown()
- *
- *
- */
-
 let primaryInstance;
 let secondaryInstance;
 
@@ -45,9 +25,35 @@ class PlayerInstance extends CharacterInstance {
       this.sprites[key].image = image;
     }
 
+    this.stats = survivor.baseStats;
+    this.currentExp = 0;
+
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
       this.checkAbilityCollisionRight.bind(this);
+  }
+
+  update() {
+    if (!this.movementDisabled) {
+      this.control();
+    }
+    super.update();
+    if (primaryInstance) {
+      primaryInstance.draw();
+    }
+    if (secondaryInstance) {
+      secondaryInstance.draw();
+    }
+    this.updateCameraBox();
+    if (
+      (this.climbingRope && (this.vy > 0 || this.vy < 0)) ||
+      !this.climbingRope
+    ) {
+      this.sprite.updateFrames();
+    }
+    this.updateSpriteProperties();
+    this.sprite.draw(this.facingDirection);
+    this.levelUp();
   }
 
   switchSprite(key) {
@@ -76,28 +82,6 @@ class PlayerInstance extends CharacterInstance {
     }
     const heightDiff = Math.round(this.sprite.height - this.height);
     this.sprite.y = this.y - heightDiff;
-  }
-
-  update() {
-    if (!this.movementDisabled) {
-      this.control();
-    }
-    super.update();
-    if (primaryInstance) {
-      primaryInstance.draw();
-    }
-    if (secondaryInstance) {
-      secondaryInstance.draw();
-    }
-    this.updateCameraBox();
-    if (
-      (this.climbingRope && (this.vy > 0 || this.vy < 0)) ||
-      !this.climbingRope
-    ) {
-      this.sprite.updateFrames();
-    }
-    this.updateSpriteProperties();
-    this.sprite.draw(this.facingDirection);
   }
 
   updateCameraBox() {
@@ -219,7 +203,7 @@ class PlayerInstance extends CharacterInstance {
       if (keys.primary) {
         this.switchSprite("primary");
         this.useSkill(commando.primary);
-        this.speed = SPEED / 3;
+        this.speed = this.stats.speed / 3;
       }
       if (keys.secondary) {
         this.useSkill(commando.secondary);
@@ -337,7 +321,7 @@ class PlayerInstance extends CharacterInstance {
       }
       setTimeout(() => {
         skill.offCooldown = true;
-        this.speed = SPEED;
+        this.speed = this.stats.speed;
       }, skill.cooldown);
     }
   }
@@ -366,6 +350,15 @@ class PlayerInstance extends CharacterInstance {
           break;
         }
       }
+    }
+  }
+
+  levelUp() {
+    if (this.currentExp >= (-4 / 0.11) * (1 - Math.pow(1.55, this.level))) {
+      this.level++;
+      this.stats.damage += this.survivor.statIncrease.damage;
+      this.stats.maxhp += this.survivor.statIncrease.maxhp;
+      this.stats.healthRegen += this.survivor.statIncrease.healthRegen;
     }
   }
 }
