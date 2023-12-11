@@ -4,9 +4,9 @@ allItems = {
     description: "Reduce incoming damage by 10%",
     rarity: "white",
   },
-  Nugget: {
-    name: "Meat Nugget",
-    description: "Increase max hp by 50",
+  Root: {
+    name: "Bitter Root",
+    description: "Increase max hp by 8%",
     rarity: "white",
   },
   Hoof: {

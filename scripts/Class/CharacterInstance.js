@@ -23,10 +23,13 @@ class CharacterInstance extends Instance {
     this.vx = 0;
     this.vy = 0;
     this.isGrounded = false;
+    this.canJump = true;
     this.climbingRope = false;
     this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
+
     this.speed = SPEED;
+    this.jumpHeight = JUMP_HEIGHT;
     this.maxJumps = 1;
     this.jumpCount = 0;
     this.level = 1;

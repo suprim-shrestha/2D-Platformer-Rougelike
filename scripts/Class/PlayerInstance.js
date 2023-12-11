@@ -7,8 +7,6 @@ class PlayerInstance extends CharacterInstance {
     this.survivor = survivor;
     this.color = "#ddd";
 
-    this.canJump = true;
-
     this.cameraBox = {
       x: this.x - ((canvas.width / SCALE) * 1) / 2,
       y: this.y - ((canvas.height / SCALE) * 1) / 2,
@@ -25,8 +23,17 @@ class PlayerInstance extends CharacterInstance {
       this.sprites[key].image = image;
     }
 
-    this.stats = survivor.baseStats;
+    // Player stats
     this.currentExp = 0;
+    this.stats = survivor.baseStats;
+    this.lives = 1;
+    this.critChance = 0.01;
+    this.instaKillChance = 0;
+    this.atkSpeed = 1;
+    this.cooldownReduction = 1;
+    this.healOnHit = 0;
+
+    this.items = [];
 
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
@@ -157,7 +164,7 @@ class PlayerInstance extends CharacterInstance {
     if (keys.jump && this.canJump && this.jumpCount < this.maxJumps) {
       this.canJump = false;
       this.jumpCount++;
-      this.vy = -JUMP_HEIGHT;
+      this.vy = -this.jumpHeight;
       this.isGrounded = false;
       if (this.climbingRope) {
         this.climbingRope = false;
@@ -226,52 +233,58 @@ class PlayerInstance extends CharacterInstance {
         let abilityY = this.y + (this.height * 1) / 3;
         if (skill === commando.primary) {
           // Create primary skill instance
-          primaryInstance = new Instance({
-            x: abilityX,
-            y: abilityY,
-            width: abilityWidth,
-            height: 2,
-          });
-          primaryInstance.color = skill.color;
-          // Set ability width
-          if (this.facingDirection === FACING_RIGHT) {
-            // Loop from player position to canvas border and check collision at each point
-            for (let posX = this.x; posX < MAP_WIDTH; posX += 5) {
-              this.checkAbilityCollisionRight(primaryInstance, posX);
-              enemyArr.forEach((enemy) => {
-                // Detect collision between enemy and path of ability
-                if (detectPointCollision(enemy, posX, abilityY)) {
-                  abilityWidth = enemy.x - this.x - enemy.width / 4;
-                  // Update abilityWidth when enemy is on same direction as fired skill and enemy is closer than the last one
-                  if (
-                    this.x < enemy.x &&
-                    abilityWidth < primaryInstance.width
-                  ) {
-                    primaryInstance.width = abilityWidth;
+          if (!primaryInstance) {
+            primaryInstance = new Instance({
+              x: abilityX,
+              y: abilityY,
+              width: abilityWidth,
+              height: 2,
+            });
+            primaryInstance.color = skill.color;
+            // Set ability width
+            if (this.facingDirection === FACING_RIGHT) {
+              // Loop from player position to canvas border and check collision at each point
+              for (let posX = this.x; posX < MAP_WIDTH; posX += 5) {
+                this.checkAbilityCollisionRight(primaryInstance, posX);
+                enemyArr.forEach((enemy) => {
+                  // Detect collision between enemy and path of ability
+                  if (detectPointCollision(enemy, posX, abilityY)) {
+                    abilityWidth = enemy.x - this.x - enemy.width / 4;
+                    // Update abilityWidth when enemy is on same direction as fired skill and enemy is closer than the last one
+                    if (
+                      this.x < enemy.x &&
+                      abilityWidth < primaryInstance.width
+                    ) {
+                      primaryInstance.width = abilityWidth;
+                    }
                   }
-                }
-              });
-            }
-          } else {
-            for (let posX = this.x; posX > 0; posX -= 5) {
-              this.checkAbilityCollisionLeft(primaryInstance, posX);
-              enemyArr.forEach((enemy) => {
-                if (detectPointCollision(enemy, posX, abilityY)) {
-                  abilityWidth = this.x - enemy.x - enemy.width / 2;
-                  if (
-                    this.x > enemy.x &&
-                    abilityWidth < primaryInstance.width
-                  ) {
-                    primaryInstance.width = abilityWidth;
-                    primaryInstance.x = this.x - abilityWidth;
+                });
+              }
+            } else {
+              for (let posX = this.x; posX > 0; posX -= 5) {
+                this.checkAbilityCollisionLeft(primaryInstance, posX);
+                enemyArr.forEach((enemy) => {
+                  if (detectPointCollision(enemy, posX, abilityY)) {
+                    abilityWidth = this.x - enemy.x - enemy.width / 2;
+                    if (
+                      this.x > enemy.x &&
+                      abilityWidth < primaryInstance.width
+                    ) {
+                      primaryInstance.width = abilityWidth;
+                      primaryInstance.x = this.x - abilityWidth;
+                    }
                   }
-                }
-              });
+                });
+              }
             }
+            setTimeout(() => {
+              primaryInstance = null;
+            }, skill.skillDuration);
+            setTimeout(() => {
+              skill.offCooldown = true;
+              this.speed = this.stats.speed;
+            }, skill.cooldown / this.atkSpeed);
           }
-          setTimeout(() => {
-            primaryInstance = null;
-          }, skill.skillDuration);
         } else {
           secondaryInstance = new Instance({
             x: abilityX,
@@ -297,6 +310,10 @@ class PlayerInstance extends CharacterInstance {
           setTimeout(() => {
             secondaryInstance = null;
           }, skill.skillDuration);
+          setTimeout(() => {
+            skill.offCooldown = true;
+            this.speed = this.stats.speed;
+          }, skill.cooldown * this.cooldownReduction);
         }
       } else if (skill === commando.utility) {
         this.switchSprite("roll");
@@ -318,11 +335,11 @@ class PlayerInstance extends CharacterInstance {
           this.movementDisabled = false;
           this.switchSprite("idle");
         }, skill.rollDuration);
+        setTimeout(() => {
+          skill.offCooldown = true;
+          this.speed = this.stats.speed;
+        }, skill.cooldown * this.cooldownReduction);
       }
-      setTimeout(() => {
-        skill.offCooldown = true;
-        this.speed = this.stats.speed;
-      }, skill.cooldown);
     }
   }
 
@@ -360,5 +377,15 @@ class PlayerInstance extends CharacterInstance {
       this.stats.maxhp += this.survivor.statIncrease.maxhp;
       this.stats.healthRegen += this.survivor.statIncrease.healthRegen;
     }
+  }
+
+  addItem(item) {
+    const existingItem = this.items.find((el) => el.item === item);
+    if (existingItem) {
+      existingItem.count++;
+    } else {
+      this.items.push({ item: item, count: 1 });
+    }
+    addItemEffect(this, item);
   }
 }
