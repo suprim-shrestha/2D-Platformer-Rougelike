@@ -7,6 +7,7 @@ class ItemInstance extends Instance {
   }
 
   draw() {
+    if (!this.image) return;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
 }
