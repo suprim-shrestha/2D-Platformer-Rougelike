@@ -42,8 +42,8 @@ class ItemInstance extends Instance {
     const popUpY = canvas.height - 200;
 
     // Enlarge item sprite size for better visualization
-    this.width = 72;
-    this.height = 72;
+    this.width = TILE_SIZE * SCALE * 2;
+    this.height = TILE_SIZE * SCALE * 2;
     this.x = popUpX + 20;
     this.y = popUpY + popUpHeight / 2 - this.height / 2;
 

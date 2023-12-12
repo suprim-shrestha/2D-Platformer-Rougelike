@@ -2,8 +2,8 @@ class CollisionBlock {
   constructor(x, y, type) {
     this.x = x;
     this.y = y;
-    this.width = 16;
-    this.height = 16;
+    this.width = TILE_SIZE;
+    this.height = TILE_SIZE;
     this.type = type;
   }
 

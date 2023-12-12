@@ -1,5 +1,5 @@
 class Chest extends Instance {
-  constructor({ x, y, width = 16, height = 16 }) {
+  constructor({ x, y, width = TILE_SIZE, height = TILE_SIZE }) {
     super({ x, y, width, height });
     this.cost = DEFAULT_CHEST_COST;
     this.item;

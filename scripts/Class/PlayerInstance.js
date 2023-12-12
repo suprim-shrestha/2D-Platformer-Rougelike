@@ -433,8 +433,8 @@ class PlayerInstance extends CharacterInstance {
       const itemInstance = new ItemInstance({
         x: itemX,
         y: canvas.height - 200,
-        width: 32,
-        height: 32,
+        width: TILE_SIZE * SCALE,
+        height: TILE_SIZE * SCALE,
         item,
         count,
       });

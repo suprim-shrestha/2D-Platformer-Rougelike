@@ -44,7 +44,11 @@ class Stage {
       row.forEach((symbol, colIndex) => {
         if (symbol === COLLISION_BLOCK) {
           this.collisionBlocks.push(
-            new CollisionBlock(colIndex * 16, rowIndex * 16, symbol)
+            new CollisionBlock(
+              colIndex * TILE_SIZE,
+              rowIndex * TILE_SIZE,
+              symbol
+            )
           );
         }
       });
@@ -63,7 +67,11 @@ class Stage {
           symbol === ROPE_BLOCK_END
         ) {
           this.ropeBlocks.push(
-            new CollisionBlock(colIndex * 16, rowIndex * 16, symbol)
+            new CollisionBlock(
+              colIndex * TILE_SIZE,
+              rowIndex * TILE_SIZE,
+              symbol
+            )
           );
         }
       });
@@ -78,7 +86,11 @@ class Stage {
       row.forEach((symbol, colIndex) => {
         if (symbol === SPAWNABLE_BLOCK) {
           this.spawnableBlocks.push(
-            new CollisionBlock(colIndex * 16, rowIndex * 16, symbol)
+            new CollisionBlock(
+              colIndex * TILE_SIZE,
+              rowIndex * TILE_SIZE,
+              symbol
+            )
           );
         }
       });

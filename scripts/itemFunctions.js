@@ -57,8 +57,8 @@ function displayItemPickup(item) {
     itemPopUp = new ItemInstance({
       x: 0,
       y: 0,
-      width: 32,
-      height: 32,
+      width: TILE_SIZE * SCALE,
+      height: TILE_SIZE * SCALE,
       item,
     });
     setTimeout(() => {
