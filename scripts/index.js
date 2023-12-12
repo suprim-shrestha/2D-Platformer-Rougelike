@@ -9,6 +9,7 @@ const player = new PlayerInstance({
   width: 11.8,
 });
 
+let itemPopUp;
 let enemyArr = [];
 
 let enemy = new CharacterInstance({
@@ -54,6 +55,10 @@ function animate(currentTime) {
     });
     player.update();
     ctx.restore();
+
+    if (itemPopUp) {
+      itemPopUp.draw();
+    }
   }
   requestAnimationFrame(animate);
 }

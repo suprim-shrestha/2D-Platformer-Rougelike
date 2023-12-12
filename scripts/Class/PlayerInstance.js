@@ -402,10 +402,30 @@ class PlayerInstance extends CharacterInstance {
           chest.isOpen = true;
           chest.sprite.image.src = "./assets/chest-open.png";
           this.addItem(chest.item);
+          this.displayItemPickup(chest.item);
           console.log("Items: ", this.items);
           console.log("Gold: ", this.gold);
         }
       }
+    }
+  }
+
+  displayItemPickup(item) {
+    if (!itemPopUp) {
+      itemPopUp = new ItemInstance({
+        x: canvas.width / 2 - 16,
+        y: canvas.height - 200,
+        width: 32,
+        height: 32,
+        item,
+      });
+      setTimeout(() => {
+        itemPopUp = null;
+      }, 5000);
+    } else {
+      setTimeout(() => {
+        this.displayItemPickup(item);
+      }, 1000);
     }
   }
 }
