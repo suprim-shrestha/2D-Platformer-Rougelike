@@ -48,3 +48,26 @@ function addItemEffect(character, item) {
       break;
   }
 }
+
+/**
+ * Create ItemInstance for Pop up display after picking up item
+ */
+function displayItemPickup(item) {
+  if (!itemPopUp) {
+    itemPopUp = new ItemInstance({
+      x: 0,
+      y: 0,
+      width: 32,
+      height: 32,
+      item,
+    });
+    setTimeout(() => {
+      itemPopUp = null;
+    }, 5000); // Display pop up for 5 seconds
+  } else {
+    setTimeout(() => {
+      // Try again after 1 second if pop up already exists
+      displayItemPickup(item);
+    }, 1000);
+  }
+}
