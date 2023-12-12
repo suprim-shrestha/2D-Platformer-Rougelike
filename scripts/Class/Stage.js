@@ -8,10 +8,13 @@ class Stage {
 
     this.playerSpawnPoint = { x: 0, y: 0 };
 
+    this.chestsArray = [];
+
     this.createCollisionBlocks();
     this.createRopeBlocks();
     this.createSpawnableBlocks();
     this.randomizePlayerSpawn();
+    this.generateChests();
   }
 
   draw() {
@@ -22,6 +25,9 @@ class Stage {
     // ropeBlocks.forEach((ropeBlock) => {
     //   ropeBlock.draw();
     // });
+    this.chestsArray.forEach((chest) => {
+      chest.draw();
+    });
   }
 
   createCollisionBlocks() {
@@ -78,5 +84,22 @@ class Stage {
     player.updateCameraBox();
     player.vy -= JUMP_HEIGHT;
     player.isGrounded = false;
+  }
+
+  generateChests() {
+    for (let i = 0; i < CHEST_COUNT; i++) {
+      const chestSpawnBlock =
+        this.spawnableBlocks[
+          Math.floor(getRandomNum(0, this.spawnableBlocks.length))
+        ];
+      const chestX = chestSpawnBlock.x + 3;
+      const chestY = chestSpawnBlock.y + 6;
+      const chest = new Chest({
+        x: chestX,
+        y: chestY,
+      });
+      this.chestsArray.push(chest);
+    }
+    console.log(this.chestsArray);
   }
 }
