@@ -1,5 +1,5 @@
 function addItemEffect(character, item) {
-  switch (item) {
+  switch (item.id) {
     case "Scarf":
       // Reduce incoming damage or chance to avoid damage
       break;
