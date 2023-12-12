@@ -92,8 +92,8 @@ class Stage {
         this.spawnableBlocks[
           Math.floor(getRandomNum(0, this.spawnableBlocks.length))
         ];
-      const chestX = chestSpawnBlock.x + 3;
-      const chestY = chestSpawnBlock.y + 6;
+      const chestX = chestSpawnBlock.x;
+      const chestY = chestSpawnBlock.y;
       const chest = new Chest({
         x: chestX,
         y: chestY,

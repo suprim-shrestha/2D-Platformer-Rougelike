@@ -1,12 +1,20 @@
 class Chest extends Instance {
-  constructor({ x, y, width = 10, height = 10 }) {
+  constructor({ x, y, width = 16, height = 16 }) {
     super({ x, y, width, height });
     this.cost = DEFAULT_CHEST_COST;
     this.item;
     this.itemRarity;
     this.isOpen = false;
 
+    this.sprite = new Sprite(this.x, this.y, "./assets/chest-closed.png");
+
     this.generateItem();
+  }
+
+  draw() {
+    this.sprite.width = this.width;
+    this.sprite.height = this.height;
+    this.sprite.draw();
   }
 
   generateItem() {

@@ -400,6 +400,7 @@ class PlayerInstance extends CharacterInstance {
         if (this.gold >= chest.cost && !chest.isOpen) {
           this.gold -= chest.cost;
           chest.isOpen = true;
+          chest.sprite.image.src = "./assets/chest-open.png";
           this.addItem(chest.item);
           console.log("Items: ", this.items);
           console.log("Gold: ", this.gold);
