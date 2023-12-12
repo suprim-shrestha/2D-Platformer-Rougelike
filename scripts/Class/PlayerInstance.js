@@ -413,8 +413,8 @@ class PlayerInstance extends CharacterInstance {
   displayItemPickup(item) {
     if (!itemPopUp) {
       itemPopUp = new ItemInstance({
-        x: canvas.width / 2 - 16,
-        y: canvas.height - 200,
+        x: 0,
+        y: 0,
         width: 32,
         height: 32,
         item,
