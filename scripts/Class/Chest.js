@@ -29,6 +29,7 @@ class Chest extends Instance {
     }
     const itemArray = Object.keys(allItems[itemRarity]);
     const itemIndex = Math.floor(getRandomNum(0, itemArray.length));
-    this.item = itemArray[itemIndex];
+    const itemName = itemArray[itemIndex];
+    this.item = allItems[itemRarity][itemName];
   }
 }
