@@ -22,3 +22,6 @@ const ROPE_BLOCK_END = 22020;
 
 const MAP_WIDTH = 2640;
 const MAP_HEIGHT = 2096;
+
+const DEFAULT_CHEST_COST = 25;
+const CHEST_COUNT = 10;
