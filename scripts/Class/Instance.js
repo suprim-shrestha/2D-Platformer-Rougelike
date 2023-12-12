@@ -1,20 +1,6 @@
 /**
  * An Instance is anything in the game world which can be interacted with or interacts with other instances.
- *
- * fields
- *  - position
- *  - velocity
- *  - sprite
- *  - visible
- *  - depth?
- *  - id?
- * draw function
- * collidesWith(Instance)
- * collidesWithMap()
- *
- *
  */
-
 class Instance {
   constructor({ x, y, width, height }) {
     this.x = x;

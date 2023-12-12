@@ -6,6 +6,7 @@ class Sprite {
     this.loaded = false;
     this.image = new Image();
     this.image.src = imgSrc;
+    // Set width and height based on image size
     this.image.onload = () => {
       this.width = this.image.width / this.frameRate;
       this.height = this.image.height;
@@ -20,6 +21,7 @@ class Sprite {
   draw(facingDirection) {
     if (!this.image) return;
 
+    // Cropbox used to display the current sprite from spritesheet
     const cropbox = {
       x: this.currentFrame * (this.image.width / this.frameRate),
       y: 0,
@@ -28,6 +30,7 @@ class Sprite {
     };
 
     ctx.save();
+    // All sprites are facing right so flip image if facing direction is left
     if (facingDirection === FACING_LEFT) {
       ctx.translate(this.x + this.width, this.y); // Translate to the right edge of the sprite
       ctx.scale(-1, 1); // Flip the image horizontally
@@ -59,6 +62,9 @@ class Sprite {
     ctx.restore();
   }
 
+  /**
+   * Update current frame based on frameBuffer
+   */
   updateFrames() {
     this.elapsedFrames++;
 

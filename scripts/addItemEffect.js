@@ -1,3 +1,9 @@
+/**
+ * Add effect of item to character
+ *
+ * @param {PlayerInstance} character
+ * @param {ItemObj} item
+ */
 function addItemEffect(character, item) {
   switch (item.id) {
     case "Scarf":

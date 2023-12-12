@@ -7,6 +7,7 @@ class PlayerInstance extends CharacterInstance {
     this.survivor = survivor;
     this.color = "#ddd";
 
+    // Camera box of full canvas size around the player to move camera
     this.cameraBox = {
       x: this.x - ((canvas.width / SCALE) * 1) / 2,
       y: this.y - ((canvas.height / SCALE) * 1) / 2,
@@ -17,6 +18,7 @@ class PlayerInstance extends CharacterInstance {
 
     this.sprite = new Sprite(this.x, this.y, this.sprites.idle.imgSrc);
 
+    // Create image object for every sprite
     for (let key in this.sprites) {
       const image = new Image();
       image.src = this.sprites[key].imgSrc;
@@ -56,7 +58,7 @@ class PlayerInstance extends CharacterInstance {
     }
     this.updateCameraBox();
     if (
-      (this.climbingRope && (this.vy > 0 || this.vy < 0)) ||
+      (this.climbingRope && (this.vy > 0 || this.vy < 0)) || // Don't update frames when on rope but not moving
       !this.climbingRope
     ) {
       this.sprite.updateFrames();
@@ -77,10 +79,16 @@ class PlayerInstance extends CharacterInstance {
     this.sprite.name = key;
   }
 
+  /**
+   * Update sprite position and size with player's size and position
+   */
   updateSpriteProperties() {
+    // Scale sprite image size to actual player size
     this.sprite.width =
       (this.sprite.image.width / this.sprite.frameRate) * PLAYER_SPRITE_SCALE;
     this.sprite.height = this.sprite.image.height * PLAYER_SPRITE_SCALE;
+
+    // Fix hitbox to player position when shooting left
     if (
       this.sprite.name === "primary" &&
       this.facingDirection === FACING_LEFT
@@ -90,6 +98,7 @@ class PlayerInstance extends CharacterInstance {
     } else {
       this.sprite.x = this.x;
     }
+    // Move sprite position up on y-axis when sprite's height is greater than player's (jump and climb sprites)
     const heightDiff = Math.round(this.sprite.height - this.height);
     this.sprite.y = this.y - heightDiff;
   }
@@ -103,6 +112,7 @@ class PlayerInstance extends CharacterInstance {
     };
   }
 
+  // Change camera position according to player's cameraBox position
   panCameraToLeft() {
     if (this.cameraBox.x + this.cameraBox.width >= MAP_WIDTH) return;
 
@@ -145,6 +155,7 @@ class PlayerInstance extends CharacterInstance {
   control() {
     if (keys.up || keys.down) {
       const movingDirection = keys.up ? "up" : "down";
+      // Only check rope collision when up or down is pressed
       if (this.checkRopeCollision(movingDirection)) {
         this.jumpCount = 0;
         this.vx = 0;
@@ -171,6 +182,7 @@ class PlayerInstance extends CharacterInstance {
       this.isGrounded = false;
       if (this.climbingRope) {
         this.climbingRope = false;
+        // Don't allow player to let go of rope if inside a collision block
         for (const collisionBlock of stage.collisionBlocks) {
           if (detectCollision(this, collisionBlock)) {
             this.climbingRope = true;
@@ -179,6 +191,7 @@ class PlayerInstance extends CharacterInstance {
         }
       }
     } else if (!keys.jump) {
+      // Have to let go of jump button before jumping again
       this.canJump = true;
     }
     if (this.vy < 0) {
@@ -213,7 +226,7 @@ class PlayerInstance extends CharacterInstance {
       if (keys.primary) {
         this.switchSprite("primary");
         this.useSkill(commando.primary);
-        this.speed = this.stats.speed / 3;
+        this.speed = this.stats.speed / 3; // Reduce player speed for walking while firing primary
       }
       if (keys.secondary) {
         this.useSkill(commando.secondary);
@@ -256,10 +269,9 @@ class PlayerInstance extends CharacterInstance {
                   // Detect collision between enemy and path of ability
                   if (detectPointCollision(enemy, posX, abilityY)) {
                     abilityWidth = enemy.x - this.x - enemy.width / 4;
-                    // Update abilityWidth when enemy is on same direction as fired skill and enemy is closer than the last one
                     if (
-                      this.x < enemy.x &&
-                      abilityWidth < primaryInstance.width
+                      this.x < enemy.x && // Update abilityWidth when enemy is on same direction as fired skill
+                      abilityWidth < primaryInstance.width // and enemy is closer than the last one
                     ) {
                       primaryInstance.width = abilityWidth;
                     }
@@ -289,7 +301,7 @@ class PlayerInstance extends CharacterInstance {
             setTimeout(() => {
               skill.offCooldown = true;
               this.speed = this.stats.speed;
-            }, skill.cooldown / this.atkSpeed);
+            }, skill.cooldown / this.atkSpeed); // atkSpeed increases firerate of primary skill only
           }
         } else {
           secondaryInstance = new Instance({
@@ -312,8 +324,6 @@ class PlayerInstance extends CharacterInstance {
           }
           setTimeout(() => {
             this.movementDisabled = false;
-          }, skill.skillDuration);
-          setTimeout(() => {
             secondaryInstance = null;
           }, skill.skillDuration);
           setTimeout(() => {
@@ -349,6 +359,12 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check ability collision with map
+   *
+   * @param {Instance} abilityInstance
+   * @param {number} posX
+   */
   checkAbilityCollisionLeft(abilityInstance, posX) {
     let abilityWidth = MAP_WIDTH;
     for (const collisionBlock of stage.collisionBlocks) {
@@ -363,6 +379,12 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check ability collision with map
+   *
+   * @param {Instance} abilityInstance
+   * @param {number} posX
+   */
   checkAbilityCollisionRight(abilityInstance, posX) {
     let abilityWidth = MAP_WIDTH;
     for (const collisionBlock of stage.collisionBlocks) {
@@ -376,6 +398,9 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check if current exp is greater than required exp for level up and increase stats
+   */
   levelUp() {
     if (this.currentExp >= (-4 / 0.11) * (1 - Math.pow(1.55, this.level))) {
       this.level++;
@@ -386,15 +411,18 @@ class PlayerInstance extends CharacterInstance {
   }
 
   addItem(item) {
-    const existingItem = this.items.find((el) => el.item === item);
     let count = 1;
+
+    const existingItem = this.items.find((el) => el.item === item);
     if (existingItem) {
+      // Increase count if same item already exists in array
       count = existingItem.count++;
       const existingItemInstance = this.itemInstances.find(
         (el) => el.item === item
       );
       existingItemInstance.count++;
     } else {
+      // Push new item to array and create new ItemInstance to display item
       this.items.push({ item: item, count });
       const lastItemInstance =
         this.itemInstances[this.itemInstances.length - 1];
@@ -414,6 +442,9 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check for collision with chest and open chest if player has required gold
+   */
   openChest() {
     for (const chest of stage.chestsArray) {
       if (detectCollision(this, chest)) {
@@ -439,9 +470,10 @@ class PlayerInstance extends CharacterInstance {
       });
       setTimeout(() => {
         itemPopUp = null;
-      }, 5000);
+      }, 5000); // Display pop up for 5 seconds
     } else {
       setTimeout(() => {
+        // Try again after 1 second if pop up already exists
         this.displayItemPickup(item);
       }, 1000);
     }

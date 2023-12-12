@@ -30,11 +30,13 @@ enemyArr.push(enemy);
 
 const stage = new Stage();
 
+// Initialize camera position
 const camera = {
   x: -player.cameraBox.x,
   y: -player.cameraBox.y,
 };
 
+// Camera can show space outside of map boundaries if player's spawn is randomized near boundary
 moveCameraWithinBoundaries();
 
 // Set maximum framerate for higher refresh rate screens
@@ -68,6 +70,9 @@ function animate(currentTime) {
 
 animate();
 
+/**
+ * Move camera within boundaries of map
+ */
 function moveCameraWithinBoundaries() {
   if (Math.abs(camera.x) + canvas.width / SCALE >= MAP_WIDTH) {
     camera.x += Math.abs(camera.x) + canvas.width / SCALE - MAP_WIDTH;

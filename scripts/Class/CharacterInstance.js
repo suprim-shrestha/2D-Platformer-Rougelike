@@ -1,22 +1,6 @@
 /**
- * Used for instances of characters
- *
- * stats {maxhp, attack, hpRegen, armor, speed}
- * facingDirection
- * isBoss
- * hp
- *
- * setInitialStats()
- * levelUpStats()
- * fireBullet()
- * kill()
- * applyBuff()
- * removeBuff()
- * hasBuff()
- * getBuffs()
- * moveTo()
+ * Instance for all playable and non-playable characters
  */
-
 class CharacterInstance extends Instance {
   constructor({ x, y, width = 15, height = 15 }) {
     super({ x, y, width, height });
@@ -39,7 +23,7 @@ class CharacterInstance extends Instance {
     if (!this.movementDisabled) {
       this.x += this.vx;
     }
-    // this.draw();
+    // Disable collision checking and gravity when on rope
     if (!this.climbingRope) {
       this.checkHorizontalCollisions();
       this.applyGravity();
@@ -95,6 +79,7 @@ class CharacterInstance extends Instance {
   checkRopeCollision(movingDirection) {
     for (const ropeBlock of stage.ropeBlocks) {
       if (detectCollision(this, ropeBlock)) {
+        // Get out of rope after reaching the top
         if (
           this.climbingRope &&
           ropeBlock.type === ROPE_BLOCK_TOP &&
@@ -108,6 +93,7 @@ class CharacterInstance extends Instance {
           ropeBlock.type === ROPE_BLOCK_TOP &&
           movingDirection === "down"
         ) {
+          // Start climbing down rope from the top
           this.climbingRope = true;
           this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
           this.y = ropeBlock.y + ROPE_CLIMBING_SPEED;
@@ -117,12 +103,14 @@ class CharacterInstance extends Instance {
             this.y + this.height >= ropeBlock.y + ropeBlock.height &&
             movingDirection === "down"
           ) {
+            // Get out of rope after touching the ground
             this.climbingRope = false;
             this.vy = 0;
             this.isGrounded = true;
             this.y = ropeBlock.y + (ropeBlock.height - this.height);
             return false;
           } else if (movingDirection === "up") {
+            // Climb rope from bottom
             this.climbingRope = true;
             this.x = ropeBlock.x + ropeBlock.width / 2 - this.width / 2;
             return true;

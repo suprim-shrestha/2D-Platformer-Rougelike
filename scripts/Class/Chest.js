@@ -17,9 +17,14 @@ class Chest extends Instance {
     this.sprite.draw();
   }
 
+  /**
+   * Generate random item in chest from list of items
+   */
   generateItem() {
     const randomRarity = getRandomNum();
     let itemRarity;
+    // Randomize item type according to rarity
+    // Chance of getting Common: 60%, Uncommon: 30% and Rare: 10%
     if (randomRarity <= 0.6) {
       itemRarity = "Common";
     } else if (randomRarity <= 0.9) {
@@ -27,7 +32,9 @@ class Chest extends Instance {
     } else {
       itemRarity = "Rare";
     }
+    // Get array of items of that rarity
     const itemArray = Object.keys(allItems[itemRarity]);
+    // Select one item from above array
     const itemIndex = Math.floor(getRandomNum(0, itemArray.length));
     const itemName = itemArray[itemIndex];
     this.item = allItems[itemRarity][itemName];

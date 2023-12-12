@@ -1,3 +1,6 @@
+/**
+ * Stage class contains all elements related to the stage including map, collision blocks, randomized chests and spawn points
+ */
 class Stage {
   constructor() {
     this.collisionBlocks = [];
@@ -17,6 +20,9 @@ class Stage {
     this.generateChests();
   }
 
+  /**
+   * Draw map and chests on screen
+   */
   draw() {
     this.map.draw();
     // collisionBlocks.forEach((collisionBlock) => {
@@ -30,6 +36,9 @@ class Stage {
     });
   }
 
+  /**
+   * Generate collision blocks from 2D array of tiles and push to an array
+   */
   createCollisionBlocks() {
     collisionArray.forEach((row, rowIndex) => {
       row.forEach((symbol, colIndex) => {
@@ -42,6 +51,9 @@ class Stage {
     });
   }
 
+  /**
+   * Specify blocks with climbable ropes
+   */
   createRopeBlocks() {
     ropeCollisions.forEach((row, rowIndex) => {
       row.forEach((symbol, colIndex) => {
@@ -58,6 +70,9 @@ class Stage {
     });
   }
 
+  /**
+   * Specify all possible spawnable blocks
+   */
   createSpawnableBlocks() {
     spawnableLocations.forEach((row, rowIndex) => {
       row.forEach((symbol, colIndex) => {
@@ -70,6 +85,9 @@ class Stage {
     });
   }
 
+  /**
+   * Randomize player spawn point in map and set player position to the randomized point
+   */
   randomizePlayerSpawn() {
     const playerSpawnBlock =
       this.spawnableBlocks[
@@ -86,6 +104,9 @@ class Stage {
     player.isGrounded = false;
   }
 
+  /**
+   * Generate chests in random points of the map
+   */
   generateChests() {
     for (let i = 0; i < CHEST_COUNT; i++) {
       const chestSpawnBlock =
@@ -100,6 +121,5 @@ class Stage {
       });
       this.chestsArray.push(chest);
     }
-    console.log(this.chestsArray);
   }
 }
