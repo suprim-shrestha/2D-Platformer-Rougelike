@@ -35,6 +35,8 @@ class PlayerInstance extends CharacterInstance {
 
     this.items = [];
 
+    this.gold = 100;
+
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
       this.checkAbilityCollisionRight.bind(this);
@@ -218,6 +220,9 @@ class PlayerInstance extends CharacterInstance {
       if (keys.utility) {
         this.useSkill(commando.utility);
       }
+      if (keys.interact) {
+        this.openChest();
+      }
     }
   }
 
@@ -387,5 +392,19 @@ class PlayerInstance extends CharacterInstance {
       this.items.push({ item: item, count: 1 });
     }
     addItemEffect(this, item);
+  }
+
+  openChest() {
+    for (const chest of stage.chestsArray) {
+      if (detectCollision(this, chest)) {
+        if (this.gold >= chest.cost && !chest.isOpen) {
+          this.gold -= chest.cost;
+          chest.isOpen = true;
+          this.addItem(chest.item);
+          console.log("Items: ", this.items);
+          console.log("Gold: ", this.gold);
+        }
+      }
+    }
   }
 }

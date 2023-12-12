@@ -7,6 +7,7 @@ const keys = {
   primary: false,
   secondary: false,
   utility: false,
+  interact: false,
 };
 
 // Event listeners for key presses
@@ -36,6 +37,9 @@ window.onkeydown = (e) => {
     case "ShiftLeft":
       keys.utility = true;
       break;
+    case "KeyE":
+      keys.interact = true;
+      break;
   }
 };
 
@@ -64,6 +68,9 @@ window.onkeyup = (e) => {
       break;
     case "ShiftLeft":
       keys.utility = false;
+      break;
+    case "KeyE":
+      keys.interact = false;
       break;
   }
 };
