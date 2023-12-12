@@ -6,7 +6,8 @@ canvas.height = window.innerHeight;
 const player = new PlayerInstance({
   x: canvas.width / 4,
   y: canvas.height - 400,
-  width: 11.8,
+  width: 10.24,
+  height: 13,
 });
 
 let itemPopUp;
