@@ -450,8 +450,7 @@ class PlayerInstance extends CharacterInstance {
       if (detectCollision(this, chest)) {
         if (this.gold >= chest.cost && !chest.isOpen) {
           this.gold -= chest.cost;
-          chest.isOpen = true;
-          chest.sprite.image.src = "./assets/chest-open.png";
+          chest.setToOpen();
           this.addItem(chest.item);
           this.displayItemPickup(chest.item);
         }

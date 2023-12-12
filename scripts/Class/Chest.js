@@ -39,4 +39,12 @@ class Chest extends Instance {
     const itemName = itemArray[itemIndex];
     this.item = allItems[itemRarity][itemName];
   }
+
+  /**
+   * Set chest state to open and change sprite
+   */
+  setToOpen() {
+    this.isOpen = true;
+    this.sprite.image.src = "./assets/chest-open.png";
+  }
 }
