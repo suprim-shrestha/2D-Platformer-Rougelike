@@ -1,14 +1,24 @@
 class ItemInstance extends Instance {
-  constructor({ x, y, width, height, item }) {
+  constructor({ x, y, width, height, item, count = null }) {
     super({ x, y, width, height });
     this.item = item;
     this.image = new Image();
     this.image.src = this.item.imageSrc;
+    this.count = count;
   }
 
   draw() {
     if (!this.image) return;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    if (this.count) {
+      ctx.font = "20px Arial";
+      ctx.fillStyle = "#fff";
+      ctx.fillText(
+        this.count,
+        this.x + this.width - 5,
+        this.y + this.height - 5
+      );
+    }
   }
 
   displayPopUp() {

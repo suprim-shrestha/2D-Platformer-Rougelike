@@ -34,8 +34,9 @@ class PlayerInstance extends CharacterInstance {
     this.healOnHit = 0;
 
     this.items = [];
+    this.itemInstances = [];
 
-    this.gold = 100;
+    this.gold = 250;
 
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
@@ -386,12 +387,31 @@ class PlayerInstance extends CharacterInstance {
 
   addItem(item) {
     const existingItem = this.items.find((el) => el.item === item);
+    let count = 1;
     if (existingItem) {
-      existingItem.count++;
+      count = existingItem.count++;
+      const existingItemInstance = this.itemInstances.find(
+        (el) => el.item === item
+      );
+      existingItemInstance.count++;
     } else {
-      this.items.push({ item: item, count: 1 });
+      this.items.push({ item: item, count });
+      const lastItemInstance =
+        this.itemInstances[this.itemInstances.length - 1];
+      const itemX = lastItemInstance
+        ? lastItemInstance.x + lastItemInstance.width + 20
+        : 20;
+      addItemEffect(this, item);
+      const itemInstance = new ItemInstance({
+        x: itemX,
+        y: canvas.height - 200,
+        width: 32,
+        height: 32,
+        item,
+        count,
+      });
+      this.itemInstances.push(itemInstance);
     }
-    addItemEffect(this, item);
   }
 
   openChest() {
@@ -403,8 +423,6 @@ class PlayerInstance extends CharacterInstance {
           chest.sprite.image.src = "./assets/chest-open.png";
           this.addItem(chest.item);
           this.displayItemPickup(chest.item);
-          console.log("Items: ", this.items);
-          console.log("Gold: ", this.gold);
         }
       }
     }

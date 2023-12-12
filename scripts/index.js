@@ -59,6 +59,9 @@ function animate(currentTime) {
     if (itemPopUp) {
       itemPopUp.displayPopUp();
     }
+    player.itemInstances.forEach((itemInstance) => {
+      itemInstance.draw();
+    });
   }
   requestAnimationFrame(animate);
 }
