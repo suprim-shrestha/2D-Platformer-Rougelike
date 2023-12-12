@@ -46,7 +46,7 @@ allItems = {
   Uncommon: {
     Feather: {
       id: "Feather",
-      name: "Hopoo's Feaather",
+      name: "Hopoo's Feather",
       description: "Gives an extra jump",
       imageSrc: "./assets/items/Feather.png",
       rarity: "green",
