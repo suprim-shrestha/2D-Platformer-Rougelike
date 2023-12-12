@@ -57,7 +57,7 @@ function animate(currentTime) {
     ctx.restore();
 
     if (itemPopUp) {
-      itemPopUp.draw();
+      itemPopUp.displayPopUp();
     }
   }
   requestAnimationFrame(animate);
