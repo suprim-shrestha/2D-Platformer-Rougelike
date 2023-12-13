@@ -66,6 +66,7 @@ class PlayerInstance extends CharacterInstance {
     this.updateSpriteProperties();
     this.sprite.draw(this.facingDirection);
     this.levelUp();
+    this.checkOutsideMap();
   }
 
   switchSprite(key) {
@@ -455,6 +456,25 @@ class PlayerInstance extends CharacterInstance {
           displayItemPickup(chest.item);
         }
       }
+    }
+  }
+
+  checkOutsideMap() {
+    if (this.y > MAP_HEIGHT) {
+      if (this.x < 572) {
+        this.x = 314;
+        this.y = 1842;
+      } else if (this.x < 1192) {
+        this.x = 862;
+        this.y = 1938;
+      } else {
+        this.x = 1360;
+        this.y = 1794;
+      }
+      this.updateCameraBox();
+      camera.x = -player.cameraBox.x;
+      camera.y = -player.cameraBox.y;
+      moveCameraWithinBoundaries();
     }
   }
 }
