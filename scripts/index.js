@@ -4,8 +4,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const player = new PlayerInstance({
-  x: canvas.width / 4,
-  y: canvas.height - 400,
+  x: 574,
+  y: 1842,
   width: 10.24,
   height: 13,
 });
@@ -13,21 +13,41 @@ const player = new PlayerInstance({
 let itemPopUp;
 let enemyArr = [];
 
-let enemy = new CharacterInstance({
+let enemy = new EnemyInstance({
   x: (canvas.width * 3) / 8,
   y: canvas.height - 400,
+  player,
+  enemyType: enemies.lizard,
 });
 enemyArr.push(enemy);
-enemy = new CharacterInstance({
+enemy = new EnemyInstance({
   x: (canvas.width * 3) / 8 + 50,
   y: canvas.height - 400,
+  player,
+  enemyType: enemies.lizard,
 });
 enemyArr.push(enemy);
-enemy = new CharacterInstance({
+enemy = new EnemyInstance({
   x: canvas.width / 8,
   y: canvas.height - 400,
+  player,
+  enemyType: enemies.lizard,
 });
 enemyArr.push(enemy);
+enemy = new EnemyInstance({
+  x: 836,
+  y: 300,
+  player,
+  enemyType: enemies.bee,
+});
+enemyArr.push(enemy);
+// enemy = new EnemyInstance({
+//   x: 326,
+//   y: 1840,
+//   player,
+//   enemyType: enemies.lizard,
+// });
+// enemyArr.push(enemy);
 
 const stage = new Stage();
 
