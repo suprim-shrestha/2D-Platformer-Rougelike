@@ -21,6 +21,7 @@ const SPAWNABLE_BLOCK = 22017;
 const ROPE_BLOCK = 22018;
 const ROPE_BLOCK_TOP = 22019;
 const ROPE_BLOCK_END = 22020;
+const ENEMY_JUMP_BLOCK = 22022;
 
 // Default map size
 const MAP_WIDTH = 2640;

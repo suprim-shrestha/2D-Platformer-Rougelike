@@ -6,6 +6,7 @@ class Stage {
     this.collisionBlocks = [];
     this.ropeBlocks = [];
     this.spawnableBlocks = [];
+    this.enemyControlBlocks = [];
 
     this.map = new Sprite(0, 0, "./assets/Stage1.png");
 
@@ -16,6 +17,7 @@ class Stage {
     this.createCollisionBlocks();
     this.createRopeBlocks();
     this.createSpawnableBlocks();
+    this.createEnemyControlBlocks();
     this.randomizePlayerSpawn();
     this.generateChests();
   }
@@ -86,6 +88,22 @@ class Stage {
       row.forEach((symbol, colIndex) => {
         if (symbol === SPAWNABLE_BLOCK) {
           this.spawnableBlocks.push(
+            new CollisionBlock(
+              colIndex * TILE_SIZE,
+              rowIndex * TILE_SIZE,
+              symbol
+            )
+          );
+        }
+      });
+    });
+  }
+
+  createEnemyControlBlocks() {
+    enemyControlBlocks.forEach((row, rowIndex) => {
+      row.forEach((symbol, colIndex) => {
+        if (symbol === ENEMY_JUMP_BLOCK) {
+          this.enemyControlBlocks.push(
             new CollisionBlock(
               colIndex * TILE_SIZE,
               rowIndex * TILE_SIZE,
