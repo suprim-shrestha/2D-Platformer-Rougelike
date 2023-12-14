@@ -5,9 +5,9 @@
  * @param {number} upper
  * @returns number
  */
-const getRandomNum = (lower = 0, upper = 1) => {
+function getRandomNum(lower = 0, upper = 1) {
   return lower + Math.random() * (upper - lower);
-};
+}
 
 /**
  * Detect collision between two rectangles
@@ -25,6 +25,14 @@ function detectCollision(rect1, rect2) {
   );
 }
 
+/**
+ * Detect if a point is inside a rectangle
+ *
+ * @param {Object} rect
+ * @param {number} x
+ * @param {number} y
+ * @returns
+ */
 function detectPointCollision(rect, x, y) {
   return (
     x > rect.x &&
@@ -32,4 +40,19 @@ function detectPointCollision(rect, x, y) {
     y > rect.y &&
     y < rect.y + rect.height
   );
+}
+
+/**
+ * Returns distance between two points
+ *
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @returns number
+ */
+function distance(x1, y1, x2, y2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  return Math.sqrt(dx * dx + dy * dy);
 }
