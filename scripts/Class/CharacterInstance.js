@@ -12,7 +12,7 @@ class CharacterInstance extends Instance {
     this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
 
-    this.characterType = characterType;
+    this.characterType = { ...characterType };
     this.stats = this.characterType.baseStats;
 
     this.currenthp = this.stats.maxhp;
