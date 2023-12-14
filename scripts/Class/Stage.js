@@ -27,12 +27,6 @@ class Stage {
    */
   draw() {
     this.map.draw();
-    // collisionBlocks.forEach((collisionBlock) => {
-    //   collisionBlock.draw();
-    // });
-    // ropeBlocks.forEach((ropeBlock) => {
-    //   ropeBlock.draw();
-    // });
     this.chestsArray.forEach((chest) => {
       chest.draw();
     });
