@@ -1,6 +1,3 @@
-let primaryInstance;
-let secondaryInstance;
-
 class PlayerInstance extends CharacterInstance {
   constructor({ x, y, width, height, survivor = commando }) {
     super({ x, y, width, height, characterType: survivor });
@@ -24,6 +21,10 @@ class PlayerInstance extends CharacterInstance {
       image.src = this.sprites[key].imgSrc;
       this.sprites[key].image = image;
     }
+
+    // Skill instances
+    this.primaryInstance;
+    this.secondaryInstance;
 
     // Player stats
     this.currentExp = 0;
@@ -49,11 +50,11 @@ class PlayerInstance extends CharacterInstance {
       this.control();
     }
     super.update();
-    if (primaryInstance) {
-      primaryInstance.draw();
+    if (this.primaryInstance) {
+      this.primaryInstance.draw();
     }
-    if (secondaryInstance) {
-      secondaryInstance.draw();
+    if (this.secondaryInstance) {
+      this.secondaryInstance.draw();
     }
     this.updateCameraBox();
     if (
@@ -252,9 +253,9 @@ class PlayerInstance extends CharacterInstance {
         let abilityY = this.y + (this.height * 1) / 3;
         if (skill === commando.primary) {
           // Create primary skill instance
-          if (!primaryInstance) {
+          if (!this.primaryInstance) {
             let hitEnemy;
-            primaryInstance = new DamagerInstance({
+            this.primaryInstance = new DamagerInstance({
               x: abilityX,
               y: abilityY,
               width: abilityWidth,
@@ -262,21 +263,21 @@ class PlayerInstance extends CharacterInstance {
               isHostile: false,
               damage: this.stats.damage * skill.damageMultiplier,
             });
-            primaryInstance.color = skill.color;
+            this.primaryInstance.color = skill.color;
             // Set ability width
             if (this.facingDirection === FACING_RIGHT) {
               // Loop from player position to canvas border and check collision at each point
               for (let posX = this.x; posX < MAP_WIDTH; posX += 5) {
-                this.checkAbilityCollisionRight(primaryInstance, posX);
+                this.checkAbilityCollisionRight(this.primaryInstance, posX);
                 enemyArr.forEach((enemy) => {
                   // Detect collision between enemy and path of ability
                   if (detectPointCollision(enemy, posX, abilityY)) {
                     abilityWidth = enemy.x - this.x - enemy.width / 4;
                     if (
                       this.x < enemy.x && // Update abilityWidth when enemy is on same direction as fired skill
-                      abilityWidth < primaryInstance.width // and enemy is closer than the last one
+                      abilityWidth < this.primaryInstance.width // and enemy is closer than the last one
                     ) {
-                      primaryInstance.width = abilityWidth;
+                      this.primaryInstance.width = abilityWidth;
                       hitEnemy = enemy;
                     }
                   }
@@ -284,16 +285,16 @@ class PlayerInstance extends CharacterInstance {
               }
             } else {
               for (let posX = this.x; posX > 0; posX -= 5) {
-                this.checkAbilityCollisionLeft(primaryInstance, posX);
+                this.checkAbilityCollisionLeft(this.primaryInstance, posX);
                 enemyArr.forEach((enemy) => {
                   if (detectPointCollision(enemy, posX, abilityY)) {
                     abilityWidth = this.x - enemy.x - enemy.width / 2;
                     if (
                       this.x > enemy.x &&
-                      abilityWidth < primaryInstance.width
+                      abilityWidth < this.primaryInstance.width
                     ) {
-                      primaryInstance.width = abilityWidth;
-                      primaryInstance.x = this.x - abilityWidth;
+                      this.primaryInstance.width = abilityWidth;
+                      this.primaryInstance.x = this.x - abilityWidth;
                       hitEnemy = enemy;
                     }
                   }
@@ -301,10 +302,10 @@ class PlayerInstance extends CharacterInstance {
               }
             }
             if (hitEnemy) {
-              primaryInstance.dealDamage([hitEnemy]);
+              this.primaryInstance.dealDamage([hitEnemy]);
             }
             setTimeout(() => {
-              primaryInstance = null;
+              this.primaryInstance = null;
             }, skill.skillDuration);
             setTimeout(() => {
               skill.offCooldown = true;
@@ -313,7 +314,7 @@ class PlayerInstance extends CharacterInstance {
           }
         } else {
           let hitEnemies = [];
-          secondaryInstance = new DamagerInstance({
+          this.secondaryInstance = new DamagerInstance({
             x: abilityX,
             y: abilityY,
             width: abilityWidth,
@@ -321,25 +322,25 @@ class PlayerInstance extends CharacterInstance {
             isHostile: false,
             damage: this.stats.damage * skill.damageMultiplier,
           });
-          secondaryInstance.color = skill.color;
+          this.secondaryInstance.color = skill.color;
           this.movementDisabled = true;
           if (this.facingDirection === FACING_RIGHT) {
             // Loop from player position to canvas border and check collision at each point
             for (let posX = this.x; posX < MAP_WIDTH; posX += 5) {
-              this.checkAbilityCollisionRight(secondaryInstance, posX);
+              this.checkAbilityCollisionRight(this.secondaryInstance, posX);
             }
           } else {
             for (let posX = this.x; posX > 0; posX -= 5) {
-              this.checkAbilityCollisionLeft(secondaryInstance, posX);
+              this.checkAbilityCollisionLeft(this.secondaryInstance, posX);
             }
           }
           hitEnemies = enemyArr.filter((enemy) =>
-            detectCollision(enemy, secondaryInstance)
+            detectCollision(enemy, this.secondaryInstance)
           );
-          secondaryInstance.dealDamage(hitEnemies);
+          this.secondaryInstance.dealDamage(hitEnemies);
           setTimeout(() => {
             this.movementDisabled = false;
-            secondaryInstance = null;
+            this.secondaryInstance = null;
           }, skill.skillDuration);
           setTimeout(() => {
             skill.offCooldown = true;
