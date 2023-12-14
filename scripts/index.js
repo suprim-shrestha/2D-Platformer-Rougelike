@@ -85,8 +85,11 @@ function animate(currentTime) {
     player.itemInstances.forEach((itemInstance) => {
       itemInstance.draw();
     });
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px Arial";
+    const playerHealth = "HP: " + player.currenthp + "/" + player.stats.maxhp;
+    ctx.fillText(playerHealth, 10, 50);
     enemyArr.forEach((enemy, index) => {
-      ctx.fillStyle = "#fff";
       ctx.fillText(enemy.currenthp, index * 100, 100);
     });
   }
