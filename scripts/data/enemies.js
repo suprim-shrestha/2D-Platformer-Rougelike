@@ -16,11 +16,15 @@ enemies = {
       damage: 2.4,
     },
     distanceToAttack: 10,
-    attack: {
+    skill: {
       isProjectile: false,
-      attackDuration: 200,
-      attackCooldown: 500,
-      attackSize: 16,
+      offCooldown: true,
+      skillDuration: 200,
+      skillCooldown: 500,
+      skillWidth: 8,
+      skillHeight: 8,
+      skillX: 3,
+      skillY: 2,
     },
   },
   bee: {
@@ -39,11 +43,15 @@ enemies = {
       damage: 2.4,
     },
     distanceToAttack: 10,
-    attack: {
+    skill: {
       isProjectile: false,
-      attackDuration: 200,
-      attackCooldown: 500,
-      attackSize: 16,
+      offCooldown: true,
+      skillDuration: 200,
+      skillCooldown: 500,
+      skillWidth: 8,
+      skillHeight: 8,
+      skillX: -2,
+      skillY: 5,
     },
   },
 };

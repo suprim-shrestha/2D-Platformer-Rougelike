@@ -2,39 +2,56 @@ class EnemyInstance extends CharacterInstance {
   constructor({ x, y, width = 10, height = 13, player, enemyType }) {
     super({ x, y, width, height, characterType: enemyType });
     this.player = player;
-    this.enemyType = enemyType;
+    this.enemyType = { ...enemyType };
     this.color = enemyType.color;
+
+    this.skillInstance;
   }
 
   moveToPlayer() {
     if (this.x < this.player.x) {
       this.vx = this.stats.speed;
+      this.facingDirection = FACING_RIGHT;
     } else {
       this.vx = -this.stats.speed;
+      this.facingDirection = FACING_LEFT;
     }
     if (this.enemyType.isFlying) {
-      if (this.y < this.player.y) {
-        this.vy = this.stats.speed;
-      } else {
+      if (this.player.y - this.y < 5 && this.player.y - this.y > 0) {
+        this.vy = 0;
+      } else if (this.y > this.player.y) {
         this.vy = -this.stats.speed;
+      } else {
+        this.vy = this.stats.speed;
       }
       this.y += this.vy;
     }
   }
 
   update() {
-    this.moveToPlayer();
+    if (!this.movementDisabled) {
+      this.moveToPlayer();
+      this.x += this.vx;
+    }
+    if (
+      distance(this.x, this.y, this.player.x, this.player.y) <=
+      this.enemyType.distanceToAttack
+    ) {
+      this.useSkill(this.enemyType.skill);
+    }
     if (!this.enemyType.isFlying) {
       this.checkHorizontalCollisions();
       this.applyGravity();
       this.checkVerticalCollisions();
     }
     this.draw();
+    if (this.skillInstance) {
+      this.skillInstance.draw();
+    }
     if (this.vx === 0 && this.vy <= 0.2 && !this.enemyType.isFlying) {
       this.jump();
     }
     this.checkSpecialBlockCollision();
-    this.x += this.vx;
   }
 
   jump() {
@@ -56,6 +73,40 @@ class EnemyInstance extends CharacterInstance {
         break;
       }
     }
+  }
+
+  useSkill(skill) {
+    if (!skill.offCooldown) return;
+
+    skill.offCooldown = false;
+    this.movementDisabled = true;
+
+    let skillX =
+      this.x +
+      (this.facingDirection === FACING_LEFT
+        ? -skill.skillWidth - skill.skillX
+        : this.width + skill.skillX);
+
+    this.skillInstance = new DamagerInstance({
+      x: skillX,
+      y: this.y + skill.skillY,
+      width: skill.skillWidth,
+      height: skill.skillHeight,
+      isHostile: true,
+      damage: this.stats.damage,
+    });
+
+    setTimeout(() => {
+      if (detectCollision(this.skillInstance, this.player)) {
+        this.skillInstance.dealDamage([this.player]);
+      }
+      this.skillInstance = null;
+    }, skill.skillDuration);
+
+    setTimeout(() => {
+      skill.offCooldown = true;
+      this.movementDisabled = false;
+    }, skill.skillCooldown);
   }
 
   kill() {
