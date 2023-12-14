@@ -492,4 +492,14 @@ class PlayerInstance extends CharacterInstance {
       moveCameraWithinBoundaries();
     }
   }
+
+  kill() {
+    this.lives--;
+    if (this.lives <= 0) {
+      console.log("player died");
+    } else {
+      this.currenthp = this.stats.maxhp;
+      console.log("revive player");
+    }
+  }
 }
