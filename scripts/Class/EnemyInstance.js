@@ -45,6 +45,7 @@ class EnemyInstance extends CharacterInstance {
       this.checkVerticalCollisions();
     }
     this.draw();
+    this.displayHpBar();
     if (this.skillInstance) {
       this.skillInstance.draw();
     }

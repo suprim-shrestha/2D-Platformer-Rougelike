@@ -33,6 +33,7 @@ class CharacterInstance extends Instance {
       this.applyGravity();
       this.checkVerticalCollisions();
     }
+    this.displayHpBar();
   }
 
   applyGravity() {
@@ -126,5 +127,18 @@ class CharacterInstance extends Instance {
         }
       }
     }
+  }
+
+  displayHpBar() {
+    const hpBarWidth = 30;
+    const hpBarHeight = 5;
+    const hpBarX = this.x - hpBarWidth / 2 + this.width / 2;
+    const hpBarY = this.y - 10;
+    const currentHpWidth = (this.currenthp / this.stats.maxhp) * hpBarWidth;
+
+    ctx.fillStyle = "#0f0";
+    ctx.strokeStyle = "#aaa";
+    ctx.fillRect(hpBarX, hpBarY, currentHpWidth, hpBarHeight);
+    ctx.strokeRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
   }
 }
