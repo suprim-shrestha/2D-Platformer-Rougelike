@@ -3,7 +3,7 @@ let secondaryInstance;
 
 class PlayerInstance extends CharacterInstance {
   constructor({ x, y, width, height, survivor = commando }) {
-    super({ x, y, width, height });
+    super({ x, y, width, height, characterType: survivor });
     this.survivor = survivor;
     this.color = "#ddd";
 
@@ -27,7 +27,6 @@ class PlayerInstance extends CharacterInstance {
 
     // Player stats
     this.currentExp = 0;
-    this.stats = survivor.baseStats;
     this.lives = 1;
     this.critChance = 0.01;
     this.instaKillChance = 0;
@@ -254,11 +253,14 @@ class PlayerInstance extends CharacterInstance {
         if (skill === commando.primary) {
           // Create primary skill instance
           if (!primaryInstance) {
-            primaryInstance = new Instance({
+            let hitEnemy;
+            primaryInstance = new DamagerInstance({
               x: abilityX,
               y: abilityY,
               width: abilityWidth,
               height: 2,
+              isHostile: false,
+              damage: this.stats.damage * skill.damageMultiplier,
             });
             primaryInstance.color = skill.color;
             // Set ability width
@@ -275,6 +277,7 @@ class PlayerInstance extends CharacterInstance {
                       abilityWidth < primaryInstance.width // and enemy is closer than the last one
                     ) {
                       primaryInstance.width = abilityWidth;
+                      hitEnemy = enemy;
                     }
                   }
                 });
@@ -291,10 +294,14 @@ class PlayerInstance extends CharacterInstance {
                     ) {
                       primaryInstance.width = abilityWidth;
                       primaryInstance.x = this.x - abilityWidth;
+                      hitEnemy = enemy;
                     }
                   }
                 });
               }
+            }
+            if (hitEnemy) {
+              primaryInstance.dealDamage([hitEnemy]);
             }
             setTimeout(() => {
               primaryInstance = null;
@@ -305,11 +312,14 @@ class PlayerInstance extends CharacterInstance {
             }, skill.cooldown / this.atkSpeed); // atkSpeed increases firerate of primary skill only
           }
         } else {
-          secondaryInstance = new Instance({
+          let hitEnemies = [];
+          secondaryInstance = new DamagerInstance({
             x: abilityX,
             y: abilityY,
             width: abilityWidth,
             height: 2,
+            isHostile: false,
+            damage: this.stats.damage * skill.damageMultiplier,
           });
           secondaryInstance.color = skill.color;
           this.movementDisabled = true;
@@ -323,6 +333,10 @@ class PlayerInstance extends CharacterInstance {
               this.checkAbilityCollisionLeft(secondaryInstance, posX);
             }
           }
+          hitEnemies = enemyArr.filter((enemy) =>
+            detectCollision(enemy, secondaryInstance)
+          );
+          secondaryInstance.dealDamage(hitEnemies);
           setTimeout(() => {
             this.movementDisabled = false;
             secondaryInstance = null;
