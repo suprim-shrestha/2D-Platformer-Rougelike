@@ -245,6 +245,12 @@ class PlayerInstance extends CharacterInstance {
     if (skill.offCooldown) {
       skill.offCooldown = false;
       if (skill === commando.primary || skill === commando.secondary) {
+        // Find if skill trriggered crit or instakill
+        const critDamage = getRandomNum() <= this.critChance ? 2 : 1;
+        const instaKillDamage =
+          getRandomNum() <= this.instaKillChance ? 999999 : 0;
+        const damage = this.stats.damage * critDamage + instaKillDamage;
+
         // Set position and width for skill instance
         let abilityWidth = MAP_WIDTH;
         let abilityX =
@@ -261,7 +267,7 @@ class PlayerInstance extends CharacterInstance {
               width: abilityWidth,
               height: 2,
               isHostile: false,
-              damage: this.stats.damage * skill.damageMultiplier,
+              damage: damage * skill.damageMultiplier,
             });
             this.primaryInstance.color = skill.color;
             // Set ability width
@@ -320,7 +326,7 @@ class PlayerInstance extends CharacterInstance {
             width: abilityWidth,
             height: 2,
             isHostile: false,
-            damage: this.stats.damage * skill.damageMultiplier,
+            damage: damage * skill.damageMultiplier,
           });
           this.secondaryInstance.color = skill.color;
           this.movementDisabled = true;
