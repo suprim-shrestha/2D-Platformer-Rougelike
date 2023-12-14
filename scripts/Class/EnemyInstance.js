@@ -1,10 +1,9 @@
 class EnemyInstance extends CharacterInstance {
   constructor({ x, y, width = 10, height = 13, player, enemyType }) {
-    super({ x, y, width, height });
+    super({ x, y, width, height, characterType: enemyType });
     this.player = player;
     this.enemyType = enemyType;
     this.color = enemyType.color;
-    this.stats = enemyType.baseStats;
   }
 
   moveToPlayer() {
@@ -57,5 +56,10 @@ class EnemyInstance extends CharacterInstance {
         break;
       }
     }
+  }
+
+  kill() {
+    const enemyIndex = enemyArr.findIndex((enemy) => this === enemy);
+    enemyArr.splice(enemyIndex, 1);
   }
 }

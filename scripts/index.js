@@ -85,6 +85,10 @@ function animate(currentTime) {
     player.itemInstances.forEach((itemInstance) => {
       itemInstance.draw();
     });
+    enemyArr.forEach((enemy, index) => {
+      ctx.fillStyle = "#fff";
+      ctx.fillText(enemy.currenthp, index * 100, 100);
+    });
   }
   requestAnimationFrame(animate);
 }
