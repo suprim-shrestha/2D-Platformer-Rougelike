@@ -9,9 +9,7 @@ class EnemyInstance extends CharacterInstance {
   }
 
   moveToPlayer() {
-    if (this.player.x - this.x < 5 && this.player.x - this.x > -5) {
-      this.vx = 0;
-    } else if (this.x < this.player.x) {
+    if (this.x < this.player.x) {
       this.vx = this.stats.speed;
       this.facingDirection = FACING_RIGHT;
     } else {
