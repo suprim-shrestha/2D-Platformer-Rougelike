@@ -92,6 +92,10 @@ function animate(currentTime) {
     ctx.fillStyle = "#fff";
     ctx.font = "20px Arial";
     ctx.fillText(game.formattedTimePlayed, canvas.width - 100, 50);
+    const playerLevel = `Player Level: ${player.level}`;
+    const enemyLevel = `Enemy Level: ${game.enemyLevel}`;
+    ctx.fillText(playerLevel, 10, 50);
+    ctx.fillText(enemyLevel, 10, 100);
   }
   requestAnimationFrame(animate);
 }
