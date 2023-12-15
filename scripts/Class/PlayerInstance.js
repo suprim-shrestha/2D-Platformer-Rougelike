@@ -450,6 +450,7 @@ class PlayerInstance extends CharacterInstance {
   levelUp() {
     if (this.currentExp >= (-4 / 0.11) * (1 - Math.pow(1.55, this.level))) {
       this.level++;
+      this.currentExp = 0;
       this.stats.damage += this.survivor.statIncrease.damage;
       this.stats.maxhp += this.survivor.statIncrease.maxhp;
       this.currenthp += this.survivor.statIncrease.maxhp;
