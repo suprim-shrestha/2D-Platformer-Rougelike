@@ -22,6 +22,7 @@ class CharacterInstance extends Instance {
     this.jumpCount = 0;
     this.level = 1;
     this.isImmune = false;
+    this.dodgeChance = 0;
   }
 
   update() {

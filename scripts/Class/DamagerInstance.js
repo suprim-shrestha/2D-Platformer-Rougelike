@@ -7,7 +7,7 @@ class DamagerInstance extends Instance {
 
   dealDamage(targets) {
     targets.forEach((target) => {
-      if (!target.isImmune) {
+      if (!target.isImmune || target.dodgeChance < getRandomNum()) {
         target.currenthp -= this.damage;
         if (target.currenthp <= 0) {
           target.kill();

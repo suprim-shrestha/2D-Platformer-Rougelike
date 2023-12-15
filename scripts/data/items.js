@@ -3,7 +3,7 @@ allItems = {
     Scarf: {
       id: "Scarf",
       name: "Hermit's Scarf",
-      description: "Reduce incoming damage by 10%",
+      description: "Chance to dodge incoming damage.",
       imageSrc: "./assets/items/Scarf.png",
       rarity: "white",
     },

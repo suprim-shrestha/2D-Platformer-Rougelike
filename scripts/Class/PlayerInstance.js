@@ -34,6 +34,7 @@ class PlayerInstance extends CharacterInstance {
     this.atkSpeed = 1;
     this.cooldownReduction = 1;
     this.healOnHit = 0;
+    this.goldMultiplier = 1;
 
     // Regenerate health per second
     this.healInterval = setInterval(() => {
@@ -317,6 +318,10 @@ class PlayerInstance extends CharacterInstance {
             }
             if (hitEnemy) {
               this.primaryInstance.dealDamage([hitEnemy]);
+              this.currenthp =
+                this.currenthp + this.healOnHit >= this.stats.maxhp
+                  ? this.stats.maxhp
+                  : this.currenthp + this.healOnHit;
             }
             setTimeout(() => {
               this.primaryInstance = null;
@@ -351,7 +356,14 @@ class PlayerInstance extends CharacterInstance {
           hitEnemies = enemyArr.filter((enemy) =>
             detectCollision(enemy, this.secondaryInstance)
           );
-          this.secondaryInstance.dealDamage(hitEnemies);
+          if (hitEnemies.length > 0) {
+            this.secondaryInstance.dealDamage(hitEnemies);
+            this.currenthp =
+              this.currenthp + this.healOnHit * hitEnemies.length >=
+              this.stats.maxhp
+                ? this.stats.maxhp
+                : this.currenthp + this.healOnHit * hitEnemies.length;
+          }
           setTimeout(() => {
             this.movementDisabled = false;
             this.secondaryInstance = null;
@@ -461,7 +473,6 @@ class PlayerInstance extends CharacterInstance {
       const itemX = lastItemInstance
         ? lastItemInstance.x + lastItemInstance.width + 20
         : 20;
-      addItemEffect(this, item);
       const itemInstance = new ItemInstance({
         x: itemX,
         y: canvas.height - 200,
@@ -472,6 +483,7 @@ class PlayerInstance extends CharacterInstance {
       });
       this.itemInstances.push(itemInstance);
     }
+    addItemEffect(this, item, count);
   }
 
   /**
@@ -515,7 +527,10 @@ class PlayerInstance extends CharacterInstance {
       endGame();
     } else {
       this.currenthp = this.stats.maxhp;
-      console.log("revive player");
+      this.isImmune = true;
+      setTimeout(() => {
+        this.isImmune = false;
+      }, 2000);
     }
   }
 }

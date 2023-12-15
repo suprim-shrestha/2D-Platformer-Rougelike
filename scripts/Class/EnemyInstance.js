@@ -163,7 +163,7 @@ class EnemyInstance extends CharacterInstance {
   kill() {
     const enemyIndex = enemyArr.findIndex((enemy) => this === enemy);
     enemyArr.splice(enemyIndex, 1);
-    this.player.gold += this.goldHeld;
+    this.player.gold += Math.round(this.goldHeld * this.player.goldMultiplier);
     this.player.currentExp += this.expHeld;
   }
 }

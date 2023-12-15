@@ -4,12 +4,13 @@
  * @param {PlayerInstance} character
  * @param {ItemObj} item
  */
-function addItemEffect(character, item) {
+function addItemEffect(character, item, count) {
   switch (item.id) {
     case "Scarf":
-      // Reduce incoming damage or chance to avoid damage
+      character.dodgeChance = (0.15 * count) / (0.15 * count + 1);
       break;
     case "Root":
+      character.currenthp += character.stats.maxhp * 0.08;
       character.stats.maxhp *= 1.08;
       break;
     case "Hoof":
@@ -17,7 +18,7 @@ function addItemEffect(character, item) {
       character.speed = character.stats.speed;
       break;
     case "Syringe":
-      character.atkSpeed += 0.1;
+      character.atkSpeed += 0.15;
       break;
     case "Glasses":
       character.critChance += 0.1;
@@ -29,7 +30,7 @@ function addItemEffect(character, item) {
       character.maxJumps += 1;
       break;
     case "Shopper":
-      // 25% more gold dropped
+      character.goldMultiplier += 0.25;
       break;
     case "Seed":
       character.healOnHit += 1;
