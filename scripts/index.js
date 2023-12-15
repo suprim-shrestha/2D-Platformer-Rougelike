@@ -3,7 +3,10 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const player = new PlayerInstance({
+let gameOver = false;
+let timePlayed = "0:00";
+
+let player = new PlayerInstance({
   x: 574,
   y: 1842,
   width: 10.24,
@@ -49,11 +52,11 @@ enemy = new EnemyInstance({
 });
 enemyArr.push(enemy);
 
-const game = new Game();
+let game = new Game();
 
-const director = new Director();
+let stage = new Stage();
 
-const stage = new Stage();
+let director = new Director();
 
 // Initialize camera position
 const camera = {
@@ -73,33 +76,48 @@ function animate(currentTime) {
     lastRenderTime = currentTime - (timeSinceLastRender % frameDuration);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.save();
-    ctx.scale(SCALE, SCALE);
-    ctx.translate(camera.x, camera.y);
-    stage.draw();
-    enemyArr.forEach((enemy) => {
-      enemy.update();
-    });
-    player.update();
-    ctx.restore();
+    if (gameOver) {
+      ctx.fillStyle = "#fff";
+      ctx.font = "20px Arial";
+      const finalMessage = `You survived ${timePlayed}`;
+      let textWidth = ctx.measureText(finalMessage).width;
+      let textX = (canvas.width - textWidth) / 2;
+      ctx.fillText(finalMessage, textX, (canvas.height * 2) / 5);
+      const gameOverDisplay = "Game Over: Press 'Enter' to Restart";
+      textWidth = ctx.measureText(gameOverDisplay).width;
+      textX = (canvas.width - textWidth) / 2;
+      ctx.fillText(gameOverDisplay, textX, (canvas.height * 3) / 5);
+      if (keys.enter) {
+        startGame();
+      }
+    } else {
+      ctx.save();
+      ctx.scale(SCALE, SCALE);
+      ctx.translate(camera.x, camera.y);
+      stage.draw();
+      enemyArr.forEach((enemy) => {
+        enemy.update();
+      });
+      player.update();
+      ctx.restore();
 
-    if (itemPopUp) {
-      itemPopUp.displayPopUp();
+      if (itemPopUp) {
+        itemPopUp.displayPopUp();
+      }
+      player.itemInstances.forEach((itemInstance) => {
+        itemInstance.draw();
+      });
+      ctx.fillStyle = "#fff";
+      ctx.font = "20px Arial";
+      ctx.fillText(timePlayed, canvas.width - 100, 50);
+      const playerLevel = `Player Level: ${player.level}`;
+      const enemyLevel = `Enemy Level: ${game.enemyLevel}`;
+      ctx.fillText(playerLevel, 10, 50);
+      ctx.fillText(enemyLevel, 10, 100);
     }
-    player.itemInstances.forEach((itemInstance) => {
-      itemInstance.draw();
-    });
-    ctx.fillStyle = "#fff";
-    ctx.font = "20px Arial";
-    ctx.fillText(game.formattedTimePlayed, canvas.width - 100, 50);
-    const playerLevel = `Player Level: ${player.level}`;
-    const enemyLevel = `Enemy Level: ${game.enemyLevel}`;
-    ctx.fillText(playerLevel, 10, 50);
-    ctx.fillText(enemyLevel, 10, 100);
   }
   requestAnimationFrame(animate);
 }
-
 animate();
 
 /**
@@ -116,4 +134,30 @@ function moveCameraWithinBoundaries() {
   } else if (camera.y > 0) {
     camera.y = 0;
   }
+}
+
+function startGame() {
+  console.log("game start");
+  let timePlayed = "0:00";
+  player = new PlayerInstance({
+    x: 0,
+    y: 0,
+    width: 10.24,
+    height: 13,
+  });
+  game = new Game();
+  stage = new Stage();
+  director = new Director();
+  camera.x = -player.cameraBox.x;
+  camera.y = -player.cameraBox.y;
+  moveCameraWithinBoundaries();
+  gameOver = false;
+}
+
+function endGame() {
+  gameOver = true;
+  enemyArr = [];
+  clearInterval(game.updateInterval);
+  clearInterval(director.updateInterval);
+  clearInterval(director.spawnInterval);
 }

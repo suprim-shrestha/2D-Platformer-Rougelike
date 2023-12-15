@@ -8,6 +8,7 @@ const keys = {
   secondary: false,
   utility: false,
   interact: false,
+  enter: false,
 };
 
 // Event listeners for key presses
@@ -40,6 +41,9 @@ window.onkeydown = (e) => {
     case "KeyE":
       keys.interact = true;
       break;
+    case "Enter":
+      keys.enter = true;
+      break;
   }
 };
 
@@ -71,6 +75,9 @@ window.onkeyup = (e) => {
       break;
     case "KeyE":
       keys.interact = false;
+      break;
+    case "Enter":
+      keys.enter = false;
       break;
   }
 };

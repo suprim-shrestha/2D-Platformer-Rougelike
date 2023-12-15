@@ -1,7 +1,7 @@
 class PlayerInstance extends CharacterInstance {
   constructor({ x, y, width, height, survivor = commando }) {
     super({ x, y, width, height, characterType: survivor });
-    this.survivor = survivor;
+    this.survivor = { ...survivor };
     this.color = "#ddd";
 
     // Camera box of full canvas size around the player to move camera
@@ -495,8 +495,8 @@ class PlayerInstance extends CharacterInstance {
         this.y = 1794;
       }
       this.updateCameraBox();
-      camera.x = -player.cameraBox.x;
-      camera.y = -player.cameraBox.y;
+      camera.x = -this.cameraBox.x;
+      camera.y = -this.cameraBox.y;
       moveCameraWithinBoundaries();
     }
   }
@@ -504,7 +504,7 @@ class PlayerInstance extends CharacterInstance {
   kill() {
     this.lives--;
     if (this.lives <= 0) {
-      console.log("player died");
+      endGame();
     } else {
       this.currenthp = this.stats.maxhp;
       console.log("revive player");

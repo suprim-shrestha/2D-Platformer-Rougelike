@@ -9,7 +9,6 @@ class Game {
     this.currentTime = new Date();
     this.timePlayedInMs = this.currentTime - this.timeStarted;
     this.timePlayedInMinutes = Math.floor(this.timePlayedInMs / (1000 * 60));
-    this.formattedTimePlayed = "0:00";
 
     this.updateInterval = setInterval(() => {
       this.update();
@@ -23,7 +22,7 @@ class Game {
     const differenceInSeconds = Math.floor(this.timePlayedInMs / 1000);
     this.timePlayedInMinutes = Math.floor(differenceInSeconds / 60);
     const seconds = differenceInSeconds % 60;
-    this.formattedTimePlayed = `${this.timePlayedInMinutes}:${
+    timePlayed = `${this.timePlayedInMinutes}:${
       seconds < 10 ? "0" : ""
     }${seconds}`;
     this.difficultyCoeff =

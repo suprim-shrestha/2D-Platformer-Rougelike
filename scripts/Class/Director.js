@@ -19,13 +19,10 @@ class Director {
     this.creditsPerSecond =
       this.creditMultiplier * (1 + 0.4 * game.difficultyCoeff);
     this.credits += this.creditsPerSecond;
-    console.log("Credits: ", this.credits);
   }
 
   spawnEnemies() {
-    console.log("Trying to spawn enemies");
     while (this.credits >= 10 && enemyArr.length < TOTAL_POSSIBLE_ENEMIES) {
-      console.log("have credits");
       const enemyTypesArray = Object.keys(enemies);
       const randomEnemyIndex = Math.floor(
         getRandomNum(0, enemyTypesArray.length)
@@ -33,7 +30,6 @@ class Director {
       const randomEnemyType = enemyTypesArray[randomEnemyIndex];
       const randomEnemy = enemies[randomEnemyType];
       const canSpawnCount = Math.floor(this.credits / randomEnemy.cost);
-      console.log(`Can spawn ${canSpawnCount} ${randomEnemyType}`);
       if (canSpawnCount > 0) {
         let spawnCount =
           canSpawnCount > MAX_ENEMIES_SPAWN ? MAX_ENEMIES_SPAWN : canSpawnCount;
@@ -61,7 +57,6 @@ class Director {
             goldHeld,
             expHeld,
           });
-          console.log(newEnemy);
           enemyArr.push(newEnemy);
           this.credits -= randomEnemy.cost;
         }
