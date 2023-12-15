@@ -146,4 +146,11 @@ class Stage {
       this.chestsArray.push(chest);
     }
   }
+
+  getRandomSpawnPointNearXY(x, y) {
+    const spawnableBlocksNearXY = [...this.spawnableBlocks].sort(
+      (a, b) => distance(a.x, a.y, x, y) - distance(b.x, b.y, x, y)
+    );
+    return spawnableBlocksNearXY;
+  }
 }
