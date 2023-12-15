@@ -50,7 +50,7 @@ enemies = {
   parent: {
     isFlying: false,
     color: "#e1eb34",
-    cost: 40,
+    cost: 30,
     baseStats: {
       maxhp: 480,
       damage: 20,
@@ -76,7 +76,7 @@ enemies = {
     color: "#542406",
     width: 15,
     height: 15,
-    cost: 40,
+    cost: 30,
     baseStats: {
       maxhp: 480,
       damage: 12,
@@ -106,7 +106,7 @@ enemies = {
     baseStats: {
       maxhp: 60,
       damage: 5,
-      speed: SPEED,
+      speed: SPEED * 0.9,
     },
     statIncrease: {
       maxhp: 18,

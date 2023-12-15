@@ -24,7 +24,7 @@ class Director {
 
   spawnEnemies() {
     console.log("Trying to spawn enemies");
-    while (this.credits >= 10) {
+    while (this.credits >= 10 && enemyArr.length < TOTAL_POSSIBLE_ENEMIES) {
       console.log("have credits");
       const enemyTypesArray = Object.keys(enemies);
       const randomEnemyIndex = Math.floor(
@@ -32,9 +32,8 @@ class Director {
       );
       const randomEnemyType = enemyTypesArray[randomEnemyIndex];
       const randomEnemy = enemies[randomEnemyType];
-      console.log(randomEnemy);
       const canSpawnCount = Math.floor(this.credits / randomEnemy.cost);
-      console.log(`Spawning ${canSpawnCount} of ${randomEnemyType}`);
+      console.log(`Can spawn ${canSpawnCount} ${randomEnemyType}`);
       if (canSpawnCount > 0) {
         let spawnCount =
           canSpawnCount > MAX_ENEMIES_SPAWN ? MAX_ENEMIES_SPAWN : canSpawnCount;
