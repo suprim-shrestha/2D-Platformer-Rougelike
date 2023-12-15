@@ -7,50 +7,14 @@ let gameOver = false;
 let timePlayed = "0:00";
 
 let player = new PlayerInstance({
-  x: 574,
-  y: 1842,
+  x: 0,
+  y: 0,
   width: 10.24,
   height: 13,
 });
 
 let itemPopUp;
 let enemyArr = [];
-
-let enemy = new EnemyInstance({
-  x: (canvas.width * 3) / 8,
-  y: canvas.height - 400,
-  player,
-  enemyType: enemies.lizard,
-});
-enemyArr.push(enemy);
-enemy = new EnemyInstance({
-  x: (canvas.width * 3) / 8 + 50,
-  y: canvas.height - 400,
-  player,
-  enemyType: enemies.wisp,
-});
-enemyArr.push(enemy);
-enemy = new EnemyInstance({
-  x: canvas.width / 8,
-  y: canvas.height - 400,
-  player,
-  enemyType: enemies.parent,
-});
-enemyArr.push(enemy);
-enemy = new EnemyInstance({
-  x: 836,
-  y: 300,
-  player,
-  enemyType: enemies.bee,
-});
-enemyArr.push(enemy);
-enemy = new EnemyInstance({
-  x: 326,
-  y: 300,
-  player,
-  enemyType: enemies.boar,
-});
-enemyArr.push(enemy);
 
 let game = new Game();
 
@@ -138,7 +102,7 @@ function moveCameraWithinBoundaries() {
 
 function startGame() {
   console.log("game start");
-  let timePlayed = "0:00";
+  timePlayed = "0:00";
   player = new PlayerInstance({
     x: 0,
     y: 0,

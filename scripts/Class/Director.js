@@ -1,6 +1,6 @@
 class Director {
   constructor() {
-    this.credits = 0;
+    this.credits = 100;
     this.creditMultiplier = 0.75;
     this.expMultiplier = 0.2;
     this.creditsPerSecond =
@@ -13,6 +13,8 @@ class Director {
     this.spawnInterval = setInterval(() => {
       this.spawnEnemies();
     }, SPAWN_INTERVAL);
+
+    this.spawnEnemies(true);
   }
 
   update() {
@@ -21,7 +23,7 @@ class Director {
     this.credits += this.creditsPerSecond;
   }
 
-  spawnEnemies() {
+  spawnEnemies(initialSpawn = false) {
     while (this.credits >= 10 && enemyArr.length < TOTAL_POSSIBLE_ENEMIES) {
       const enemyTypesArray = Object.keys(enemies);
       const randomEnemyIndex = Math.floor(
@@ -39,16 +41,23 @@ class Director {
         const expHeld = Math.floor(
           2 * game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
         );
-        console.log(goldHeld);
         for (let i = 0; i < spawnCount; i++) {
           if (enemyArr.length >= TOTAL_POSSIBLE_ENEMIES) {
             break;
           }
-          const spawnPoints = stage.getRandomSpawnPointNearXY(
-            player.x,
-            player.y
-          );
-          const spawnPoint = spawnPoints[Math.floor(getRandomNum(5, 15))];
+          let spawnPoint;
+          if (initialSpawn) {
+            spawnPoint =
+              stage.spawnableBlocks[
+                Math.floor(getRandomNum(0, stage.spawnableBlocks.length))
+              ];
+          } else {
+            const spawnPoints = stage.getRandomSpawnPointNearXY(
+              player.x,
+              player.y
+            );
+            spawnPoint = spawnPoints[Math.floor(getRandomNum(5, 15))];
+          }
           const newEnemy = new EnemyInstance({
             x: spawnPoint.x,
             y: spawnPoint.y,
