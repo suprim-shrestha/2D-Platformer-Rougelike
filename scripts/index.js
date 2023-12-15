@@ -49,6 +49,8 @@ enemy = new EnemyInstance({
 });
 enemyArr.push(enemy);
 
+const game = new Game();
+
 const stage = new Stage();
 
 // Initialize camera position
@@ -85,6 +87,9 @@ function animate(currentTime) {
     player.itemInstances.forEach((itemInstance) => {
       itemInstance.draw();
     });
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px Arial";
+    ctx.fillText(game.formattedTimePlayed, canvas.width - 100, 50);
   }
   requestAnimationFrame(animate);
 }

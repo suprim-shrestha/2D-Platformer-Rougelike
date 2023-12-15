@@ -30,3 +30,7 @@ const MAP_HEIGHT = 2096;
 // Chest
 const DEFAULT_CHEST_COST = 25;
 const CHEST_COUNT = 10;
+
+// Game
+PLAYER_FACTOR = 1;
+TIME_FACTOR = 0.1012;
