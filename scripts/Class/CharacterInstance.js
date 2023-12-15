@@ -2,7 +2,7 @@
  * Instance for all playable and non-playable characters
  */
 class CharacterInstance extends Instance {
-  constructor({ x, y, width = 15, height = 15, characterType }) {
+  constructor({ x, y, width = 15, height = 15 }) {
     super({ x, y, width, height });
     this.vx = 0;
     this.vy = 0;
@@ -12,10 +12,6 @@ class CharacterInstance extends Instance {
     this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
 
-    this.characterType = { ...characterType };
-    this.stats = this.characterType.baseStats;
-
-    this.currenthp = this.stats.maxhp;
     this.speed = SPEED;
     this.jumpHeight = JUMP_HEIGHT;
     this.maxJumps = 1;
