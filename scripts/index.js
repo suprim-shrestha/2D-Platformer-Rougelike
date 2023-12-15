@@ -76,8 +76,10 @@ function animate(currentTime) {
       ctx.fillText(timePlayed, canvas.width - 100, 50);
       const playerLevel = `Player Level: ${player.level}`;
       const enemyLevel = `Enemy Level: ${game.enemyLevel}`;
+      const goldCount = `Gold: ${player.gold}`;
       ctx.fillText(playerLevel, 10, 50);
       ctx.fillText(enemyLevel, 10, 100);
+      ctx.fillText(goldCount, 10, 150);
     }
   }
   requestAnimationFrame(animate);
@@ -124,4 +126,5 @@ function endGame() {
   clearInterval(game.updateInterval);
   clearInterval(director.updateInterval);
   clearInterval(director.spawnInterval);
+  clearInterval(player.healInterval);
 }

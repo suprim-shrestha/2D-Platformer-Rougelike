@@ -35,10 +35,18 @@ class PlayerInstance extends CharacterInstance {
     this.cooldownReduction = 1;
     this.healOnHit = 0;
 
+    // Regenerate health per second
+    this.healInterval = setInterval(() => {
+      this.currenthp =
+        this.currenthp + this.stats.healthRegen >= this.stats.maxhp
+          ? this.stats.maxhp
+          : this.currenthp + this.stats.healthRegen;
+    }, 1000);
+
     this.items = [];
     this.itemInstances = [];
 
-    this.gold = 250;
+    this.gold = 10;
 
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
