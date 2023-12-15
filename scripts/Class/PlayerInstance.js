@@ -356,6 +356,7 @@ class PlayerInstance extends CharacterInstance {
       } else if (skill === commando.utility) {
         this.switchSprite("roll");
         this.movementDisabled = true;
+        this.isImmune = true;
         this.vy = 0;
         const skillInterval = setInterval(() => {
           this.vx = this.facingDirection * this.speed * skill.rollSpeed;
@@ -371,6 +372,7 @@ class PlayerInstance extends CharacterInstance {
           this.checkHorizontalCollisions();
           this.vx = 0;
           this.movementDisabled = false;
+          this.isImmune = false;
           this.switchSprite("idle");
         }, skill.rollDuration);
         setTimeout(() => {
