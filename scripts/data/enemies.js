@@ -1,5 +1,6 @@
 enemies = {
   lizard: {
+    id: "lizard",
     isFlying: false,
     color: "#49c",
     cost: 11,
@@ -24,6 +25,7 @@ enemies = {
     },
   },
   wisp: {
+    id: "wisp",
     isFlying: false,
     color: "#f00",
     cost: 10,
@@ -48,6 +50,7 @@ enemies = {
     },
   },
   parent: {
+    id: "parent",
     isFlying: false,
     color: "#e1eb34",
     cost: 30,
@@ -72,6 +75,7 @@ enemies = {
     },
   },
   boar: {
+    id: "boar",
     isFlying: false,
     color: "#542406",
     width: 15,
@@ -100,6 +104,7 @@ enemies = {
     },
   },
   bee: {
+    id: "bee",
     isFlying: true,
     color: "#ebab34",
     cost: 10,
