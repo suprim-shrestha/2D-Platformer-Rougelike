@@ -51,6 +51,8 @@ enemyArr.push(enemy);
 
 const game = new Game();
 
+const director = new Director();
+
 const stage = new Stage();
 
 // Initialize camera position
