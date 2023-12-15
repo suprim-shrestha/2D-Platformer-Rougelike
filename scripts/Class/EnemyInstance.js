@@ -1,9 +1,21 @@
 class EnemyInstance extends CharacterInstance {
-  constructor({ x, y, width = 10, height = 13, player, enemyType }) {
+  constructor({
+    x,
+    y,
+    width = 10,
+    height = 13,
+    player,
+    enemyType,
+    expHeld = 0,
+    goldHeld = 0,
+  }) {
     super({ x, y, width, height, characterType: enemyType });
     this.player = player;
     this.enemyType = { ...enemyType };
     this.color = enemyType.color;
+    this.expHeld = expHeld;
+    this.goldHeld = goldHeld;
+    this.level = 1;
 
     this.skillInstance;
   }
@@ -29,6 +41,7 @@ class EnemyInstance extends CharacterInstance {
   }
 
   update() {
+    this.levelUp();
     if (!this.movementDisabled) {
       this.moveToPlayer();
       this.x += this.vx;
@@ -138,8 +151,19 @@ class EnemyInstance extends CharacterInstance {
     }, skill.skillCooldown);
   }
 
+  levelUp() {
+    const levelDiff = game.enemyLevel - this.level;
+    if (levelDiff > 0) {
+      this.stats.damage += this.enemyType.statIncrease.damage * levelDiff;
+      this.stats.maxhp += this.enemyType.statIncrease.maxhp * levelDiff;
+      this.level = game.enemyLevel;
+    }
+  }
+
   kill() {
     const enemyIndex = enemyArr.findIndex((enemy) => this === enemy);
     enemyArr.splice(enemyIndex, 1);
+    this.player.gold += this.goldHeld;
+    this.player.currentExp += this.expHeld;
   }
 }
