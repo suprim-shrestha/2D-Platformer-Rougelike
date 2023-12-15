@@ -37,6 +37,13 @@ class Director {
       if (canSpawnCount > 0) {
         let spawnCount =
           canSpawnCount > MAX_ENEMIES_SPAWN ? MAX_ENEMIES_SPAWN : canSpawnCount;
+        const goldHeld = Math.floor(
+          game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
+        );
+        const expHeld = Math.floor(
+          2 * game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
+        );
+        console.log(goldHeld);
         for (let i = 0; i < spawnCount; i++) {
           if (enemyArr.length >= TOTAL_POSSIBLE_ENEMIES) {
             break;
@@ -51,6 +58,8 @@ class Director {
             y: spawnPoint.y,
             player,
             enemyType: randomEnemy,
+            goldHeld,
+            expHeld,
           });
           console.log(newEnemy);
           enemyArr.push(newEnemy);
