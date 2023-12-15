@@ -11,7 +11,7 @@ class Game {
     this.timePlayedInMinutes = Math.floor(this.timePlayedInMs / (1000 * 60));
     this.formattedTimePlayed = "0:00";
 
-    setInterval(() => {
+    this.updateInterval = setInterval(() => {
       this.update();
     }, 1000);
   }
