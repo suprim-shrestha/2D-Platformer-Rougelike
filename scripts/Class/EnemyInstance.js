@@ -9,7 +9,9 @@ class EnemyInstance extends CharacterInstance {
   }
 
   moveToPlayer() {
-    if (this.x < this.player.x) {
+    if (this.player.x - this.x < 5 && this.player.x - this.x > -5) {
+      this.vx = 0;
+    } else if (this.x < this.player.x) {
       this.vx = this.stats.speed;
       this.facingDirection = FACING_RIGHT;
     } else {
@@ -82,31 +84,59 @@ class EnemyInstance extends CharacterInstance {
     skill.offCooldown = false;
     this.movementDisabled = true;
 
-    let skillX =
-      this.x +
-      (this.facingDirection === FACING_LEFT
-        ? -skill.skillWidth - skill.skillX
-        : this.width + skill.skillX);
+    if (!skill.isChargeType) {
+      let skillX =
+        this.x +
+        (this.facingDirection === FACING_LEFT
+          ? -skill.skillWidth - skill.skillX
+          : this.width + skill.skillX);
 
-    this.skillInstance = new DamagerInstance({
-      x: skillX,
-      y: this.y + skill.skillY,
-      width: skill.skillWidth,
-      height: skill.skillHeight,
-      isHostile: true,
-      damage: this.stats.damage,
-    });
+      this.skillInstance = new DamagerInstance({
+        x: skillX,
+        y: this.y + skill.skillY,
+        width: skill.skillWidth,
+        height: skill.skillHeight,
+        isHostile: true,
+        damage: this.stats.damage,
+      });
 
-    setTimeout(() => {
-      if (detectCollision(this.skillInstance, this.player)) {
-        this.skillInstance.dealDamage([this.player]);
-      }
-      this.skillInstance = null;
-    }, skill.skillDuration);
+      setTimeout(() => {
+        if (detectCollision(this.skillInstance, this.player)) {
+          this.skillInstance.dealDamage([this.player]);
+        }
+        this.skillInstance = null;
+        this.movementDisabled = false;
+      }, skill.skillDuration);
+    } else {
+      this.skillInstance = new DamagerInstance({
+        x: this.x + skill.skillX,
+        y: this.y + skill.skillY,
+        width: skill.skillWidth,
+        height: skill.skillHeight,
+        isHostile: true,
+        damage: this.stats.damage,
+      });
+      const skillInterval = setInterval(() => {
+        this.vx = this.facingDirection * skill.chargeSpeed;
+        this.x += this.vx;
+        if (
+          this.skillInstance &&
+          detectCollision(this.skillInstance, this.player)
+        ) {
+          this.skillInstance.dealDamage([this.player]);
+          this.skillInstance = null;
+        }
+      }, 1000 / FRAME_RATE);
+      setTimeout(() => {
+        this.skillInstance = null;
+        clearInterval(skillInterval);
+        this.movementDisabled = false;
+        this.checkHorizontalCollisions();
+      }, skill.skillDuration);
+    }
 
     setTimeout(() => {
       skill.offCooldown = true;
-      this.movementDisabled = false;
     }, skill.skillCooldown);
   }
 

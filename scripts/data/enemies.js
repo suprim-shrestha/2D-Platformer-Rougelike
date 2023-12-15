@@ -62,7 +62,7 @@ enemies = {
       offCooldown: true,
       skillDuration: 200,
       skillCooldown: 500,
-      skillWidth: 30,
+      skillWidth: 8,
       skillHeight: 8,
       skillX: 0,
       skillY: 2,
@@ -71,6 +71,8 @@ enemies = {
   boar: {
     isFlying: false,
     color: "#542406",
+    width: 15,
+    height: 15,
     baseStats: {
       maxhp: 480,
       damage: 12,
@@ -83,13 +85,14 @@ enemies = {
     distanceToAttack: 10,
     skill: {
       isChargeType: true,
+      chargeSpeed: SPEED * 2,
       offCooldown: true,
-      skillDuration: 200,
-      skillCooldown: 500,
-      skillWidth: 30,
-      skillHeight: 8,
+      skillDuration: 500,
+      skillCooldown: 3000,
+      skillWidth: 15,
+      skillHeight: 15,
       skillX: 0,
-      skillY: 2,
+      skillY: 0,
     },
   },
   bee: {

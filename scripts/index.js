@@ -24,14 +24,14 @@ enemy = new EnemyInstance({
   x: (canvas.width * 3) / 8 + 50,
   y: canvas.height - 400,
   player,
-  enemyType: enemies.lizard,
+  enemyType: enemies.wisp,
 });
 enemyArr.push(enemy);
 enemy = new EnemyInstance({
   x: canvas.width / 8,
   y: canvas.height - 400,
   player,
-  enemyType: enemies.lizard,
+  enemyType: enemies.parent,
 });
 enemyArr.push(enemy);
 enemy = new EnemyInstance({
@@ -41,13 +41,13 @@ enemy = new EnemyInstance({
   enemyType: enemies.bee,
 });
 enemyArr.push(enemy);
-// enemy = new EnemyInstance({
-//   x: 326,
-//   y: 1840,
-//   player,
-//   enemyType: enemies.lizard,
-// });
-// enemyArr.push(enemy);
+enemy = new EnemyInstance({
+  x: 326,
+  y: 300,
+  player,
+  enemyType: enemies.boar,
+});
+enemyArr.push(enemy);
 
 const stage = new Stage();
 
