@@ -12,6 +12,9 @@ class EnemyInstance extends CharacterInstance {
     super({ x, y, width, height, characterType: enemyType });
     this.player = player;
     this.enemyType = { ...enemyType };
+    this.enemyId = this.enemyType.id;
+    this.stats = { ...this.enemyType.baseStats };
+    this.currenthp = this.stats.maxhp;
     this.color = enemyType.color;
     this.expHeld = expHeld;
     this.goldHeld = goldHeld;
@@ -156,6 +159,7 @@ class EnemyInstance extends CharacterInstance {
     if (levelDiff > 0) {
       this.stats.damage += this.enemyType.statIncrease.damage * levelDiff;
       this.stats.maxhp += this.enemyType.statIncrease.maxhp * levelDiff;
+      this.currenthp += this.enemyType.statIncrease.maxhp * levelDiff;
       this.level = game.enemyLevel;
     }
   }

@@ -27,6 +27,8 @@ class PlayerInstance extends CharacterInstance {
     this.secondaryInstance;
 
     // Player stats
+    this.stats = { ...this.survivor.baseStats };
+    this.currenthp = this.stats.maxhp;
     this.currentExp = 0;
     this.lives = 1;
     this.critChance = 0.01;
@@ -450,6 +452,7 @@ class PlayerInstance extends CharacterInstance {
       this.level++;
       this.stats.damage += this.survivor.statIncrease.damage;
       this.stats.maxhp += this.survivor.statIncrease.maxhp;
+      this.currenthp += this.survivor.statIncrease.maxhp;
       this.stats.healthRegen += this.survivor.statIncrease.healthRegen;
     }
   }
