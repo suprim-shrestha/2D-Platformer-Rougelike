@@ -2,10 +2,11 @@ enemies = {
   lizard: {
     isFlying: false,
     color: "#49c",
+    cost: 11,
     baseStats: {
       maxhp: 80,
       damage: 12,
-      speed: SPEED,
+      speed: SPEED * 0.9,
     },
     statIncrease: {
       maxhp: 24,
@@ -25,10 +26,11 @@ enemies = {
   wisp: {
     isFlying: false,
     color: "#f00",
+    cost: 10,
     baseStats: {
       maxhp: 100,
       damage: 14,
-      speed: SPEED,
+      speed: SPEED * 0.9,
     },
     statIncrease: {
       maxhp: 24,
@@ -48,10 +50,11 @@ enemies = {
   parent: {
     isFlying: false,
     color: "#e1eb34",
+    cost: 40,
     baseStats: {
       maxhp: 480,
       damage: 20,
-      speed: SPEED * 0.8,
+      speed: SPEED * 0.7,
     },
     statIncrease: {
       maxhp: 100,
@@ -73,16 +76,17 @@ enemies = {
     color: "#542406",
     width: 15,
     height: 15,
+    cost: 40,
     baseStats: {
       maxhp: 480,
       damage: 12,
-      speed: SPEED * 0.5,
+      speed: SPEED * 0.6,
     },
     statIncrease: {
       maxhp: 100,
       damage: 2.4,
     },
-    distanceToAttack: 10,
+    distanceToAttack: 30,
     skill: {
       isChargeType: true,
       chargeSpeed: SPEED * 2,
@@ -98,6 +102,7 @@ enemies = {
   bee: {
     isFlying: true,
     color: "#ebab34",
+    cost: 10,
     baseStats: {
       maxhp: 60,
       damage: 5,
