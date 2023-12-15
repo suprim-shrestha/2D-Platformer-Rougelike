@@ -125,6 +125,5 @@ function endGame() {
   enemyArr = [];
   clearInterval(game.updateInterval);
   clearInterval(director.updateInterval);
-  clearInterval(director.spawnInterval);
   clearInterval(player.healInterval);
 }

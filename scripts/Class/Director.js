@@ -5,14 +5,11 @@ class Director {
     this.expMultiplier = 0.2;
     this.creditsPerSecond =
       this.creditMultiplier * (1 + 0.4 * game.difficultyCoeff);
+    this.timeSinceLastSpawn = new Date();
 
     this.updateInterval = setInterval(() => {
       this.update();
     }, 1000);
-
-    this.spawnInterval = setInterval(() => {
-      this.spawnEnemies();
-    }, SPAWN_INTERVAL);
 
     this.spawnEnemies(true);
   }
@@ -21,6 +18,11 @@ class Director {
     this.creditsPerSecond =
       this.creditMultiplier * (1 + 0.4 * game.difficultyCoeff);
     this.credits += this.creditsPerSecond;
+    const currentTime = new Date();
+    if (currentTime - this.timeSinceLastSpawn > SPAWN_INTERVAL) {
+      this.spawnEnemies();
+      this.timeSinceLastSpawn = currentTime;
+    }
   }
 
   spawnEnemies(initialSpawn = false) {
@@ -35,11 +37,11 @@ class Director {
       if (canSpawnCount > 0) {
         let spawnCount =
           canSpawnCount > MAX_ENEMIES_SPAWN ? MAX_ENEMIES_SPAWN : canSpawnCount;
-        const goldHeld = Math.floor(
-          game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
-        );
-        const expHeld = Math.floor(
+        const goldHeld = Math.round(
           2 * game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
+        );
+        const expHeld = Math.round(
+          game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
         );
         for (let i = 0; i < spawnCount; i++) {
           if (enemyArr.length >= TOTAL_POSSIBLE_ENEMIES) {
@@ -56,7 +58,7 @@ class Director {
               player.x,
               player.y
             );
-            spawnPoint = spawnPoints[Math.floor(getRandomNum(5, 15))];
+            spawnPoint = spawnPoints[Math.floor(getRandomNum(10, 25))];
           }
           const newEnemy = new EnemyInstance({
             x: spawnPoint.x,
