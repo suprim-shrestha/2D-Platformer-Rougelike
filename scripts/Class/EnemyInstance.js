@@ -69,6 +69,9 @@ class EnemyInstance extends CharacterInstance {
       this.jump();
     }
     this.checkSpecialBlockCollision();
+    if (this.y > MAP_WIDTH) {
+      this.kill();
+    }
   }
 
   jump() {
