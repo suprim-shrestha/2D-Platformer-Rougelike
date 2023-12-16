@@ -51,9 +51,12 @@ class EnemyInstance extends CharacterInstance {
   }
 
   moveToPlayer() {
-    if (this.player.x - this.x < 3 && this.player.x - this.x > -3) {
+    if (
+      this.player.x - this.x < this.enemyType.distanceToAttack &&
+      this.player.x - this.x > -this.enemyType.distanceToAttack
+    ) {
       this.vx = 0;
-    } else if (this.x < this.player.x) {
+    } else if (this.x < this.player.x - this.enemyType.distanceToAttack) {
       this.vx = this.stats.speed;
       this.facingDirection = FACING_RIGHT;
     } else {
