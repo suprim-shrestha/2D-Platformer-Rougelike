@@ -112,9 +112,6 @@ class EnemyInstance extends CharacterInstance {
     if (this.skillInstance) {
       this.skillInstance.draw();
     }
-    if (this.vx === 0 && this.vy <= 0.2 && !this.enemyType.isFlying) {
-      this.jump();
-    }
     this.checkSpecialBlockCollision();
     if (this.y > MAP_WIDTH) {
       this.kill();
@@ -135,7 +132,7 @@ class EnemyInstance extends CharacterInstance {
 
   checkSpecialBlockCollision() {
     for (const specialBlock of stage.enemyControlBlocks) {
-      if (detectCollision(this, specialBlock)) {
+      if (detectCollision(this, specialBlock) && !this.enemyType.isFlying) {
         this.jump();
         break;
       }
