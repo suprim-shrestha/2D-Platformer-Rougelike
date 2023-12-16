@@ -228,7 +228,14 @@ class EnemyInstance extends CharacterInstance {
     this.sprite.width =
       (this.sprite.image.width / this.sprite.frameRate) * this.spriteScale;
     this.sprite.height = this.sprite.image.height * this.spriteScale;
-    this.sprite.x = this.x;
+
+    // Fix hitbox position when attacking left
+    if (this.sprite.name === "attack" && this.facingDirection === FACING_LEFT) {
+      const widthDiff = Math.round(this.sprite.width - this.width);
+      this.sprite.x = this.x - widthDiff;
+    } else {
+      this.sprite.x = this.x;
+    }
     const heightDiff = Math.round(this.sprite.height - this.height);
     this.sprite.y = this.y - heightDiff;
   }
