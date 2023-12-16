@@ -2,7 +2,7 @@ class EnemyInstance extends CharacterInstance {
   constructor({
     x,
     y,
-    width = 10,
+    width = 13,
     height = 13,
     player,
     enemyType,
@@ -20,11 +20,40 @@ class EnemyInstance extends CharacterInstance {
     this.goldHeld = goldHeld;
     this.level = 1;
 
+    this.width = this.enemyType.width;
+    this.height = this.enemyType.height;
+
+    this.distanceFromPlayer = distance(
+      this.x,
+      this.y,
+      this.player.x,
+      this.player.y
+    );
+
     this.skillInstance;
+
+    this.sprites = this.enemyType.sprites;
+
+    this.sprite = new Sprite(
+      this.x,
+      this.y,
+      this.sprites.idle.imgSrc,
+      this.sprites.idle.frameRate,
+      this.sprites.idle.frameBuffer
+    );
+
+    // Create image object for every sprite
+    for (let key in this.sprites) {
+      const image = new Image();
+      image.src = this.sprites[key].imgSrc;
+      this.sprites[key].image = image;
+    }
   }
 
   moveToPlayer() {
-    if (this.x < this.player.x) {
+    if (this.player.x - this.x < 3 && this.player.x - this.x > -3) {
+      this.vx = 0;
+    } else if (this.x < this.player.x) {
       this.vx = this.stats.speed;
       this.facingDirection = FACING_RIGHT;
     } else {
@@ -32,9 +61,9 @@ class EnemyInstance extends CharacterInstance {
       this.facingDirection = FACING_LEFT;
     }
     if (this.enemyType.isFlying) {
-      if (this.player.y - this.y < 5 && this.player.y - this.y > 0) {
+      if (this.player.y - this.y < 10 && this.player.y - this.y > 5) {
         this.vy = 0;
-      } else if (this.y > this.player.y) {
+      } else if (this.y > this.player.y - 5) {
         this.vy = -this.stats.speed;
       } else {
         this.vy = this.stats.speed;
@@ -49,10 +78,22 @@ class EnemyInstance extends CharacterInstance {
       this.moveToPlayer();
       this.x += this.vx;
     }
-    if (
-      distance(this.x, this.y, this.player.x, this.player.y) <=
-      this.enemyType.distanceToAttack
-    ) {
+    if (this.facingDirection === FACING_RIGHT) {
+      this.distanceFromPlayer = distance(
+        this.x + this.width,
+        this.y,
+        this.player.x,
+        this.player.y
+      );
+    } else {
+      this.distanceFromPlayer = distance(
+        this.x,
+        this.y,
+        this.player.x + this.player.width,
+        this.player.y
+      );
+    }
+    if (this.distanceFromPlayer <= this.enemyType.distanceToAttack) {
       this.useSkill(this.enemyType.skill);
     }
     if (!this.enemyType.isFlying) {
@@ -61,6 +102,9 @@ class EnemyInstance extends CharacterInstance {
       this.checkVerticalCollisions();
     }
     this.draw();
+    this.sprite.updateFrames();
+    this.updateSpriteProperties();
+    this.sprite.draw(this.facingDirection);
     this.displayHpBar();
     if (this.skillInstance) {
       this.skillInstance.draw();
@@ -98,6 +142,8 @@ class EnemyInstance extends CharacterInstance {
   useSkill(skill) {
     if (!skill.offCooldown) return;
 
+    this.switchSprite("attack");
+
     skill.offCooldown = false;
     this.movementDisabled = true;
 
@@ -123,6 +169,7 @@ class EnemyInstance extends CharacterInstance {
         }
         this.skillInstance = null;
         this.movementDisabled = false;
+        this.switchSprite("idle");
       }, skill.skillDuration);
     } else {
       this.skillInstance = new DamagerInstance({
@@ -155,6 +202,27 @@ class EnemyInstance extends CharacterInstance {
     setTimeout(() => {
       skill.offCooldown = true;
     }, skill.skillCooldown);
+  }
+
+  switchSprite(key) {
+    if (this.sprite.image === this.sprites[key].image || !this.sprite.loaded)
+      return;
+
+    this.currentFrame = 0;
+    this.sprite.image = this.sprites[key].image;
+    this.sprite.frameBuffer = this.sprites[key].frameBuffer;
+    this.sprite.frameRate = this.sprites[key].frameRate;
+    this.sprite.name = key;
+  }
+
+  updateSpriteProperties() {
+    // Scale sprite image size to actual hitbox size
+    this.spriteScale = this.height / this.sprite.image.height;
+    this.sprite.width =
+      (this.sprite.image.width / this.sprite.frameRate) * this.spriteScale;
+    this.sprite.height = this.sprite.image.height * this.spriteScale;
+    this.sprite.x = this.x;
+    this.sprite.y = this.y;
   }
 
   levelUp() {
