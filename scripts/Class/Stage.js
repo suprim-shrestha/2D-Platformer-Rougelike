@@ -20,6 +20,10 @@ class Stage {
     this.createEnemyControlBlocks();
     this.randomizePlayerSpawn();
     this.generateChests();
+
+    this.teleporter = new Teleporter({ x: 0, y: 0 });
+
+    this.setTeleporterLocation();
   }
 
   /**
@@ -27,6 +31,7 @@ class Stage {
    */
   draw() {
     this.map.draw();
+    this.teleporter.draw();
     this.chestsArray.forEach((chest) => {
       chest.draw();
     });
@@ -145,6 +150,22 @@ class Stage {
       });
       this.chestsArray.push(chest);
     }
+  }
+
+  setTeleporterLocation() {
+    const spawnBlocksNearPlayer = this.getRandomSpawnPointNearXY(
+      this.playerSpawnPoint.x,
+      this.playerSpawnPoint.y
+    );
+    const teleporterSpawnIndex = Math.floor(
+      getRandomNum(
+        spawnBlocksNearPlayer.length - 30,
+        spawnBlocksNearPlayer.length
+      )
+    );
+    const teleporterSpawnBlock = spawnBlocksNearPlayer[teleporterSpawnIndex];
+    this.teleporter.x = teleporterSpawnBlock.x;
+    this.teleporter.y = teleporterSpawnBlock.y - 10;
   }
 
   getRandomSpawnPointNearXY(x, y) {
