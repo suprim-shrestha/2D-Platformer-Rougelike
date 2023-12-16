@@ -32,4 +32,18 @@ class Game {
       1 + (this.difficultyCoeff - PLAYER_FACTOR) / 0.33
     );
   }
+
+  nextStage() {
+    this.stageCompleted++;
+    this.currentStage++;
+    enemyArr = [];
+    player.currenthp = player.stats.maxhp;
+    player.gold = 0;
+    stage = new Stage();
+    director.credits = 100;
+    director.spawnEnemies(true);
+    camera.x = -player.cameraBox.x;
+    camera.y = -player.cameraBox.y;
+    moveCameraWithinBoundaries();
+  }
 }

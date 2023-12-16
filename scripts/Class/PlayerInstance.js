@@ -249,7 +249,9 @@ class PlayerInstance extends CharacterInstance {
       if (keys.interact) {
         this.openChest();
         if (detectCollision(this, stage.teleporter)) {
-          if (!stage.teleporter.isActive) {
+          if (stage.teleporter.isCharged) {
+            game.nextStage();
+          } else if (!stage.teleporter.isActive) {
             stage.teleporter.activate();
           }
         }
