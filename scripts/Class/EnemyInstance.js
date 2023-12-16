@@ -33,7 +33,7 @@ class EnemyInstance extends CharacterInstance {
 
     this.skillInstance;
 
-    this.sprites = this.enemyType.sprites;
+    this.sprites = { ...this.enemyType.sprites };
     this.spriteScale = this.enemyType.spriteScale;
     this.sprite = new Sprite(
       this.x,
@@ -124,7 +124,11 @@ class EnemyInstance extends CharacterInstance {
   }
 
   jump() {
-    if (this.canJump && this.jumpCount < this.maxJumps) {
+    if (
+      this.canJump &&
+      this.jumpCount < this.maxJumps &&
+      !this.movementDisabled
+    ) {
       this.canJump = false;
       this.jumpCount++;
       this.vy = -this.jumpHeight;
@@ -190,13 +194,13 @@ class EnemyInstance extends CharacterInstance {
       const skillInterval = setInterval(() => {
         this.vx = this.facingDirection * skill.chargeSpeed;
         this.x += this.vx;
-        this.skillInstance.x += this.vx;
-        if (
-          this.skillInstance &&
-          detectCollision(this.skillInstance, this.player)
-        ) {
-          this.skillInstance.dealDamage([this.player]);
-          this.skillInstance = null;
+        if (this.skillInstance) {
+          this.skillInstance.x = this.x + skill.skillX;
+          this.skillInstance.y = this.y + skill.skillY;
+          if (detectCollision(this.skillInstance, this.player)) {
+            this.skillInstance.dealDamage([this.player]);
+            this.skillInstance = null;
+          }
         }
       }, 1000 / FRAME_RATE);
       setTimeout(() => {
