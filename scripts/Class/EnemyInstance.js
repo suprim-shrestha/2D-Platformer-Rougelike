@@ -190,6 +190,7 @@ class EnemyInstance extends CharacterInstance {
       const skillInterval = setInterval(() => {
         this.vx = this.facingDirection * skill.chargeSpeed;
         this.x += this.vx;
+        this.skillInstance.x += this.vx;
         if (
           this.skillInstance &&
           detectCollision(this.skillInstance, this.player)
