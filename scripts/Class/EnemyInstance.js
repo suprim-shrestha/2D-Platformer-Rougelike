@@ -169,13 +169,15 @@ class EnemyInstance extends CharacterInstance {
       });
 
       setTimeout(() => {
-        if (detectCollision(this.skillInstance, this.player)) {
-          this.skillInstance.dealDamage([this.player]);
-        }
         this.skillInstance = null;
         this.movementDisabled = false;
         this.switchSprite("idle");
       }, skill.skillDuration);
+      setTimeout(() => {
+        if (detectCollision(this.skillInstance, this.player)) {
+          this.skillInstance.dealDamage([this.player]);
+        }
+      }, skill.skillDuration / 2);
     } else {
       this.skillInstance = new DamagerInstance({
         x: this.x + skill.skillX,
