@@ -5,6 +5,7 @@ class Director {
     this.expMultiplier = 0.2;
     this.creditsPerSecond =
       this.creditMultiplier * (1 + 0.4 * game.difficultyCoeff);
+    this.teleporterMultiplier = 1;
     this.timeSinceLastSpawn = new Date();
 
     this.updateInterval = setInterval(() => {
@@ -15,11 +16,19 @@ class Director {
   }
 
   update() {
+    this.teleporterMultiplier = stage.teleporter.isActive ? 4 : 1;
+
     this.creditsPerSecond =
-      this.creditMultiplier * (1 + 0.4 * game.difficultyCoeff);
+      this.creditMultiplier *
+      (1 + 0.4 * game.difficultyCoeff) *
+      this.teleporterMultiplier;
     this.credits += this.creditsPerSecond;
     const currentTime = new Date();
-    if (currentTime - this.timeSinceLastSpawn > SPAWN_INTERVAL) {
+    if (
+      currentTime - this.timeSinceLastSpawn >
+        SPAWN_INTERVAL / this.teleporterMultiplier &&
+      !stage.teleporter.isCharged
+    ) {
       this.spawnEnemies();
       this.timeSinceLastSpawn = currentTime;
     }
