@@ -43,4 +43,4 @@ const SPAWN_INTERVAL = 25000;
 // Teleporter
 const TELEPORTER_WIDTH = 48;
 const TELEPORTER_HEIGHT = 26;
-const CHARGE_TIME = 90000;
+const CHARGE_TIME = 90;

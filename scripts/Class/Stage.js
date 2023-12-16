@@ -31,7 +31,7 @@ class Stage {
    */
   draw() {
     this.map.draw();
-    this.teleporter.draw();
+    this.teleporter.update();
     this.chestsArray.forEach((chest) => {
       chest.draw();
     });
