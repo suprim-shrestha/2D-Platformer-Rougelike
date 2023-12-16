@@ -12,6 +12,7 @@ class EnemyInstance extends CharacterInstance {
     super({ x, y, width, height, characterType: enemyType });
     this.player = player;
     this.enemyType = { ...enemyType };
+    this.skill = { ...enemyType.skill };
     this.enemyId = this.enemyType.id;
     this.stats = { ...this.enemyType.baseStats };
     this.currenthp = this.stats.maxhp;
@@ -33,7 +34,7 @@ class EnemyInstance extends CharacterInstance {
     this.skillInstance;
 
     this.sprites = this.enemyType.sprites;
-
+    this.spriteScale = this.enemyType.spriteScale;
     this.sprite = new Sprite(
       this.x,
       this.y,
@@ -51,17 +52,20 @@ class EnemyInstance extends CharacterInstance {
   }
 
   moveToPlayer() {
-    if (
-      this.player.x - this.x < this.enemyType.distanceToAttack &&
-      this.player.x - this.x > -this.enemyType.distanceToAttack
-    ) {
-      this.vx = 0;
-    } else if (this.x < this.player.x - this.enemyType.distanceToAttack) {
+    if (this.x < this.player.x) {
       this.vx = this.stats.speed;
       this.facingDirection = FACING_RIGHT;
     } else {
       this.vx = -this.stats.speed;
       this.facingDirection = FACING_LEFT;
+    }
+    if (
+      this.player.x - this.x - this.width <=
+        this.enemyType.distanceToAttack / 4 &&
+      this.player.x + this.player.width - this.x >=
+        -this.enemyType.distanceToAttack / 4
+    ) {
+      this.vx = 0;
     }
     if (this.enemyType.isFlying) {
       if (this.player.y - this.y < 10 && this.player.y - this.y > 5) {
@@ -77,10 +81,6 @@ class EnemyInstance extends CharacterInstance {
 
   update() {
     this.levelUp();
-    if (!this.movementDisabled) {
-      this.moveToPlayer();
-      this.x += this.vx;
-    }
     if (this.facingDirection === FACING_RIGHT) {
       this.distanceFromPlayer = distance(
         this.x + this.width,
@@ -96,8 +96,12 @@ class EnemyInstance extends CharacterInstance {
         this.player.y
       );
     }
+    if (!this.movementDisabled) {
+      this.moveToPlayer();
+      this.x += this.vx;
+    }
     if (this.distanceFromPlayer <= this.enemyType.distanceToAttack) {
-      this.useSkill(this.enemyType.skill);
+      this.useSkill(this.skill);
     }
     if (!this.enemyType.isFlying) {
       this.checkHorizontalCollisions();
@@ -217,7 +221,6 @@ class EnemyInstance extends CharacterInstance {
 
   updateSpriteProperties() {
     // Scale sprite image size to actual hitbox size
-    this.spriteScale = this.height / this.sprite.image.height;
     this.sprite.width =
       (this.sprite.image.width / this.sprite.frameRate) * this.spriteScale;
     this.sprite.height = this.sprite.image.height * this.spriteScale;

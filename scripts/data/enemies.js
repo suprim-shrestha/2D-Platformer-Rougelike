@@ -109,6 +109,7 @@ enemies = {
     color: "#ebab34",
     width: 18,
     height: 18,
+    spriteScale: 18 / 40,
     cost: 10,
     baseStats: {
       maxhp: 60,
