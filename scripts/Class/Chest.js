@@ -1,7 +1,13 @@
 class Chest extends Instance {
-  constructor({ x, y, width = TILE_SIZE, height = TILE_SIZE }) {
+  constructor({
+    x,
+    y,
+    width = TILE_SIZE,
+    height = TILE_SIZE,
+    cost = DEFAULT_CHEST_COST,
+  }) {
     super({ x, y, width, height });
-    this.cost = DEFAULT_CHEST_COST;
+    this.cost = cost;
     this.item;
     this.itemRarity;
     this.isOpen = false;
@@ -15,6 +21,11 @@ class Chest extends Instance {
     this.sprite.width = this.width;
     this.sprite.height = this.height;
     this.sprite.draw();
+    ctx.font = "6px Arial";
+    ctx.fillStyle = "#fff";
+    const chestCost = `$${this.cost}`;
+    const textWidth = ctx.measureText(chestCost).width;
+    ctx.fillText(chestCost, this.x + this.width / 2 - textWidth / 2, this.y);
   }
 
   /**

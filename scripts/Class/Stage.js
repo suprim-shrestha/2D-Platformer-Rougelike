@@ -13,6 +13,7 @@ class Stage {
     this.playerSpawnPoint = { x: 0, y: 0 };
 
     this.chestsArray = [];
+    this.chestCost = Math.round(DEFAULT_CHEST_COST * game.difficultyCoeff);
 
     this.createCollisionBlocks();
     this.createRopeBlocks();
@@ -147,6 +148,7 @@ class Stage {
       const chest = new Chest({
         x: chestX,
         y: chestY,
+        cost: this.chestCost,
       });
       this.chestsArray.push(chest);
     }
