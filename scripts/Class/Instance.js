@@ -7,7 +7,7 @@ class Instance {
     this.y = y;
     this.width = width;
     this.height = height;
-    this.color = "#49c";
+    this.color = "rgba(255,0,0,0.2)";
   }
 
   draw() {

@@ -104,11 +104,12 @@ class EnemyInstance extends CharacterInstance {
       this.useSkill(this.skill);
     }
     if (!this.enemyType.isFlying) {
+      this.updateSprites();
       this.checkHorizontalCollisions();
       this.applyGravity();
       this.checkVerticalCollisions();
     }
-    this.draw();
+    // this.draw();
     this.sprite.updateFrames();
     this.updateSpriteProperties();
     this.sprite.draw(this.facingDirection);
@@ -225,7 +226,23 @@ class EnemyInstance extends CharacterInstance {
       (this.sprite.image.width / this.sprite.frameRate) * this.spriteScale;
     this.sprite.height = this.sprite.image.height * this.spriteScale;
     this.sprite.x = this.x;
-    this.sprite.y = this.y;
+    const heightDiff = Math.round(this.sprite.height - this.height);
+    this.sprite.y = this.y - heightDiff;
+  }
+
+  updateSprites() {
+    if (!this.movementDisabled) {
+      if (this.vx != 0) {
+        this.switchSprite("run");
+      } else {
+        this.switchSprite("idle");
+      }
+      if (this.vy < 0) {
+        this.switchSprite("jump");
+      } else if (this.vy > 0.25) {
+        this.switchSprite("fall");
+      }
+    }
   }
 
   levelUp() {
