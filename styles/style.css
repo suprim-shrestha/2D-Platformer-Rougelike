@@ -15,14 +15,20 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
+  font-family: "Silkscreen", san-serif;
+  color: #bbb;
 }
 
 .controls {
   position: absolute;
   left: 20px;
   top: 10%;
-  color: #bbb;
-  font-family: "Silkscreen", san-serif;
+}
+
+.objectives {
+  position: absolute;
+  right: 20px;
+  top: 10%;
 }
 
 .btn-start {
