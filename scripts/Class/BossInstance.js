@@ -5,7 +5,7 @@ class BossInstance extends EnemyInstance {
     width = 20,
     height = 20,
     player,
-    enemyType = boss.golem,
+    enemyType,
     expHeld = 0,
     goldHeld = 0,
   }) {

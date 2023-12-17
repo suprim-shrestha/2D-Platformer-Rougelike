@@ -80,7 +80,7 @@ boss = {
     isFlying: true,
     color: "#e1eb34",
     width: 20,
-    height: 400,
+    height: 40,
     spriteScale: 40 / 62,
     cost: 30,
     baseStats: {
