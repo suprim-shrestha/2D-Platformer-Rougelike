@@ -11,3 +11,23 @@ startButton.addEventListener("click", () => {
   startGame();
   animate();
 });
+
+/**
+ * Initialize all class instances
+ */
+function startGame() {
+  timePlayed = "0:00";
+  player = new PlayerInstance({
+    x: 0,
+    y: 0,
+    width: 10.24,
+    height: 13,
+  });
+  game = new Game();
+  stage = new Stage();
+  director = new Director();
+  camera.x = -player.cameraBox.x;
+  camera.y = -player.cameraBox.y;
+  moveCameraWithinBoundaries();
+  gameOver = false;
+}

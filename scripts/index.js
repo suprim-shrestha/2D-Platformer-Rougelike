@@ -40,19 +40,7 @@ function animate(currentTime) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (gameOver) {
-      ctx.fillStyle = "#fff";
-      ctx.font = "20px Silkscreen, san-serif";
-      const finalMessage = `You survived ${timePlayed}`;
-      let textWidth = ctx.measureText(finalMessage).width;
-      let textX = (canvas.width - textWidth) / 2;
-      ctx.fillText(finalMessage, textX, (canvas.height * 2) / 5);
-      const gameOverDisplay = "Game Over: Press 'Enter' to Restart";
-      textWidth = ctx.measureText(gameOverDisplay).width;
-      textX = (canvas.width - textWidth) / 2;
-      ctx.fillText(gameOverDisplay, textX, (canvas.height * 3) / 5);
-      if (keys.enter) {
-        startGame();
-      }
+      displayGameOverScreen();
     } else {
       ctx.save();
       ctx.scale(SCALE, SCALE);
@@ -64,26 +52,11 @@ function animate(currentTime) {
       player.update();
       ctx.restore();
 
-      if (itemPopUp) {
-        itemPopUp.displayPopUp();
-      }
-      player.itemInstances.forEach((itemInstance) => {
-        itemInstance.draw();
-      });
-      ctx.fillStyle = "#fff";
-      ctx.font = "20px Silkscreen, san-serif";
-      ctx.fillText(timePlayed, canvas.width - 100, 50);
-      const playerLevel = `Player Level: ${player.level}`;
-      const enemyLevel = `Enemy Level: ${game.enemyLevel}`;
-      const goldCount = `Gold: ${player.gold}`;
-      ctx.fillText(playerLevel, 10, 50);
-      ctx.fillText(enemyLevel, 10, 100);
-      ctx.fillText(goldCount, 10, 150);
+      diplayGameHUD();
     }
   }
   requestAnimationFrame(animate);
 }
-// animate();
 
 /**
  * Move camera within boundaries of map
@@ -99,31 +72,4 @@ function moveCameraWithinBoundaries() {
   } else if (camera.y > 0) {
     camera.y = 0;
   }
-}
-
-function startGame() {
-  console.log("game start");
-  timePlayed = "0:00";
-  player = new PlayerInstance({
-    x: 0,
-    y: 0,
-    width: 10.24,
-    height: 13,
-  });
-  game = new Game();
-  stage = new Stage();
-  director = new Director();
-  camera.x = -player.cameraBox.x;
-  camera.y = -player.cameraBox.y;
-  moveCameraWithinBoundaries();
-  gameOver = false;
-}
-
-function endGame() {
-  gameOver = true;
-  enemyArr = [];
-  bossArr = [];
-  clearInterval(game.updateInterval);
-  clearInterval(director.updateInterval);
-  clearInterval(player.healInterval);
 }
