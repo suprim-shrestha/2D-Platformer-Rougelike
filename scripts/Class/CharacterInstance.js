@@ -162,7 +162,7 @@ class CharacterInstance extends Instance {
 
     ctx.fillStyle = "#000";
     ctx.fillRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
-    ctx.fillStyle = "#0f0";
+    ctx.fillStyle = this.isBoss ? "#f00" : "#0f0";
     ctx.strokeStyle = "#aaa";
     ctx.fillRect(hpBarX, hpBarY, currentHpWidth, hpBarHeight);
     ctx.strokeRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
