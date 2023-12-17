@@ -21,8 +21,7 @@ class BossInstance extends EnemyInstance {
     });
 
     this.skills = [...this.enemyType.skills];
-    this.skill = this.skills[0];
-    this.distanceToAttack = this.skill.distanceToAttack;
+    this.chooseSkill();
   }
 
   update() {
@@ -36,6 +35,8 @@ class BossInstance extends EnemyInstance {
     const availableSkills = this.skills.filter((skill) => skill.offCooldown);
     const skillIndex = Math.floor(getRandomNum(0, availableSkills.length));
     this.skill = availableSkills[skillIndex];
-    this.distanceToAttack = this.skill.distanceToAttack;
+    if (this.skill) {
+      this.distanceToAttack = this.skill.distanceToAttack;
+    }
   }
 }
