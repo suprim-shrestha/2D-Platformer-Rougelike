@@ -50,5 +50,6 @@ class Teleporter extends Instance {
   activate() {
     this.activatedTime = new Date();
     this.isActive = true;
+    director.spawnBoss();
   }
 }

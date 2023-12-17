@@ -34,6 +34,11 @@ class Director {
     }
   }
 
+  /**
+   * Spawn enemies if director has credits available
+   *
+   * @param {boolean} initialSpawn
+   */
   spawnEnemies(initialSpawn = false) {
     while (this.credits >= 10 && enemyArr.length < TOTAL_POSSIBLE_ENEMIES) {
       const enemyTypesArray = Object.keys(enemies);
@@ -82,5 +87,37 @@ class Director {
         }
       }
     }
+  }
+
+  /**
+   * Spawn boss during teleporter event
+   */
+  spawnBoss() {
+    const bossTypesArray = Object.keys(boss);
+    const randomBossIndex = Math.floor(getRandomNum(0, bossTypesArray.length));
+    const randomBossType = bossTypesArray[randomBossIndex];
+    const randomBoss = boss[randomBossType];
+    const expHeld = Math.round(
+      game.difficultyCoeff * randomBoss.cost * this.expMultiplier
+    );
+    const goldHeld = Math.round(
+      2 * game.difficultyCoeff * randomBoss.cost * this.expMultiplier
+    );
+
+    const spawnPoints = stage.getRandomSpawnPointNearXY(
+      stage.teleporter.x,
+      stage.teleporter.y
+    );
+    const spawnPoint = spawnPoints[Math.floor(getRandomNum(5, 15))];
+
+    const newBoss = new BossInstance({
+      x: spawnPoint.x,
+      y: spawnPoint.y,
+      player,
+      enemyType: randomBoss,
+      goldHeld,
+      expHeld,
+    });
+    bossArr.push(newBoss);
   }
 }
