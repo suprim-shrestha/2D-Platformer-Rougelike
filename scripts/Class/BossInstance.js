@@ -20,6 +20,8 @@ class BossInstance extends EnemyInstance {
       goldHeld,
     });
 
+    this.isBoss = true;
+
     this.skills = [...this.enemyType.skills];
     this.chooseSkill();
   }

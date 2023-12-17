@@ -63,9 +63,6 @@ function animate(currentTime) {
       enemyArr.forEach((enemy) => {
         enemy.update();
       });
-      bossArr.forEach((boss) => {
-        boss.update();
-      });
       player.update();
       ctx.restore();
 

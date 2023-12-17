@@ -118,6 +118,7 @@ class Director {
       goldHeld,
       expHeld,
     });
+    enemyArr.push(newBoss);
     bossArr.push(newBoss);
   }
 }
