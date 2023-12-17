@@ -1,4 +1,5 @@
 const commando = {
+  id: "commando",
   baseStats: {
     maxhp: 110,
     healthRegen: 1,

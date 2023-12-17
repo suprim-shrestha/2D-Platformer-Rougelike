@@ -15,6 +15,7 @@ class CharacterInstance extends Instance {
     // Character stats
     this.stats = { ...characterType.baseStats };
     this.currenthp = this.stats.maxhp;
+    this.characterId = characterType.id;
 
     this.speed = SPEED;
     this.jumpHeight = JUMP_HEIGHT;
@@ -191,10 +192,14 @@ class CharacterInstance extends Instance {
     this.sprite.height = this.sprite.image.height * this.spriteScale;
 
     // Fix hitbox position when attacking left
-    if (
+    if (this.sprite.name === "charge") {
+      const widthDiff = Math.round(this.sprite.width - this.width);
+      this.sprite.x = this.x - widthDiff / 2;
+    } else if (
       (this.sprite.name === "attack" ||
         this.sprite.name === "primary" ||
-        this.sprite.name === "secondary") &&
+        this.sprite.name === "secondary" ||
+        this.characterId === "reaper") &&
       this.facingDirection === FACING_LEFT
     ) {
       const widthDiff = Math.round(this.sprite.width - this.width);

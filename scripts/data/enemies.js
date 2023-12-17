@@ -156,6 +156,7 @@ enemies = {
       isChargeType: true,
       chargeSpeed: SPEED * 2,
       offCooldown: true,
+      chargeStart: 0,
       skillDuration: 500,
       skillCooldown: 3000,
       skillWidth: 15,
@@ -174,7 +175,7 @@ enemies = {
         frameRate: 6,
         frameBuffer: 4,
       },
-      attack: {
+      charge: {
         imgSrc: "./assets/enemies/boar/boar-attack.png",
         frameRate: 6,
         frameBuffer: 5,
