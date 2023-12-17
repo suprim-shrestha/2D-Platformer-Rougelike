@@ -21,4 +21,7 @@ function diplayGameHUD() {
   ctx.fillText(playerLevel, 10, 50);
   ctx.fillText(enemyLevel, 10, 75);
   ctx.fillText(goldCount, 10, 100);
+
+  // Skill HUD
+  player.displaySkillHUD();
 }

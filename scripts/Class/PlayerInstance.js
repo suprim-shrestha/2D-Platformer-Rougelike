@@ -38,6 +38,9 @@ class PlayerInstance extends CharacterInstance {
     this.items = [];
     this.itemInstances = [];
 
+    this.skillDisplay = new Image();
+    this.skillDisplay.src = "./assets/commando/skills.png";
+
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
       this.checkAbilityCollisionRight.bind(this);
@@ -189,14 +192,14 @@ class PlayerInstance extends CharacterInstance {
       }
       if (keys.primary) {
         this.switchSprite("primary");
-        this.useSkill(commando.primary);
+        this.useSkill(this.survivor.primary);
         this.speed = this.stats.speed / 3; // Reduce player speed for walking while firing primary
       }
       if (keys.secondary) {
-        this.useSkill(commando.secondary);
+        this.useSkill(this.survivor.secondary);
       }
       if (keys.utility) {
-        this.useSkill(commando.utility);
+        this.useSkill(this.survivor.utility);
       }
       if (keys.interact) {
         this.openChest();
@@ -214,7 +217,10 @@ class PlayerInstance extends CharacterInstance {
   useSkill(skill) {
     if (skill.offCooldown) {
       skill.offCooldown = false;
-      if (skill === commando.primary || skill === commando.secondary) {
+      if (
+        skill === this.survivor.primary ||
+        skill === this.survivor.secondary
+      ) {
         // Find if skill trriggered crit or instakill
         const critDamage = getRandomNum() <= this.critChance ? 2 : 1;
         const instaKillDamage =
@@ -229,7 +235,7 @@ class PlayerInstance extends CharacterInstance {
             ? -abilityWidth - 7
             : this.width + 7);
         let abilityY = this.y + (this.height * 1) / 3 - 1;
-        if (skill === commando.primary) {
+        if (skill === this.survivor.primary) {
           // Create primary skill instance
           if (!this.primaryInstance) {
             let hitEnemy;
@@ -338,7 +344,7 @@ class PlayerInstance extends CharacterInstance {
             this.speed = this.stats.speed;
           }, skill.cooldown * this.cooldownReduction);
         }
-      } else if (skill === commando.utility) {
+      } else if (skill === this.survivor.utility) {
         this.switchSprite("roll");
         this.movementDisabled = true;
         this.isImmune = true;
@@ -466,6 +472,32 @@ class PlayerInstance extends CharacterInstance {
           displayItemPickup(chest.item);
         }
       }
+    }
+  }
+
+  /**
+   * Displays skills and cooldowns
+   */
+  displaySkillHUD() {
+    if (!this.skillDisplay) return;
+
+    const skillDisplayX = canvas.width / 2 - SKILL_HUD_WIDTH / 2;
+    const skillDisplayY = (canvas.height * 8) / 9;
+
+    ctx.drawImage(
+      this.skillDisplay,
+      skillDisplayX,
+      skillDisplayY,
+      SKILL_HUD_WIDTH,
+      SKILL_HUD_HEIGHT
+    );
+
+    ctx.fillStyle = "rgba(200, 200, 200, 0.7)";
+    if (!this.survivor.secondary.offCooldown) {
+      ctx.fillRect(skillDisplayX + 42.5, skillDisplayY + 4, 30, 30);
+    }
+    if (!this.survivor.utility.offCooldown) {
+      ctx.fillRect(skillDisplayX + 83.75, skillDisplayY + 4, 30, 30);
     }
   }
 
