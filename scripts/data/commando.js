@@ -29,7 +29,7 @@ const commando = {
   utility: {
     cooldown: 4000,
     offCooldown: true,
-    rollSpeed: 4,
+    rollSpeed: 2.3,
     rollDuration: 340,
   },
   spriteScale: 10.24 / 26,
