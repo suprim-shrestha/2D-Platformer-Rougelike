@@ -11,24 +11,12 @@ class PlayerInstance extends CharacterInstance {
       width: canvas.width / SCALE,
       height: canvas.height / SCALE,
     };
-    this.sprites = this.survivor.sprites;
-
-    this.sprite = new Sprite(this.x, this.y, this.sprites.idle.imgSrc);
-
-    // Create image object for every sprite
-    for (let key in this.sprites) {
-      const image = new Image();
-      image.src = this.sprites[key].imgSrc;
-      this.sprites[key].image = image;
-    }
 
     // Skill instances
     this.primaryInstance;
     this.secondaryInstance;
 
     // Player stats
-    this.stats = { ...this.survivor.baseStats };
-    this.currenthp = this.stats.maxhp;
     this.currentExp = 0;
     this.lives = 1;
     this.critChance = 0.01;
@@ -37,6 +25,7 @@ class PlayerInstance extends CharacterInstance {
     this.cooldownReduction = 1;
     this.healOnHit = 0;
     this.goldMultiplier = 1;
+    this.gold = 10;
 
     // Regenerate health per second
     this.healInterval = setInterval(() => {
@@ -48,8 +37,6 @@ class PlayerInstance extends CharacterInstance {
 
     this.items = [];
     this.itemInstances = [];
-
-    this.gold = 10;
 
     this.checkAbilityCollisionLeft = this.checkAbilityCollisionLeft.bind(this);
     this.checkAbilityCollisionRight =
@@ -78,41 +65,6 @@ class PlayerInstance extends CharacterInstance {
     this.sprite.draw(this.facingDirection);
     this.levelUp();
     this.checkOutsideMap();
-  }
-
-  switchSprite(key) {
-    if (this.sprite.image === this.sprites[key].image || !this.sprite.loaded)
-      return;
-
-    this.currentFrame = 0;
-    this.sprite.image = this.sprites[key].image;
-    this.sprite.frameBuffer = this.sprites[key].frameBuffer;
-    this.sprite.frameRate = this.sprites[key].frameRate;
-    this.sprite.name = key;
-  }
-
-  /**
-   * Update sprite position and size with player's size and position
-   */
-  updateSpriteProperties() {
-    // Scale sprite image size to actual player size
-    this.sprite.width =
-      (this.sprite.image.width / this.sprite.frameRate) * PLAYER_SPRITE_SCALE;
-    this.sprite.height = this.sprite.image.height * PLAYER_SPRITE_SCALE;
-
-    // Fix hitbox to player position when shooting left
-    if (
-      this.sprite.name === "primary" &&
-      this.facingDirection === FACING_LEFT
-    ) {
-      const widthDiff = Math.round(this.sprite.width - this.width);
-      this.sprite.x = this.x - widthDiff;
-    } else {
-      this.sprite.x = this.x;
-    }
-    // Move sprite position up on y-axis when sprite's height is greater than player's (jump and climb sprites)
-    const heightDiff = Math.round(this.sprite.height - this.height);
-    this.sprite.y = this.y - heightDiff;
   }
 
   updateCameraBox() {

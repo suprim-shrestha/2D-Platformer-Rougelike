@@ -31,6 +31,7 @@ const commando = {
     rollSpeed: 4,
     rollDuration: 340,
   },
+  spriteScale: 10.24 / 26,
   sprites: {
     idle: {
       imgSrc: "./assets/commando/idle.png",

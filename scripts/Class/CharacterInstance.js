@@ -2,7 +2,7 @@
  * Instance for all playable and non-playable characters
  */
 class CharacterInstance extends Instance {
-  constructor({ x, y, width = 15, height = 15 }) {
+  constructor({ x, y, width = 15, height = 15, characterType }) {
     super({ x, y, width, height });
     this.vx = 0;
     this.vy = 0;
@@ -12,6 +12,10 @@ class CharacterInstance extends Instance {
     this.facingDirection = FACING_RIGHT;
     this.movementDisabled = false;
 
+    // Character stats
+    this.stats = { ...characterType.baseStats };
+    this.currenthp = this.stats.maxhp;
+
     this.speed = SPEED;
     this.jumpHeight = JUMP_HEIGHT;
     this.maxJumps = 1;
@@ -19,6 +23,24 @@ class CharacterInstance extends Instance {
     this.level = 1;
     this.isImmune = false;
     this.dodgeChance = 0;
+
+    // Sprites
+    this.sprites = { ...characterType.sprites };
+    this.spriteScale = characterType.spriteScale;
+    this.sprite = new Sprite(
+      this.x,
+      this.y,
+      this.sprites.idle.imgSrc,
+      this.sprites.idle.frameRate,
+      this.sprites.idle.frameBuffer
+    );
+
+    // Create image object for every sprite
+    for (let key in this.sprites) {
+      const image = new Image();
+      image.src = this.sprites[key].imgSrc;
+      this.sprites[key].image = image;
+    }
   }
 
   update() {
@@ -127,6 +149,9 @@ class CharacterInstance extends Instance {
     }
   }
 
+  /**
+   * Display HP bar above player
+   */
   displayHpBar() {
     const hpBarWidth = 30;
     const hpBarHeight = 5;
@@ -134,9 +159,52 @@ class CharacterInstance extends Instance {
     const hpBarY = this.y - 10;
     const currentHpWidth = (this.currenthp / this.stats.maxhp) * hpBarWidth;
 
+    ctx.fillStyle = "#000";
+    ctx.fillRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
     ctx.fillStyle = "#0f0";
     ctx.strokeStyle = "#aaa";
     ctx.fillRect(hpBarX, hpBarY, currentHpWidth, hpBarHeight);
     ctx.strokeRect(hpBarX, hpBarY, hpBarWidth, hpBarHeight);
+  }
+
+  /**
+   * Switch sprite and set initial properties of sprite
+   */
+  switchSprite(key) {
+    if (this.sprite.image === this.sprites[key].image || !this.sprite.loaded)
+      return;
+
+    this.currentFrame = 0;
+    this.sprite.image = this.sprites[key].image;
+    this.sprite.frameBuffer = this.sprites[key].frameBuffer;
+    this.sprite.frameRate = this.sprites[key].frameRate;
+    this.sprite.name = key;
+  }
+
+  /**
+   * Update sprite position and size with character's size and position
+   */
+  updateSpriteProperties() {
+    // Scale sprite image size to actual hitbox size
+    this.sprite.width =
+      (this.sprite.image.width / this.sprite.frameRate) * this.spriteScale;
+    this.sprite.height = this.sprite.image.height * this.spriteScale;
+
+    // Fix hitbox position when attacking left
+    if (
+      (this.sprite.name === "attack" ||
+        this.sprite.name === "primary" ||
+        this.sprite.name === "secondary") &&
+      this.facingDirection === FACING_LEFT
+    ) {
+      const widthDiff = Math.round(this.sprite.width - this.width);
+      this.sprite.x = this.x - widthDiff;
+    } else {
+      this.sprite.x = this.x;
+    }
+
+    // Move sprite position up on y-axis when sprite's height is greater than character's
+    const heightDiff = Math.round(this.sprite.height - this.height);
+    this.sprite.y = this.y - heightDiff;
   }
 }

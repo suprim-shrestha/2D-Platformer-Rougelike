@@ -14,8 +14,6 @@ class EnemyInstance extends CharacterInstance {
     this.enemyType = { ...enemyType };
     this.skill = { ...enemyType.skill };
     this.enemyId = this.enemyType.id;
-    this.stats = { ...this.enemyType.baseStats };
-    this.currenthp = this.stats.maxhp;
     this.color = enemyType.color;
     this.expHeld = expHeld;
     this.goldHeld = goldHeld;
@@ -32,23 +30,6 @@ class EnemyInstance extends CharacterInstance {
     );
 
     this.skillInstance;
-
-    this.sprites = { ...this.enemyType.sprites };
-    this.spriteScale = this.enemyType.spriteScale;
-    this.sprite = new Sprite(
-      this.x,
-      this.y,
-      this.sprites.idle.imgSrc,
-      this.sprites.idle.frameRate,
-      this.sprites.idle.frameBuffer
-    );
-
-    // Create image object for every sprite
-    for (let key in this.sprites) {
-      const image = new Image();
-      image.src = this.sprites[key].imgSrc;
-      this.sprites[key].image = image;
-    }
   }
 
   moveToPlayer() {
@@ -214,34 +195,6 @@ class EnemyInstance extends CharacterInstance {
     setTimeout(() => {
       skill.offCooldown = true;
     }, skill.skillCooldown);
-  }
-
-  switchSprite(key) {
-    if (this.sprite.image === this.sprites[key].image || !this.sprite.loaded)
-      return;
-
-    this.currentFrame = 0;
-    this.sprite.image = this.sprites[key].image;
-    this.sprite.frameBuffer = this.sprites[key].frameBuffer;
-    this.sprite.frameRate = this.sprites[key].frameRate;
-    this.sprite.name = key;
-  }
-
-  updateSpriteProperties() {
-    // Scale sprite image size to actual hitbox size
-    this.sprite.width =
-      (this.sprite.image.width / this.sprite.frameRate) * this.spriteScale;
-    this.sprite.height = this.sprite.image.height * this.spriteScale;
-
-    // Fix hitbox position when attacking left
-    if (this.sprite.name === "attack" && this.facingDirection === FACING_LEFT) {
-      const widthDiff = Math.round(this.sprite.width - this.width);
-      this.sprite.x = this.x - widthDiff;
-    } else {
-      this.sprite.x = this.x;
-    }
-    const heightDiff = Math.round(this.sprite.height - this.height);
-    this.sprite.y = this.y - heightDiff;
   }
 
   updateSprites() {

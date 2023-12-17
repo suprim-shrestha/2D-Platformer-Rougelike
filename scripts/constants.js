@@ -12,8 +12,6 @@ const FACING_RIGHT = 1;
 // Canvas scale factor
 const SCALE = 2;
 
-const PLAYER_SPRITE_SCALE = 10.24 / 26;
-
 // Blocks
 const TILE_SIZE = 16;
 const COLLISION_BLOCK = 22016;
