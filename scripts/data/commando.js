@@ -15,15 +15,15 @@ const commando = {
   primary: {
     cooldown: 200,
     offCooldown: true,
-    color: "#f00",
+    color: "#f7f0b3",
     skillDuration: 30,
     damageMultiplier: 1,
   },
   secondary: {
     cooldown: 3000,
     offCooldown: true,
-    color: "#0f0",
-    skillDuration: 200,
+    color: "#eee",
+    skillDuration: 500,
     damageMultiplier: 3,
   },
   utility: {
@@ -73,6 +73,11 @@ const commando = {
       imgSrc: "./assets/commando/primary.png",
       frameRate: 3,
       frameBuffer: 6,
+    },
+    secondary: {
+      imgSrc: "./assets/commando/secondary.png",
+      frameRate: 6,
+      frameBuffer: 5,
     },
   },
 };

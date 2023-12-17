@@ -225,8 +225,10 @@ class PlayerInstance extends CharacterInstance {
         let abilityWidth = MAP_WIDTH;
         let abilityX =
           this.x +
-          (this.facingDirection === FACING_LEFT ? -abilityWidth : this.width);
-        let abilityY = this.y + (this.height * 1) / 3;
+          (this.facingDirection === FACING_LEFT
+            ? -abilityWidth - 7
+            : this.width + 7);
+        let abilityY = this.y + (this.height * 1) / 3 - 1;
         if (skill === commando.primary) {
           // Create primary skill instance
           if (!this.primaryInstance) {
@@ -235,7 +237,7 @@ class PlayerInstance extends CharacterInstance {
               x: abilityX,
               y: abilityY,
               width: abilityWidth,
-              height: 2,
+              height: 1,
               isHostile: false,
               damage: damage * skill.damageMultiplier,
             });
@@ -293,6 +295,7 @@ class PlayerInstance extends CharacterInstance {
             }, skill.cooldown / this.atkSpeed); // atkSpeed increases firerate of primary skill only
           }
         } else {
+          this.switchSprite("secondary");
           let hitEnemies = [];
           this.secondaryInstance = new DamagerInstance({
             x: abilityX,
@@ -328,6 +331,7 @@ class PlayerInstance extends CharacterInstance {
           setTimeout(() => {
             this.movementDisabled = false;
             this.secondaryInstance = null;
+            this.switchSprite("idle");
           }, skill.skillDuration);
           setTimeout(() => {
             skill.offCooldown = true;
