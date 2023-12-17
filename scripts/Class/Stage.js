@@ -161,7 +161,7 @@ class Stage {
     );
     const teleporterSpawnIndex = Math.floor(
       getRandomNum(
-        spawnBlocksNearPlayer.length - 30,
+        spawnBlocksNearPlayer.length - 60,
         spawnBlocksNearPlayer.length
       )
     );

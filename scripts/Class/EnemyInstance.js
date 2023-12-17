@@ -31,6 +31,12 @@ class EnemyInstance extends CharacterInstance {
 
     this.skillInstance;
     this.projectileInstance;
+
+    // Stop enemies from moving for 1 second after spawning
+    this.movementDisabled = true;
+    setTimeout(() => {
+      this.movementDisabled = false;
+    }, 1000);
   }
 
   moveToPlayer() {
