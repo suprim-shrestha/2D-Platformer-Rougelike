@@ -34,6 +34,9 @@ class Game {
   }
 
   nextStage() {
+    // Return if boss has not been killed
+    if (bossArr.length != 0) return;
+
     this.stageCompleted++;
     this.currentStage++;
     enemyArr = [];
