@@ -15,6 +15,7 @@ let player = new PlayerInstance({
 
 let itemPopUp;
 let enemyArr = [];
+let bossArr = [];
 
 let game = new Game();
 
@@ -61,6 +62,9 @@ function animate(currentTime) {
       stage.draw();
       enemyArr.forEach((enemy) => {
         enemy.update();
+      });
+      bossArr.forEach((boss) => {
+        boss.update();
       });
       player.update();
       ctx.restore();
