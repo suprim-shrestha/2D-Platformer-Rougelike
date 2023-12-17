@@ -27,9 +27,7 @@ class BossInstance extends EnemyInstance {
   }
 
   update() {
-    if (!this.skill || !this.skill.offCooldown) {
-      this.chooseSkill();
-    }
+    this.chooseSkill();
     super.update();
   }
 
