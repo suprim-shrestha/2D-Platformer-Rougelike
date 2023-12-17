@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: url(./../assets/background.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.main-menu {
+  margin: 0;
+  padding: 0;
+  background: url(./../assets/menu-background.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.btn-start {
+  position: absolute;
+  text-decoration: none;
+  background: none;
+  border: 1px solid white;
+  border-radius: 15px;
+  font-family: "Silkscreen", san-serif;
+  font-size: 32px;
+  color: #bbb;
+  padding: 10px 25px;
+  bottom: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  cursor: pointer;
+}
+
+.btn-start:hover {
+  background: #bbb;
+  color: #000;
+}
+
+.canvas {
+  display: none;
+}

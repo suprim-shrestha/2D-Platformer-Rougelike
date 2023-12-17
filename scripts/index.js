@@ -17,11 +17,9 @@ let itemPopUp;
 let enemyArr = [];
 let bossArr = [];
 
-let game = new Game();
-
-let stage = new Stage();
-
-let director = new Director();
+let game;
+let stage;
+let director;
 
 // Initialize camera position
 const camera = {
@@ -85,7 +83,7 @@ function animate(currentTime) {
   }
   requestAnimationFrame(animate);
 }
-animate();
+// animate();
 
 /**
  * Move camera within boundaries of map
@@ -124,6 +122,7 @@ function startGame() {
 function endGame() {
   gameOver = true;
   enemyArr = [];
+  bossArr = [];
   clearInterval(game.updateInterval);
   clearInterval(director.updateInterval);
   clearInterval(player.healInterval);
