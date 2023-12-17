@@ -286,6 +286,7 @@ class EnemyInstance extends CharacterInstance {
     enemyArr.splice(enemyIndex, 1);
     this.player.gold += Math.round(this.goldHeld * this.player.goldMultiplier);
     this.player.currentExp += this.expHeld;
+    game.enemiesKilled++;
 
     if (this.isBoss) {
       bossArr = [];

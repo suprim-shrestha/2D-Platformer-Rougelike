@@ -9,6 +9,7 @@ class Game {
     this.currentTime = new Date();
     this.timePlayedInMs = this.currentTime - this.timeStarted;
     this.timePlayedInMinutes = Math.floor(this.timePlayedInMs / (1000 * 60));
+    this.enemiesKilled = 0;
 
     this.updateInterval = setInterval(() => {
       this.update();
