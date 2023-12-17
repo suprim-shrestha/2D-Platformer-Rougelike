@@ -31,6 +31,7 @@ class EnemyInstance extends CharacterInstance {
     );
 
     this.skillInstance;
+    this.projectileInstance;
   }
 
   moveToPlayer() {
@@ -97,6 +98,21 @@ class EnemyInstance extends CharacterInstance {
     if (this.skillInstance) {
       this.skillInstance.draw();
     }
+    if (this.projectileInstance) {
+      this.projectileInstance.update();
+      this.projectileInstance.draw();
+      if (detectCollision(this.projectileInstance, this.player)) {
+        this.projectileInstance.dealDamage([this.player]);
+        this.projectileInstance = null;
+      } else if (
+        this.projectileInstance.x >= MAP_WIDTH ||
+        this.projectileInstance.x + this.projectileInstance.width <= 0 ||
+        this.projectileInstance.y >= MAP_HEIGHT ||
+        this.projectileInstance.y + this.projectileInstance.height <= 0
+      ) {
+        this.projectileInstance = null;
+      }
+    }
     this.checkSpecialBlockCollision();
     if (this.y > MAP_WIDTH) {
       this.kill();
@@ -136,7 +152,57 @@ class EnemyInstance extends CharacterInstance {
     skill.offCooldown = false;
     this.movementDisabled = true;
 
-    if (!skill.isChargeType) {
+    if (skill.isChargeType) {
+      this.skillInstance = new DamagerInstance({
+        x: this.x + skill.skillX,
+        y: this.y + skill.skillY,
+        width: skill.skillWidth,
+        height: skill.skillHeight,
+        isHostile: true,
+        damage: this.stats.damage,
+      });
+      const skillInterval = setInterval(() => {
+        this.vx = this.facingDirection * skill.chargeSpeed;
+        this.x += this.vx;
+        if (this.skillInstance) {
+          this.skillInstance.x = this.x + skill.skillX;
+          this.skillInstance.y = this.y + skill.skillY;
+          if (detectCollision(this.skillInstance, this.player)) {
+            this.skillInstance.dealDamage([this.player]);
+            this.skillInstance = null;
+          }
+        }
+      }, 1000 / FRAME_RATE);
+      setTimeout(() => {
+        this.skillInstance = null;
+        clearInterval(skillInterval);
+        this.movementDisabled = false;
+        this.checkHorizontalCollisions();
+      }, skill.skillDuration);
+    } else if (skill.isProjectile) {
+      let skillX =
+        this.x +
+        (this.facingDirection === FACING_LEFT
+          ? -skill.skillWidth - skill.skillX
+          : this.width + skill.skillX);
+
+      this.projectileInstance = new DamagerInstance({
+        x: skillX,
+        y: this.y + skill.skillY,
+        width: skill.skillWidth,
+        height: skill.skillHeight,
+        isHostile: true,
+        damage: this.stats.damage,
+        isProjectile: skill.isProjectile,
+        target: this.player,
+        projectileSpeed: SPEED * 3,
+      });
+
+      setTimeout(() => {
+        this.movementDisabled = false;
+        this.switchSprite("idle");
+      }, skill.skillDuration);
+    } else {
       let skillX =
         this.x +
         (this.facingDirection === FACING_LEFT
@@ -165,33 +231,6 @@ class EnemyInstance extends CharacterInstance {
           this.skillInstance.dealDamage([this.player]);
         }
       }, skill.skillDuration / 2);
-    } else {
-      this.skillInstance = new DamagerInstance({
-        x: this.x + skill.skillX,
-        y: this.y + skill.skillY,
-        width: skill.skillWidth,
-        height: skill.skillHeight,
-        isHostile: true,
-        damage: this.stats.damage,
-      });
-      const skillInterval = setInterval(() => {
-        this.vx = this.facingDirection * skill.chargeSpeed;
-        this.x += this.vx;
-        if (this.skillInstance) {
-          this.skillInstance.x = this.x + skill.skillX;
-          this.skillInstance.y = this.y + skill.skillY;
-          if (detectCollision(this.skillInstance, this.player)) {
-            this.skillInstance.dealDamage([this.player]);
-            this.skillInstance = null;
-          }
-        }
-      }, 1000 / FRAME_RATE);
-      setTimeout(() => {
-        this.skillInstance = null;
-        clearInterval(skillInterval);
-        this.movementDisabled = false;
-        this.checkHorizontalCollisions();
-      }, skill.skillDuration);
     }
 
     setTimeout(() => {
