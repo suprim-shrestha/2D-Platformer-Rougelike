@@ -13,7 +13,6 @@ class EnemyInstance extends CharacterInstance {
     this.player = player;
     this.enemyType = { ...enemyType };
     this.skill = { ...enemyType.skill };
-    this.enemyId = this.enemyType.id;
     this.color = enemyType.color;
     this.expHeld = expHeld;
     this.goldHeld = goldHeld;
@@ -95,12 +94,12 @@ class EnemyInstance extends CharacterInstance {
     this.updateSpriteProperties();
     this.sprite.draw(this.facingDirection);
     this.displayHpBar();
-    if (this.skillInstance) {
-      this.skillInstance.draw();
-    }
+    // if (this.skillInstance) {
+    //   this.skillInstance.draw();
+    // }
     if (this.projectileInstance) {
       this.projectileInstance.update();
-      this.projectileInstance.draw();
+      // this.projectileInstance.draw();
       if (detectCollision(this.projectileInstance, this.player)) {
         this.projectileInstance.dealDamage([this.player]);
         this.projectileInstance = null;
@@ -147,20 +146,26 @@ class EnemyInstance extends CharacterInstance {
   useSkill(skill) {
     if (!skill.offCooldown) return;
 
-    this.switchSprite("attack");
-
     skill.offCooldown = false;
     this.movementDisabled = true;
 
     if (skill.isChargeType) {
-      this.skillInstance = new DamagerInstance({
-        x: this.x + skill.skillX,
-        y: this.y + skill.skillY,
-        width: skill.skillWidth,
-        height: skill.skillHeight,
-        isHostile: true,
-        damage: this.stats.damage,
-      });
+      this.switchSprite("charge");
+
+      setTimeout(() => {
+        this.skillInstance = new DamagerInstance({
+          x: this.x + skill.skillX,
+          y: this.y + skill.skillY,
+          width: skill.skillWidth,
+          height: skill.skillHeight,
+          isHostile: true,
+          damage: this.stats.damage,
+        });
+        setTimeout(() => {
+          this.skillInstance = null;
+        }, skill.skillDuration - skill.chargeStart);
+      }, skill.chargeStart);
+
       const skillInterval = setInterval(() => {
         this.vx = this.facingDirection * skill.chargeSpeed;
         this.x += this.vx;
@@ -173,11 +178,13 @@ class EnemyInstance extends CharacterInstance {
           }
         }
       }, 1000 / FRAME_RATE);
+
       setTimeout(() => {
         this.skillInstance = null;
         clearInterval(skillInterval);
         this.movementDisabled = false;
         this.checkHorizontalCollisions();
+        this.switchSprite("idle");
       }, skill.skillDuration);
     } else if (skill.isProjectile) {
       this.switchSprite("projectile");
@@ -207,6 +214,7 @@ class EnemyInstance extends CharacterInstance {
         this.switchSprite("idle");
       }, skill.skillDuration);
     } else {
+      this.switchSprite("attack");
       let skillX =
         this.x +
         (this.facingDirection === FACING_LEFT
