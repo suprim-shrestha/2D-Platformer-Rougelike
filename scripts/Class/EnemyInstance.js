@@ -180,23 +180,26 @@ class EnemyInstance extends CharacterInstance {
         this.checkHorizontalCollisions();
       }, skill.skillDuration);
     } else if (skill.isProjectile) {
+      this.switchSprite("projectile");
       let skillX =
         this.x +
         (this.facingDirection === FACING_LEFT
           ? -skill.skillWidth - skill.skillX
           : this.width + skill.skillX);
 
-      this.projectileInstance = new DamagerInstance({
-        x: skillX,
-        y: this.y + skill.skillY,
-        width: skill.skillWidth,
-        height: skill.skillHeight,
-        isHostile: true,
-        damage: this.stats.damage,
-        isProjectile: skill.isProjectile,
-        target: this.player,
-        projectileSpeed: SPEED * 3,
-      });
+      setTimeout(() => {
+        this.projectileInstance = new DamagerInstance({
+          x: skillX,
+          y: this.y + skill.skillY,
+          width: skill.skillWidth,
+          height: skill.skillHeight,
+          isHostile: true,
+          damage: this.stats.damage,
+          isProjectile: skill.isProjectile,
+          target: this.player,
+          projectileSpeed: SPEED * 3,
+        });
+      }, skill.projectileStart);
 
       setTimeout(() => {
         this.movementDisabled = false;
