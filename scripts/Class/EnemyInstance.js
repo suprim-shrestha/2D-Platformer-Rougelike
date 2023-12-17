@@ -197,7 +197,8 @@ class EnemyInstance extends CharacterInstance {
           damage: this.stats.damage,
           isProjectile: skill.isProjectile,
           target: this.player,
-          projectileSpeed: SPEED * 3,
+          projectileSpeed: skill.projectileSpeed,
+          projectileSprite: skill.projectileSprite,
         });
       }, skill.projectileStart);
 

@@ -9,6 +9,7 @@ class DamagerInstance extends Instance {
     isProjectile = false,
     target = player,
     projectileSpeed = 0,
+    projectileSprite,
   }) {
     super({ x, y, width, height });
     this.isHostile = isHostile;
@@ -20,6 +21,8 @@ class DamagerInstance extends Instance {
     this.projectileSpeed = projectileSpeed;
     if (this.isProjectile) {
       this.setProjectileDirection();
+      this.image = new Image();
+      this.image.src = projectileSprite;
     }
   }
 
@@ -38,6 +41,24 @@ class DamagerInstance extends Instance {
     if (this.isProjectile) {
       this.x += this.vx;
       this.y += this.vy;
+
+      if (!this.image) return;
+      // Flip sprite if going left
+      if (this.vx < 0) {
+        ctx.save();
+        ctx.translate(this.x + this.width, this.y); // Translate to the right edge of the sprite
+        ctx.scale(-1, 1); // Flip the image horizontally
+        ctx.drawImage(
+          this.image,
+          0,
+          0, // Draw at (0, 0) relative to the translated position
+          this.width,
+          this.height
+        );
+        ctx.restore();
+      } else {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      }
     }
   }
 
