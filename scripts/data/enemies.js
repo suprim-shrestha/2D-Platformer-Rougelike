@@ -16,8 +16,8 @@ enemies = {
       maxhp: 24,
       damage: 2.4,
     },
-    distanceToAttack: 8,
     skill: {
+      distanceToAttack: 8,
       offCooldown: true,
       skillDuration: 750,
       skillCooldown: 2000,
@@ -96,8 +96,8 @@ enemies = {
       maxhp: 100,
       damage: 4,
     },
-    distanceToAttack: 20,
     skill: {
+      distanceToAttack: 20,
       offCooldown: true,
       skillDuration: 1050,
       skillCooldown: 3000,
@@ -151,8 +151,8 @@ enemies = {
       maxhp: 100,
       damage: 2.4,
     },
-    distanceToAttack: 30,
     skill: {
+      distanceToAttack: 30,
       isChargeType: true,
       chargeSpeed: SPEED * 2,
       offCooldown: true,
@@ -208,8 +208,8 @@ enemies = {
       maxhp: 18,
       damage: 1,
     },
-    distanceToAttack: 10,
     skill: {
+      distanceToAttack: 10,
       offCooldown: true,
       skillDuration: 500,
       skillCooldown: 800,

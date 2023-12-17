@@ -18,6 +18,7 @@ class EnemyInstance extends CharacterInstance {
     this.expHeld = expHeld;
     this.goldHeld = goldHeld;
     this.level = 1;
+    this.distanceToAttack = this.skill.distanceToAttack;
 
     this.width = this.enemyType.width;
     this.height = this.enemyType.height;
@@ -41,10 +42,8 @@ class EnemyInstance extends CharacterInstance {
       this.facingDirection = FACING_LEFT;
     }
     if (
-      this.player.x - this.x - this.width <=
-        this.enemyType.distanceToAttack / 4 &&
-      this.player.x + this.player.width - this.x >=
-        -this.enemyType.distanceToAttack / 4
+      this.player.x - this.x - this.width <= this.distanceToAttack / 4 &&
+      this.player.x + this.player.width - this.x >= -this.distanceToAttack / 4
     ) {
       this.vx = 0;
     }
@@ -80,9 +79,9 @@ class EnemyInstance extends CharacterInstance {
     if (!this.movementDisabled) {
       this.moveToPlayer();
       this.x += this.vx;
-    }
-    if (this.distanceFromPlayer <= this.enemyType.distanceToAttack) {
-      this.useSkill(this.skill);
+      if (this.skill && this.distanceFromPlayer <= this.distanceToAttack) {
+        this.useSkill(this.skill);
+      }
     }
     if (!this.enemyType.isFlying) {
       this.updateSprites();
@@ -159,7 +158,10 @@ class EnemyInstance extends CharacterInstance {
         this.switchSprite("idle");
       }, skill.skillDuration);
       setTimeout(() => {
-        if (detectCollision(this.skillInstance, this.player)) {
+        if (
+          this.skillInstance &&
+          detectCollision(this.skillInstance, this.player)
+        ) {
           this.skillInstance.dealDamage([this.player]);
         }
       }, skill.skillDuration / 2);
