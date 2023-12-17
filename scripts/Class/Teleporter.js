@@ -17,7 +17,7 @@ class Teleporter extends Instance {
 
     if (this.isCharged) {
       ctx.fillStyle = "#fff";
-      ctx.font = "8px Arial";
+      ctx.font = "8px Silkscreen, san-serif";
       const teleporterMessage = `Teleporter Charged`;
       const textWidth = ctx.measureText(teleporterMessage).width;
       ctx.fillText(
@@ -27,7 +27,7 @@ class Teleporter extends Instance {
       );
     } else if (this.isActive) {
       ctx.fillStyle = "#fff";
-      ctx.font = "8px Arial";
+      ctx.font = "8px Silkscreen, san-serif";
       const teleporterMessage = `Time Remaining: ${this.activeTime} / ${CHARGE_TIME} seconds`;
       const textWidth = ctx.measureText(teleporterMessage).width;
       ctx.fillText(

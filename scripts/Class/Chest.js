@@ -21,7 +21,7 @@ class Chest extends Instance {
     this.sprite.width = this.width;
     this.sprite.height = this.height;
     this.sprite.draw();
-    ctx.font = "6px Arial";
+    ctx.font = "6px Silkscreen, san-serif";
     ctx.fillStyle = "#fff";
     const chestCost = `$${this.cost}`;
     const textWidth = ctx.measureText(chestCost).width;

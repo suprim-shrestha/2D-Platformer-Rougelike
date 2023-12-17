@@ -43,7 +43,7 @@ function animate(currentTime) {
 
     if (gameOver) {
       ctx.fillStyle = "#fff";
-      ctx.font = "20px Arial";
+      ctx.font = "20px Silkscreen, san-serif";
       const finalMessage = `You survived ${timePlayed}`;
       let textWidth = ctx.measureText(finalMessage).width;
       let textX = (canvas.width - textWidth) / 2;
@@ -73,7 +73,7 @@ function animate(currentTime) {
         itemInstance.draw();
       });
       ctx.fillStyle = "#fff";
-      ctx.font = "20px Arial";
+      ctx.font = "20px Silkscreen, san-serif";
       ctx.fillText(timePlayed, canvas.width - 100, 50);
       const playerLevel = `Player Level: ${player.level}`;
       const enemyLevel = `Enemy Level: ${game.enemyLevel}`;

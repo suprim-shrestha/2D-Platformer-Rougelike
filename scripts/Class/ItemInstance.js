@@ -14,7 +14,7 @@ class ItemInstance extends Instance {
     // Display current count of items only when displaying all items
     // and multiple of same item exists
     if (this.count && this.count > 1) {
-      ctx.font = "20px Arial";
+      ctx.font = "20px Silkscreen, san-serif";
       ctx.fillStyle = "#fff";
       ctx.fillText(
         this.count,
@@ -29,9 +29,9 @@ class ItemInstance extends Instance {
    */
   displayPopUp() {
     // Calculate text width of item name and description and compare them
-    ctx.font = "20px Arial";
+    ctx.font = "20px Silkscreen, san-serif";
     const nameWidth = ctx.measureText(this.item.name).width;
-    ctx.font = "16px Arial";
+    ctx.font = "16px Silkscreen, san-serif";
     const descWidth = ctx.measureText(this.item.description).width;
     const textWidth = nameWidth > descWidth ? nameWidth : descWidth;
 
@@ -53,7 +53,7 @@ class ItemInstance extends Instance {
     ctx.strokeRect(popUpX, popUpY, popUpWidth, popUpHeight);
     this.draw();
     ctx.fillText(this.item.description, popUpX + this.width + 40, popUpY + 69);
-    ctx.font = "20px Arial";
+    ctx.font = "20px Silkscreen, san-serif";
     ctx.fillText(this.item.name, popUpX + this.width + 40, popUpY + 43);
   }
 }
