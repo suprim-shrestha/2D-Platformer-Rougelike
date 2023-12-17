@@ -274,7 +274,7 @@ class EnemyInstance extends CharacterInstance {
     this.player.currentExp += this.expHeld;
 
     if (this.isBoss) {
-      bossArr.splice(enemyIndex, 1);
+      bossArr = [];
     }
   }
 }
