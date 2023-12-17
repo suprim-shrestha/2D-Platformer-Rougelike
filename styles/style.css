@@ -17,13 +17,20 @@ body {
   position: relative;
 }
 
+.controls {
+  position: absolute;
+  left: 20px;
+  top: 10%;
+  color: #bbb;
+  font-family: "Silkscreen", san-serif;
+}
+
 .btn-start {
   position: absolute;
   text-decoration: none;
   background: none;
   border: 1px solid white;
   border-radius: 15px;
-  font-family: "Silkscreen", san-serif;
   font-size: 32px;
   color: #bbb;
   padding: 10px 25px;
@@ -31,6 +38,7 @@ body {
   left: 50%;
   transform: translate(-50%, 0);
   cursor: pointer;
+  font-family: "Silkscreen", san-serif;
 }
 
 .btn-start:hover {
