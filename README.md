@@ -56,6 +56,13 @@
 - Every enemy has a different credit value (cost).
 - Enemies spawn near the player and start to attack the player.
 
+## Difficulty:
+
+- Difficulty increases with time and stages completed.
+- Enemy level increases with difficulty.
+- Enemy stats (maxHp and damage) increase with each level.
+- Difference in player and enemy level and strength increases with time which player covers using items.
+
 ## Teleporter:
 
 - Teleporter is the end of the stage.
