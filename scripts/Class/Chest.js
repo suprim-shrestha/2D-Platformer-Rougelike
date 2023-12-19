@@ -1,3 +1,6 @@
+/**
+ * Chest is an instance which has a cost and holds a random item that the player can buy
+ */
 class Chest extends Instance {
   constructor({
     x,
@@ -21,6 +24,8 @@ class Chest extends Instance {
     this.sprite.width = this.width;
     this.sprite.height = this.height;
     this.sprite.draw();
+
+    // Display chest cost above the chest
     ctx.font = "6px Silkscreen, san-serif";
     ctx.fillStyle = "#fff";
     const chestCost = `$${this.cost}`;

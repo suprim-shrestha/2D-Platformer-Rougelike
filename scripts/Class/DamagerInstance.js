@@ -26,6 +26,11 @@ class DamagerInstance extends Instance {
     }
   }
 
+  /**
+   * Decrease hp of all hit targets
+   *
+   * @param {CharacterInstance[]} targets
+   */
   dealDamage(targets) {
     targets.forEach((target) => {
       if (!target.isImmune || target.dodgeChance < getRandomNum()) {
@@ -62,6 +67,9 @@ class DamagerInstance extends Instance {
     }
   }
 
+  /**
+   * Set initial velocity and direction for projectile towards target.
+   */
   setProjectileDirection() {
     const magnitude = distance(this.x, this.y, this.target.x, this.target.y);
     this.dx = (this.target.x - this.x) / magnitude;

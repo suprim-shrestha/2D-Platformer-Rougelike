@@ -99,6 +99,9 @@ class Stage {
     });
   }
 
+  /**
+   * Specify enemy control blocks to control enemy behavior
+   */
   createEnemyControlBlocks() {
     enemyControlBlocks.forEach((row, rowIndex) => {
       row.forEach((symbol, colIndex) => {
@@ -154,6 +157,9 @@ class Stage {
     }
   }
 
+  /**
+   * Set teleporter location on stage to a location far away from the player
+   */
   setTeleporterLocation() {
     const spawnBlocksNearPlayer = this.getRandomSpawnPointNearXY(
       this.playerSpawnPoint.x,
@@ -170,6 +176,13 @@ class Stage {
     this.teleporter.y = teleporterSpawnBlock.y - 10;
   }
 
+  /**
+   * Returns an array of spawnable blocks sorted according to distance from given coordinates
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns CollisionBlock[]
+   */
   getRandomSpawnPointNearXY(x, y) {
     const spawnableBlocksNearXY = [...this.spawnableBlocks].sort(
       (a, b) => distance(a.x, a.y, x, y) - distance(b.x, b.y, x, y)

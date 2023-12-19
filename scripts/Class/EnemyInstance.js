@@ -1,3 +1,6 @@
+/**
+ * CharacterInstance for all enemy characters
+ */
 class EnemyInstance extends CharacterInstance {
   constructor({
     x,
@@ -39,6 +42,9 @@ class EnemyInstance extends CharacterInstance {
     }, 1000);
   }
 
+  /**
+   * Move enemy towards player by comparing their positions
+   */
   moveToPlayer() {
     if (this.x < this.player.x) {
       this.vx = this.stats.speed;
@@ -53,6 +59,7 @@ class EnemyInstance extends CharacterInstance {
     ) {
       this.vx = 0;
     }
+    // Vertical movement if enemy can fly
     if (this.enemyType.isFlying) {
       if (this.player.y - this.y < 10 && this.player.y - this.y > 5) {
         this.vy = 0;
@@ -89,6 +96,7 @@ class EnemyInstance extends CharacterInstance {
         this.useSkill(this.skill);
       }
     }
+    // Collision is not checked for flying enemies
     if (!this.enemyType.isFlying) {
       this.updateSprites();
       this.checkHorizontalCollisions();
@@ -108,6 +116,7 @@ class EnemyInstance extends CharacterInstance {
       // this.projectileInstance.draw();
       if (detectCollision(this.projectileInstance, this.player)) {
         this.projectileInstance.dealDamage([this.player]);
+        // Remove projectile after it hits the player
         this.projectileInstance = null;
       } else if (
         this.projectileInstance.x >= MAP_WIDTH ||
@@ -115,6 +124,7 @@ class EnemyInstance extends CharacterInstance {
         this.projectileInstance.y >= MAP_HEIGHT ||
         this.projectileInstance.y + this.projectileInstance.height <= 0
       ) {
+        // Remove projectile if it goes out of screen
         this.projectileInstance = null;
       }
     }
@@ -140,6 +150,9 @@ class EnemyInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check collision with special blocks that control enemy behavior
+   */
   checkSpecialBlockCollision() {
     for (const specialBlock of stage.enemyControlBlocks) {
       if (detectCollision(this, specialBlock) && !this.enemyType.isFlying) {
@@ -158,6 +171,7 @@ class EnemyInstance extends CharacterInstance {
     if (skill.isChargeType) {
       this.switchSprite("charge");
 
+      // Create damage instance for charge type skill only after charge start duration
       setTimeout(() => {
         this.skillInstance = new DamagerInstance({
           x: this.x + skill.skillX,
@@ -172,6 +186,7 @@ class EnemyInstance extends CharacterInstance {
         }, skill.skillDuration - skill.chargeStart);
       }, skill.chargeStart);
 
+      // Update charge skill instance with enemy position
       const skillInterval = setInterval(() => {
         this.vx = this.facingDirection * skill.chargeSpeed;
         this.x += this.vx;
@@ -200,6 +215,7 @@ class EnemyInstance extends CharacterInstance {
           ? -skill.skillWidth - skill.skillX
           : this.width + skill.skillX);
 
+      // Create projectile skill instance
       setTimeout(() => {
         this.projectileInstance = new DamagerInstance({
           x: skillX,
@@ -256,6 +272,9 @@ class EnemyInstance extends CharacterInstance {
     }, skill.skillCooldown);
   }
 
+  /**
+   * Function to update sprites according to movement
+   */
   updateSprites() {
     if (!this.movementDisabled) {
       if (this.vx != 0) {
@@ -271,6 +290,9 @@ class EnemyInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Level up enemies if game enemy level is greater than its own level and increase stats
+   */
   levelUp() {
     const levelDiff = game.enemyLevel - this.level;
     if (levelDiff > 0) {
@@ -281,6 +303,9 @@ class EnemyInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Remove enemy from enemies array and give player its held gold and exp rewards
+   */
   kill() {
     const enemyIndex = enemyArr.findIndex((enemy) => this === enemy);
     enemyArr.splice(enemyIndex, 1);

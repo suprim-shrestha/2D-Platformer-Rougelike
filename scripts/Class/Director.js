@@ -1,3 +1,6 @@
+/**
+ * Class for game mechanic to spawn random enemies
+ */
 class Director {
   constructor() {
     this.credits = 100;
@@ -16,13 +19,17 @@ class Director {
   }
 
   update() {
+    // Multiplier during teleporter event to increase difficulty
     this.teleporterMultiplier = stage.teleporter.isActive ? 4 : 1;
 
+    // Set creditsPerSecond for director and increment its current credits
     this.creditsPerSecond =
       this.creditMultiplier *
       (1 + 0.4 * game.difficultyCoeff) *
       this.teleporterMultiplier;
     this.credits += this.creditsPerSecond;
+
+    // Call spawn enemies function if time since last spawn is greater than spawn interval
     const currentTime = new Date();
     if (
       currentTime - this.timeSinceLastSpawn >
@@ -41,16 +48,22 @@ class Director {
    */
   spawnEnemies(initialSpawn = false) {
     while (this.credits >= 10 && enemyArr.length < TOTAL_POSSIBLE_ENEMIES) {
+      // Select random enemy type from enemy list
       const enemyTypesArray = Object.keys(enemies);
       const randomEnemyIndex = Math.floor(
         getRandomNum(0, enemyTypesArray.length)
       );
       const randomEnemyType = enemyTypesArray[randomEnemyIndex];
       const randomEnemy = enemies[randomEnemyType];
+
+      // Calculate number of enemies that can be spawned with current credits
       const canSpawnCount = Math.floor(this.credits / randomEnemy.cost);
       if (canSpawnCount > 0) {
+        // Can only spawn limited enemies of same type
         let spawnCount =
           canSpawnCount > MAX_ENEMIES_SPAWN ? MAX_ENEMIES_SPAWN : canSpawnCount;
+
+        // Calculate exp and gold held by enemy
         const goldHeld = Math.round(
           2 * game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
         );
@@ -58,6 +71,7 @@ class Director {
           game.difficultyCoeff * randomEnemy.cost * this.expMultiplier
         );
         for (let i = 0; i < spawnCount; i++) {
+          // Cannot spawn enemies more than total possible enemies
           if (enemyArr.length >= TOTAL_POSSIBLE_ENEMIES) {
             break;
           }
@@ -68,6 +82,7 @@ class Director {
                 Math.floor(getRandomNum(0, stage.spawnableBlocks.length))
               ];
           } else {
+            // Get random spawn point near player
             const spawnPoints = stage.getRandomSpawnPointNearXY(
               player.x,
               player.y
@@ -93,6 +108,7 @@ class Director {
    * Spawn boss during teleporter event
    */
   spawnBoss() {
+    // Select random boss enemy from boss list
     const bossTypesArray = Object.keys(boss);
     const randomBossIndex = Math.floor(getRandomNum(0, bossTypesArray.length));
     const randomBossType = bossTypesArray[randomBossIndex];
@@ -118,7 +134,9 @@ class Director {
       goldHeld,
       expHeld,
     });
+    // Push to enemies array for updates and collision detection with player skill instance
     enemyArr.push(newBoss);
+    // Push to boss array to check for teleporter event completion
     bossArr.push(newBoss);
   }
 }

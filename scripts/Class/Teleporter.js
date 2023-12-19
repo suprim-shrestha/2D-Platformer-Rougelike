@@ -13,8 +13,10 @@ class Teleporter extends Instance {
 
   draw() {
     if (!this.image) return;
+    // Draw teleporter sprite
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 
+    // Display charge completed message
     if (this.isCharged) {
       ctx.fillStyle = "#fff";
       ctx.font = "8px Silkscreen, san-serif";
@@ -26,6 +28,7 @@ class Teleporter extends Instance {
         this.y - 5
       );
     } else if (this.isActive) {
+      // Display time remaining to charge teleporter
       ctx.fillStyle = "#fff";
       ctx.font = "8px Silkscreen, san-serif";
       const teleporterMessage = `Time Remaining: ${this.activeTime} / ${CHARGE_TIME} seconds`;

@@ -1,3 +1,6 @@
+/**
+ * Instance of items collected to display either pop up when item is picked up or all current items.
+ */
 class ItemInstance extends Instance {
   constructor({ x, y, width, height, item, count = null }) {
     super({ x, y, width, height });

@@ -1,3 +1,6 @@
+/**
+ * Special EnemyInstance for boss enemies
+ */
 class BossInstance extends EnemyInstance {
   constructor({
     x,
@@ -31,6 +34,9 @@ class BossInstance extends EnemyInstance {
     super.update();
   }
 
+  /**
+   * Choose a skill from its list of available skills that are off cooldown
+   */
   chooseSkill() {
     const availableSkills = this.skills.filter((skill) => skill.offCooldown);
     const skillIndex = Math.floor(getRandomNum(0, availableSkills.length));

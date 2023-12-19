@@ -1,3 +1,6 @@
+/**
+ * CharacterInstance for player character
+ */
 class PlayerInstance extends CharacterInstance {
   constructor({ x, y, width, height, survivor = commando }) {
     super({ x, y, width, height, characterType: survivor });
@@ -25,7 +28,7 @@ class PlayerInstance extends CharacterInstance {
     this.cooldownReduction = 1;
     this.healOnHit = 0;
     this.goldMultiplier = 1;
-    this.gold = 10;
+    this.gold = 25;
 
     // Regenerate health per second
     this.healInterval = setInterval(() => {
@@ -38,6 +41,7 @@ class PlayerInstance extends CharacterInstance {
     this.items = [];
     this.itemInstances = [];
 
+    // Skill HUD at bottom of the screen
     this.skillDisplay = new Image();
     this.skillDisplay.src = "./assets/commando/skills.png";
 
@@ -70,6 +74,9 @@ class PlayerInstance extends CharacterInstance {
     this.checkOutsideMap();
   }
 
+  /**
+   * Update camerabox position with player's position
+   */
   updateCameraBox() {
     this.cameraBox = {
       x: this.x - this.cameraBox.width / 2,
@@ -119,6 +126,9 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check keys pressed and perform appropriate actions
+   */
   control() {
     if (keys.up || keys.down) {
       const movingDirection = keys.up ? "up" : "down";
@@ -142,6 +152,7 @@ class PlayerInstance extends CharacterInstance {
     } else if (this.climbingRope) {
       this.vy = 0;
     }
+    // Conditions for jump. jumpCount and maxJumps used because of increase jump count item
     if (keys.jump && this.canJump && this.jumpCount < this.maxJumps) {
       this.canJump = false;
       this.jumpCount++;
@@ -161,16 +172,19 @@ class PlayerInstance extends CharacterInstance {
       // Have to let go of jump button before jumping again
       this.canJump = true;
     }
+    // Pan camera when moving up or down
     if (this.vy < 0) {
       this.panCameraToDown();
     } else if (this.vy > 0) {
       this.panCameraToUp();
     }
+    // Most movements disabled when climbing rope
     if (!this.climbingRope) {
       if (keys.left) {
         this.switchSprite("run");
         this.vx = -this.speed;
         this.panCameraToRight();
+        // Cannot change direction when firing primary skill
         if (!keys.primary) {
           this.facingDirection = FACING_LEFT;
         }
@@ -202,6 +216,7 @@ class PlayerInstance extends CharacterInstance {
         this.useSkill(this.survivor.utility);
       }
       if (keys.interact) {
+        // Detect collision with chests and teleporter then perform appropriate actions
         this.openChest();
         if (detectCollision(this, stage.teleporter)) {
           if (stage.teleporter.isCharged) {
@@ -214,6 +229,9 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Use skill if skill is off cooldown
+   */
   useSkill(skill) {
     if (skill.offCooldown) {
       skill.offCooldown = false;
@@ -287,16 +305,20 @@ class PlayerInstance extends CharacterInstance {
             }
             if (hitEnemy) {
               this.primaryInstance.dealDamage([hitEnemy]);
+              // Heal on hitting enemy by healOnHit amount (default: 0)
               this.currenthp =
                 this.currenthp + this.healOnHit >= this.stats.maxhp
                   ? this.stats.maxhp
                   : this.currenthp + this.healOnHit;
             }
+            // Clear skill Instance after skill duration
             setTimeout(() => {
               this.primaryInstance = null;
             }, skill.skillDuration);
+            // Set skill offCooldown to true after cooldown is over
             setTimeout(() => {
               skill.offCooldown = true;
+              // Return speed to normal after letting go of primary
               this.speed = this.stats.speed;
             }, skill.cooldown / this.atkSpeed); // atkSpeed increases firerate of primary skill only
           }
@@ -323,6 +345,7 @@ class PlayerInstance extends CharacterInstance {
               this.checkAbilityCollisionLeft(this.secondaryInstance, posX);
             }
           }
+          // Find all hit enemies with piercing secondary skill
           hitEnemies = enemyArr.filter((enemy) =>
             detectCollision(enemy, this.secondaryInstance)
           );
@@ -347,7 +370,9 @@ class PlayerInstance extends CharacterInstance {
       } else if (skill === this.survivor.utility) {
         this.switchSprite("roll");
         this.movementDisabled = true;
+        // Player is immune to attacks during roll
         this.isImmune = true;
+        // Reset vertical velocity before roll
         this.vy = 0;
         const skillInterval = setInterval(() => {
           this.vx = this.facingDirection * this.speed * skill.rollSpeed;
@@ -427,6 +452,11 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Add item to items array of player or increase count if item already exists
+   *
+   * @param {ItemObject} item
+   */
   addItem(item) {
     let count = 1;
 
@@ -501,6 +531,9 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Place player on map if player has fallen off
+   */
   checkOutsideMap() {
     if (this.y > MAP_HEIGHT) {
       if (this.x < 572) {
@@ -520,6 +553,9 @@ class PlayerInstance extends CharacterInstance {
     }
   }
 
+  /**
+   * Check for extra lives and set gameOver if lives is 0
+   */
   kill() {
     this.lives--;
     if (this.lives <= 0) {

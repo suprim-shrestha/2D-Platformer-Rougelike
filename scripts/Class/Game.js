@@ -16,6 +16,9 @@ class Game {
     }, 1000);
   }
 
+  /**
+   * Update all difficulty factors
+   */
   update() {
     this.stageFactor = Math.pow(1.15, this.stageCompleted);
     this.currentTime = new Date();
@@ -43,11 +46,16 @@ class Game {
     enemyArr = [];
     player.currenthp = player.stats.maxhp;
     player.gold = 0;
+    // Initialize Stage class to randomize chests, player and teleporter locations
     stage = new Stage();
-    director.credits = 100;
-    director.spawnEnemies(true);
+
+    // Update camera position with player
     camera.x = -player.cameraBox.x;
     camera.y = -player.cameraBox.y;
     moveCameraWithinBoundaries();
+
+    // Allow director to spawn new enemies with given credits
+    director.credits = 100;
+    director.spawnEnemies(true);
   }
 }
